@@ -1,0 +1,33 @@
+---
+title: "**Collaborative Research Centre \\linebreak Transregio Munich - Frankfurt (TRR 267) \\linebreak Non-coding RNA in the cardiovascular system \\linebreak \\linebreak Make your paper figures professionally: \\linebreak Scientific data analysis and visualization with R**"
+
+author: "Fatemeh Behjati Ardakani, Vangelis Theodorakis, Julien Gagneur, Marcel Schulz"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+geometry: margin=2cm
+fontfamily: helvet
+output: 
+  bookdown::pdf_book:
+    toc: true
+    toc_depth: 3
+    includes:
+      in_header: preamble.tex
+    highlight: tango
+    theme: united
+  
+documentclass: book
+biblio-style: apalike
+link-citations: yes
+---
+- \usepackage{titling}
+      - \pretitle{\begin{center}
+        \includegraphics[width=2in,height=2in]{logo.jpg}\LARGE\\}
+      - \posttitle{\end{center}}
+```{r include=FALSE}
+options("width"=80)
+knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE, cache=F, 
+    results="show",
+    out.width="400px", out.height="250px",
+    fig.align="center",
+    dpi=200, tidy = TRUE, tidy.opts=list(width.cutoff=80))
+file.copy(file.path(R.home("doc"), "html", "logo.jpg"), '.')
+```

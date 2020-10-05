@@ -1,0 +1,12 @@
+```{r include=FALSE}
+options("width"=80)
+knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE, cache=F, 
+    results="show",
+    out.width="400px", out.height="250px",
+    fig.align="center",
+    dpi=200, tidy = TRUE, tidy.opts=list(width.cutoff=80))
+```
+
+# Foreword
+
+The aim of these series of lectures is to provide you with all the knowledge needed in order to make state of the art plots using the R programming language and Grammar of Graphics. The lectures cover the basic concepts of R, how to manipulate data and how to generate clear and meaningful plots for your target audience, using ggplot2 an implementation of Grammar of Graphics for R. 

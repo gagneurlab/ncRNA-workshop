@@ -1,0 +1,51 @@
+# Quiz solutions
+
+## data.table
+
+1. A, including the column names inside c() will return a vector.
+
+\vskip 0.5cm
+
+2. C, inner join will omit the experiments whose dates are not provided.
+Full join will add rows of the experiments we are not interested in.
+Left join will leave the rows we are interested in and simply add the dates when available and NAs when not.
+Right join will leave us with experiments we are not interested and omit ones that we are interested but don't have the date.
+
+## tidy data
+
+1. B, melt
+
+    Tidy form:
+
+    ![Tidy religion dataset](../assets/img/lec05_tidy_rel.png){width=300px}
+
+\vskip 0.5cm
+
+2. D Melt, unite and cast
+
+    Tidy form:
+
+    ![Tidy weather dataset](../assets/img/lec05_tidy_weather.png){width=300px}
+ 
+
+## ggplot2
+
+1. B, because neither variables were mapped nor geometry specified. 
+
+\vskip 0.5cm
+
+2. C, because while axis x and y are mapped, no geometry is specified.
+
+\vskip 0.5cm
+
+3. D Axis x and y are mapped. But no geometry specified.
+
+\vskip 0.5cm
+
+4. 
+    
+    1. Rainbow color where there are no breakpoints. Color boundaries are created based on author's interest.
+
+    2. Manually twisted color scale.
+
+5. B, light grey does not draw attention and grid lines are less important than data.

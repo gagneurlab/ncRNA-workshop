@@ -1,0 +1,523 @@
+# Advanced plotting
+```{r echo=FALSE}
+
+library(gridExtra)
+
+# data
+poke_dt <- readRDS('../extdata/tidy_pokemon_poke_dt.RDS')
+moves_dt <- readRDS('../extdata/tidy_pokemon_moves_dt.RDS')
+olydt <- fread('../extdata/summer_olympic_medals_ALL_MEDALISTS.csv')
+ind <- fread('../extdata/CPI_HDI.csv')
+
+mysize <- 15
+mytheme <- theme(
+    axis.title = element_text(size=mysize), 
+    axis.text = element_text(size=mysize),
+    legend.title = element_text(size=mysize),
+    legend.text = element_text(size=mysize)
+    ) + theme_bw()
+
+```
+
+Define a theme
+
+```{r}
+mysize <- 15
+mytheme <- theme(
+    axis.title = element_text(size=mysize), 
+    axis.text = element_text(size=mysize),
+    legend.title = element_text(size=mysize),
+    legend.text = element_text(size=mysize)
+    ) + theme_bw()
+```
+
+In the following examples we will use the `ind` dataset
+
+```{r}
+ind
+```
+
+HDI: Human Development Index (http://hdr.undp.org/)
+
+Year: 2014
+
+## Histogram
+
+A histogram represents the frequencies of values of a variable bucketed into ranges. It takes as input numeric variables only. Histogram is similar to bar chart but the difference is it groups the values into continuous ranges. Each bar in histogram represents the height of the number of values present in that range. Each bar of the histograms is called bin.
+
+Histogram of Human Development Index (HDI) in the ind dataset: 
+```{r, warning=FALSE, message=FALSE}
+ggplot(ind, aes(HDI)) + geom_histogram() + mytheme
+```
+
+Setting the number of bins
+```{r, warning=FALSE, message=FALSE}
+ggplot(ind, aes(HDI)) + geom_histogram(bins=10) + mytheme
+```
+
+## Density plots
+Sometimes it is better to represent the distribution of a numeric variable using density plots and not histograms.
+
+These smoothed distribution plot are typically obtained by kernel density estimation:
+[https://en.wikipedia.org/wiki/Kernel_density_estimation](https://en.wikipedia.org/wiki/Kernel_density_estimation)
+
+Density plot of Human Development Index (HDI) in the ind dataset: 
+```{r, warning=FALSE, message=FALSE}
+ggplot(ind, aes(HDI)) + geom_density() + mytheme
+```
+
+## Kernel density plots - smoothing bandwidth
+
+Using the bandwidth argument of the `geom_density` function, one can tweak how close the density should the distribution be. It can be set manually. Default option is a bandwidth rule (which is usually a good choice).
+
+:::::: {.columns}
+::: {.column width="48%"}
+
+Small bandwidth:
+
+```{r, out.width="200px", out.height="250px"}
+ggplot(ind, aes(HDI)) + geom_density(bw=0.01) +
+  mytheme
+```
+:::
+::: {.column width="4%"}
+\ 
+:::
+::: {.column width="48%"}
+Large bandwidth:
+
+```{r, out.width="200px", out.height="250px"}
+ggplot(ind, aes(HDI)) + geom_density(bw=1) +
+  mytheme
+```
+:::
+::::::
+
+Be careful with density plots as the bandwidth can have strong visual effects. Histograms are not that bad and show the data 'raw'.
+
+
+## Multidimensional data
+
+* For this part, we assume all variables to be quantitative.
+
+* That means, all variable values will be plotted on continuous (xy-)axes.
+
+* More complicated, mixed binary/multinomial/ordinal/continuous data might require specialized plotting and data analysis strategies.
+
+## Small dimensionality, ~3-10 variables
+
+**Plot matrix**
+
+```{r}
+library(GGally)
+ggpairs(mpg, columns = c("displ","cyl","cty","hwy")) + mytheme
+```
+
+## Medium dimensionality, <100 variables
+
+Correlation plot is a graph of correlation matrix. Useful to highlight the most correlated variables in a data table. In this plot, correlation coefficients are colored according to the value. Correlation matrix can be also reordered according to the degree of association between variables.
+
+Correlation plots are also called "corrgrams" or "correlograms"
+
+```{r}
+ggcorr(mtcars, geom = 'circle') 
+```
+
+## High dimensionality, >100, >>100 variables
+
+For the representation of high dimensionality datasets with more that 100 variables we use heatmaps.
+A heatmap is a graphical representation of data that uses a system of color-coding to represent different values. 
+
+```{r}
+mtcars_melted <- as.data.table(scale(mtcars[1:10,]), keep.rownames = "Cars") %>% melt(id.var = "Cars")
+mtcars_melted <- mtcars_melted
+ggplot(mtcars_melted, aes(variable, Cars)) +
+  geom_tile(aes(fill=value)) +
+   scale_fill_gradient2(low='darkblue', mid= 'white', high='darkred') + mytheme
+```
+
+## Conditional correlation
+In this data, the two variables Phenotype and Expression are nicely correlated:
+
+```{r, echo=F,warning=F}
+AA <- data.table(Expression = rnorm(1000, mean = 5), 
+                 Phenotype = rnorm(1000, mean=1, sd = 1.5))
+AB <- data.table(Expression = rnorm(2000, mean = 6), 
+                 Phenotype = rnorm(2000, mean=4, sd = 1.5))
+BB <- data.table(Expression = rnorm(1000, mean = 8), 
+                 Phenotype = rnorm(1000, mean=8, sd = 1.5))
+dt <- rbindlist(list(AA=AA, AB=AB, BB=BB), idcol = "Genotype")
+# shuffle, so head shows different genotypes
+dt <- dt[sample(dim(dt)[1],dim(dt)[1]),]
+```
+
+
+```{r}
+ggplot(dt, aes(Phenotype, Expression)) + geom_point() + mytheme
+dt[, cor(Phenotype, Expression)]
+```
+
+...but are they directly correlated or is that due to a further variable?
+
+
+## Facets are good to check conditional correlation
+
+```{r, echo=T}
+ggplot(dt, aes(Phenotype, Expression)) + geom_point() + facet_wrap(~ Genotype) + mytheme
+```
+
+**Statistically speaking**: The two variables *are* correlated, but their conditional correlation (given the genotype) is zero.
+
+## The `diamonds` data
+```{r, echo=FALSE}
+head(diamonds, 1)
+```
+Description of R datasets are available through the help.
+
+```{r}
+?diamonds
+```
+Variable  | Description
+------------- | -------------
+price  | price in US dollars (\$326, \$18,823)
+carat  | weight of the diamond (0.2, 5.01)
+cut | quality of the cut (Fair, Good, Very Good, Premium, Ideal)
+color | diamond colour, from J (worst) to D (best)
+clarity | a measurement of how clear the diamond is (I1 (worst), SI1, SI2, VS1, VS2, VVS1, VVS2, IF (best))
+x | length in mm (0.00, 10.74)
+y | width in mm (0.00, 58.9)
+z | depth in mm (0.00, 1.8)
+depth | total depth percentage = z / mean(x, y) = 2 * z / (x + y) (43, 79)
+table | width of top of diamond relative to widest point (43, 95)
+
+## Conditioning with categorical variables: multi-way barplots
+
+In the following examples we are going to use barplots. A barplot (or barchart) is one of the most common types of graphic. It shows the relationship between a numeric and a categoric variable. Each entity of the categoric variable is represented as a bar. The size of the bar represents its numeric value. 
+
+Additionally, we introduced that, one can map variables to colours easily with ggplot.
+```{r}
+ggplot(data = diamonds, aes(cut, fill = cut)) + geom_bar() + mytheme
+```
+
+What happens if you map fill colour to other variable like `clarity`? 
+
+```{r}
+ggplot(diamonds, aes(x = cut, fill = clarity)) + 
+  geom_bar() + mytheme
+```
+
+The stacking is performed automatically by the position adjustment specified by the position argument. The default position is "`stack`".
+
+```{r}
+ggplot(diamonds, aes(x = cut, fill = clarity)) + 
+  geom_bar(position = "fill") + mytheme
+```
+
+`position = "fill"` works like stacking, but makes each set of stacked bars the have same height. This makes it easier to compare proportions across groups.
+
+```{r}
+ggplot(diamonds, aes(x = cut, fill = clarity)) + 
+  geom_bar(position = "dodge") + mytheme
+```
+
+`position = "dodge"` places overlapping objects directly beside one another. This makes it easier to compare individual values.
+
+Other position types include `"jitter"` and `"identity"`.
+
+## Color coding in R
+
+Four ways to code colors in R (ggplot2):<br/><br/>
+
+1. Default aesthetic mapping (`aes(color = variable)`)
+
+```{r, eval=F}
+x <- c(1:5); dt <- data.table(x)
+p <- ggplot(dt, aes(x)) # save the mapping to p
+p + geom_bar(aes(fill = factor(x))) # factor convert x into factors, then map to ggplot default color palette
+p + geom_bar(aes(fill = factor(x))) + scale_fill_brewer(palette="Spectral") # change default color palette
+```
+
+```{r, eval=T, echo=F}
+library(gridExtra)
+x <- c(1:5); dt <- data.table(x)
+p <- ggplot(dt, aes(x)) # save the mapping to p
+p1 <- p + geom_bar(aes(fill = factor(x))) + mytheme
+p2 <- p + geom_bar(aes(fill = factor(x))) + scale_fill_brewer(palette="Spectral") + mytheme
+grid.arrange(p1, p2, ncol=2)
+```
+
+2. Predefined color numbers 
+
+```{r}
+x <- c(1:5); dt <- data.table(x)
+p <- ggplot(dt, aes(x)) # save the mapping to p
+p + geom_bar(fill = x) + mytheme
+```
+ 
+3. Predefined color names
+
+* *Additive color model*
+
+* Hexadecimal coding of three number pairs for red, green, blue; and alpha (00%-99%) for transparency
+* `00`-`FF` corresponds to 0-255
+
+3. Predefined color names or RGB - HTML color codes (last bar with 50% transparency)
+
+```{r}
+x <- c(1:5); dt <- data.table(x)
+p <- ggplot(dt, aes(x)) # save the mapping to p
+p + geom_bar(fill=c("#FFFFFF", "#FFFF00", "#666666","#22AAAA", "#00008050")) + mytheme
+```
+
+The RColorBrewer package provides a set of nice color palettes
+```{r, RColorBrewer, out.width='200px', out.height="200px", fig.height = 8,  }
+library(RColorBrewer)
+display.brewer.all()
+```
+
+Like all aspects of visual perception, we do not perceive color in an absolute manner.
+
+* Perception of an object is influenced by the context
+
+* Visual perception is relative, not absolute.
+
+
+You should use colors meaningfully and with restraint
+
+**Rule #1**
+
+If you want different objects of the `same color` in a table or graph to look the same, 
+make sure that the `background is consistent`.
+
+```{r, echo=F}
+knitr::include_graphics("../assets/img/lec07_col_contrast.png")
+```
+
+**Rule #2**
+
+If you want objects in a table or graph to be `easily seen`, 
+use a background color that `contrasts sufficiently` with the object.
+
+This is an example of double-encoding (position and colors).
+
+```{r, warning=F, results='hide', echo=F}
+library(plotly)
+# library(webshot2)
+dt <- poke_dt[,.(mean_hp = mean(HP, na.rm=T)), by=Type][order(mean_hp)]
+dt[,Type:= factor(Type, levels = as.character(Type))]
+p <- plot_ly(dt, y= ~mean_hp, x= ~Type, type='bar', 
+             color=~Type, colors= rainbow(length(unique(dt$Type)))) %>%
+  layout( xaxis=list(categoryorder='trace', title=''),
+         yaxis=list(title='Average health power'),
+         title='Pokemon health power by type',
+         margin=list(b=60)
+  )
+# p
+tmpf12 <- "../assets/fig/lec07-col_restraint.html"
+
+htmlwidgets::saveWidget(p, file.path(getwd(),tmpf12))
+```
+
+```{r, echo=FALSE}
+# webshot(url = tmpf12, file = "hc.png", delay = 1, zoom = 4, vheight = 500)
+```
+
+**Rule #3**
+
+Use color only when needed to serve a particular communication goal.
+
+**Rule #4** 
+
+Use different colors only when they correspond to differences of meaning in the data.
+
+**Rule #5**
+
+Use `soft`, natural colors to display `most` information 
+and `bright` and/or dark colors to `highlight` information that requires greater attention.
+ 
+ 
+## Define standard palettes of colors for particular purposes
+
+Different types of color palettes
+* Categorical: separate items into distinct groups
+* Sequential: quantitative differences. Typically for quantitative positive values.
+```{r echo=F}
+knitr::include_graphics("../assets/img/lec07_col_seq_pal.png")
+```
+
+* Diverging: quantitative differences, breakpoints. For quantitative signed values (e.g. correlations)
+
+```{r echo=F}
+knitr::include_graphics("../assets/img/lec07_col_div_pal.png")
+```
+
+Xiong et al., Science 2014
+
+## Themes control non-data parts of your plots:
+* Complete theme
+* Axis title
+* Axis text
+* Plot title
+* Legends
+
+They control the appearance of your plots: size, color, position... 
+
+But have nothing to do with how the data is represented.
+
+```{r}
+ggplot(ind, aes(CPI, HDI, color=region)) +
+  geom_point() +
+  theme_bw() # black and white
+```
+
+Other complete themes: `theme_classic`, `theme_minimal`, `theme_light`, `theme_dark`.
+ 
+You can add more themes with `ggthemes` package (from github)
+```{r}
+library(ggthemes)
+ggplot(ind, aes(CPI, HDI, color=region)) +
+  geom_point() +
+  theme_wsj() + scale_colour_wsj("colors6", "")
+```
+
+wsj: Wall Street Journal
+
+
+## Axis 
+
+To manipulate the axis title, you need to tweak the following arguments of the ```theme()```:
+
+- `axis.title`
+
+- `axis.title.x`
+
+- `axis.title.y`
+
+In case of many themes, the latter overrides the former
+
+```{r}
+ggplot(ind, aes(CPI, HDI, color=region)) +
+  geom_jitter() + theme_bw() +
+  theme(axis.title = element_text(size=20, color = 'red')) 
+```
+
+To manipulate the axis text, you need to tweak the following arguments of the ```theme()```:
+    
+- `axis.text`
+
+- `axis.text.x`
+
+- `axis.text.y`
+
+```{r}
+ggplot(ind, aes(CPI, HDI, color=region)) +
+  geom_jitter() + theme_bw() +
+  theme(axis.text = element_text(size=20, color = 'blue')) 
+```
+
+Summary axis elements
+
+The axis elements control the appearance of the axes:
+
+Element             | Setter            | Description               
+--------------------|-------------------|---------------------------
+axis.line           | `element_line()`  | line parallel to axis (hidden in default themes)
+axis.text           | `element_text()`  | tick labels               
+axis.text.x         | `element_text()`  | x-axis tick labels        
+axis.text.y         | `element_text()`  | y-axis tick labels        
+axis.title          | `element_text()`  | axis titles               
+axis.title.x        | `element_text()`  | x-axis title              
+axis.title.y        | `element_text()`  | y-axis title              
+axis.ticks          | `element_line()`  | axis tick marks           
+axis.ticks.length   | `unit()`          | length of tick marks 
+
+
+## Plot title themes
+```{r}
+ggplot(ind, aes(CPI, HDI, color=region)) +
+  geom_jitter() +
+  ggtitle('CPI vs HDI') + theme_bw() +
+  theme(plot.title = element_text(size=20, face = 'bold')) 
+```
+ 
+Some elements affect the plot as a whole:
+
+Element               | Setter           | Description               
+----------------------|------------------|------------
+plot.background       | `element_rect()` | plot background
+plot.title            | `element_text()` | plot title
+plot.margin           | `margin()`       | margins around plot
+
+## Legend themes
+```{r}
+base <- ggplot(ind, aes(CPI, HDI, color=region)) +
+  geom_jitter() + theme_bw()
+base + theme(
+  legend.text = element_text(size = 15),
+  legend.title = element_text(size = 15, face = "bold")
+)
+```
+ 
+The legend elements control the appearance of all legends. You can also modify the appearance of individual legends by modifying the same elements in `guide_legend()` or `guide_colourbar()`.
+
+Element             | Setter                    | Description                                 |
+--------------------|---------------------------|---------------------------------------------|
+legend.background   |  `element_rect()`         | legend background                           |
+legend.key          |  `element_rect()`         | background of legend keys                   |
+legend.key.size     |  `unit()`                 | legend key size                             |
+legend.key.height   |  `unit()`                 | legend key height                           |
+legend.key.width    |  `unit()`                 | legend key width                            |
+legend.margin       |  `unit()`                 | legend margin                               |
+legend.text         |  `element_text()`         | legend labels                               |
+legend.text.align   |  0--1                     | legend label alignment (0 = right, 1 = left)|
+legend.title        |  `element_text()`         | legend name                                 |
+legend.title.align  |  0--1                     | legend name alignment (0 = right, 1 = left) |
+
+## Interactive plots with plotly
+
+```{r, echo=F}
+p <- ggplot(mtcars, aes(factor(cyl), mpg)) + 
+  geom_boxplot()
+p <- ggplotly(p)
+tmpf1 <-  "../assets/fig/lec07-boxplot.html"
+htmlwidgets::saveWidget(p, file.path(getwd(), tmpf1))
+```
+
+```{r, eval=F}
+library(plotly)
+p <- ggplot(mtcars, aes(factor(cyl), mpg)) + 
+  geom_boxplot()
+ggplotly(p)
+```
+```{r, echo=FALSE}
+# webshot(url = tmpf1, file = "hc.png", delay = 1, zoom = 4, vheight = 500)
+```
+
+<script type='text/javascript'>toc("Bad Habits")</script>
+
+## Chart junk
+
+[Source: Darkhorse Analytics](http://www.darkhorseanalytics.com/blog/data-looks-better-naked/)
+
+<!-- ![Chart junk](../assets/img/lec05-data-ink.gif) -->
+
+* poor **data-ink ratio**
+* double encoding (color and axis encode the same)
+* heavy or dark grid lines
+* unnecessary text
+* ornamented chart axes
+* pictures within graphs
+* shading, color gradients or 3D perspective
+
+## Assembling paper figures
+`cowplot` package is a simple add-on to ggplot2. It provides publication-ready theme for ggplot2.
+
+```{r, fig.width="5", fig.height="5", out.height="500px"}
+library(cowplot)
+plot_mpg <- ggplot(mpg, aes(x = cty, y = hwy, colour = factor(cyl))) + 
+  geom_point(size=2.5)
+plot_diamonds <- ggplot(diamonds, aes(clarity, fill = cut)) + geom_bar() +
+  theme(axis.text.x = element_text(angle=70, vjust=0.5))
+plot_grid(plot_mpg, plot_diamonds, labels = c("A", "B"), nrow = 2) # can modify ncol or nrow
+```
+ 

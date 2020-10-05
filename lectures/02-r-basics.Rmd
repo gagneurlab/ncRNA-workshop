@@ -1,0 +1,773 @@
+```{r include=FALSE}
+options("width"=80)
+knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE, cache=T, 
+    results="show",
+    out.width="400px", out.height="250px",
+    fig.align="center",
+    dpi=200, tidy = TRUE, tidy.opts=list(width.cutoff=80))
+
+error_hook <- knitr::knit_hooks$get("error")
+knitr::knit_hooks$set(
+  error = function(x, options) {
+    if (!is.null(n <- options$linewidth)) {
+      x = knitr:::split_lines(x)
+      if (any(nchar(x) > n))
+        x = strwrap(x, width = n)
+      x = paste(x, collapse = '\n')
+    }
+    error_hook(x, options)
+  }
+)
+```
+
+# R basics
+
+In this lecture we will cover the basic concepts of the R programming language: data types, data operations, data structures, control flow and function
+
+## R studio
+
+There are only few things needed to start your data science journey. Those are:
+
+* a computer with an appropriate editor installed
+* a programming language of your choice
+* and some data (obviously)
+
+You can download R for your particular OS from [the r-project site.](https://www.r-project.org/)
+
+And RStudio from [the official RStudio site.](https://rstudio.com/)
+
+The basic editor used by R users is the RStudio. It consists of various sections such as:
+
+* the main script section, for writing scripts [top left section] (Ctrl+1 to focus)
+* the console tab, for typing R commands directly [bottom left section as tab] (Ctrl+2 to focus)
+* the terminal tab, for direct access to your system shell [bottom left section] (Shift+Alt+T to focus)
+* the plot tab, where you see the last plot generated [bottom right section as tab]
+* the help tab, with useful documentation of R functions [bottom right section as tab] (F1 on the name of a function or Ctrl+3)
+* the history tab, with the list of the R commands used [top right section as tab]
+* the environment tab, with the created variables and functions loaded [top right section as tab]
+* and the packages tab, with the available/loaded R packages [bottom right section as tab]
+
+Check the View menu to find out the rest of useful shortcuts!
+
+![RStudio](../assets/img/RStudio.png){#id .class width=600px height=400px}
+
+
+## Data structures
+
+R has various data structures and types that we will see shortly. From simple scalar variables to tables with multiple features and observation, each layer builds on top of its previous.
+
+**Notes:**  
+
+* Scalars are just vectors of length one
+* Use `str()` to see the structure of an object
+* All more complex objects, like *S3*, *S4* or *Reference classes* are build from this structures
+* Additionally R uses *attributes* to store metadata about an object
+
+## Data types
+
+The usual types for an variable can be logical, numeric, double, character or complex (e.g. matrix, data.frame). It is quite handy to know your data types as then you know which operations/functions are available and meaningful to use and it saves you time when debugging
+
+typeof | mode | storage.mode
+-------|------|--------------
+logical | logical | logical
+integer | numeric | integer
+double | numeric | double
+complex | complex | complex
+character | character | character
+
+In practice no distinction is made between doubles and integers. They are just "numerics".  
+Numeric are by default doubles:
+
+```{r}
+typeof(1)
+typeof(1L)
+```
+
+## Assignments
+
+Assignments in R are preferably of this form:
+
+```{r eval=F}
+objectName <- value
+```
+
+It is also possible to assign with the *equal* sign.
+
+```{r eval=F}
+objectName = value
+```
+
+\newpage
+
+```{r}
+x <- 5 # Both methods have the same outcome
+y = 5
+```
+
+```{r}
+x
+y
+```
+
+However, the "equal" sign is used for argument passing to functions. Thus if nesting, the equal sign will be interpreted as a argument assignment and might throw an error:
+
+```{r, linewidth=80, error=TRUE}
+## We want to measure the running time of the inner product of a large vector and 
+## assign the outcome of the function to a variable simultaneously
+system.time(a <- t(1:1e6)%*%(1:1e6))
+system.time(a = t(1:1e6)%*%(1:1e6)) ## This would cause an error
+```
+
+Right Alt + - gives a quick shortcut to add **<-** ;)
+
+
+## Vectors
+
+Vectors are 1-dimensional data structures which can contain one or more variables, regardless of their type.
+
+Usually created with `c()` (from *concatenation*):
+```{r}
+c(1, 5, 8, 10)
+str(c(1, 5, 8, 10))
+length(c(1, 5, 8, 10))
+c("a", "B", "cc")
+c(TRUE, FALSE, c(TRUE, TRUE))
+c(1, "B", FALSE)
+```
+
+There are multiple ways to create a numeric sequence depending on the desired result.
+
+Usually for an integer sequence *from:to* is enough. For different results we may need to use `seq()` function utilizing its arguments to increase by a *step* of our choice or to split the range depending on the desired length of the output.
+
+```{r}
+1:10 
+seq(from = 1, to = 10, by = .3)
+seq(from = 1, to = 10, length.out = 12)
+```
+
+Keep in mind that sometimes different approaches, give different data types as results so when weird things happen, always check the documentation (devil is in the details)!
+
+For non numeric values e.g. logical, character, `rep()` function comes also in handy. 
+
+The *replicate* function `rep()` replicates a vector a certain number of *times* and concatenates them: 
+```{r}
+rep(c(TRUE, FALSE), times = 5)
+```
+
+To replicate *each* entry of the input vector at the time:
+```{r}
+rep(c(TRUE, FALSE), each = 5)
+```
+
+Vector elements are accessed via the ```[``` operator:
+```{r}
+## Create an A,B,C,D,E vector
+x <- LETTERS[1:5]
+x
+## access the third entry
+x[3]
+## modify the third entry
+x[3] <- 'Z'
+x
+```
+
+Elements in vectors can have names. 
+Using names instead of index to access entries in a vector make code more robust to re-ordering, sub-setting, and changes in data input.  
+Names can be created at initialization or set afterwards with `names()`. 
+
+```{r}
+x <- c(a = 1, b = 2, c = 3)
+x
+names(x) <- c("A", "B", "C")
+x
+```
+
+Names don't have to be unique, but should preferably be, as sub-setting by names will only return the first match
+```{r}
+x <- c(a = 1, a = 2, b = 3)
+x["a"]
+```
+
+Not all elements need to have names.
+```{r}
+c(a = 1, 2, 3)
+```
+
+## Working with missing values
+
+Missing values are specified with `NA` (Not Available). They are placeholders for the specific type and as such are something like an unspecified value. If not taken care of, it can break computation, e.g. What is the sum of [1, 3, 5, x] if you do not know x?
+
+```{r}
+## Define a vector containing a missing value (NA)
+v <- c(1,3,5,NA) 
+```
+Now we try to compute its mean:
+```{r}
+mean(v)
+```
+
+For many functions including ```mean()```, a ```na.rm``` parameter allows ignoring missing values:
+```{r}
+mean(v, na.rm = TRUE)
+```
+
+## Factors
+
+```{r}
+x <- factor(c("red", "yellow", "red","green", "green"))
+x
+```
+
+* A factor is a is used to store categorical data. The distinct categories are called 'levels'.
+
+* They belong to a special `class()`, *factor*, which makes them behave differently from regular integer vectors.
+
+* Factors cannot be altered in the same way as vectors. Only their levels can be altered.
+
+* Factors are built on top of integer vectors: the values are integer indexes in the dictionary of levels.
+
+* They occupy less space in memory than characters, since they are stored as integers.
+
+
+Level | Integer 
+------|--------
+green  | 1 
+red | 2 
+yellow | 3 
+
+* Factors are typically constructed with `factor()`. By default the levels are the unique values, sorted by alphanumerical order. 
+```{r}
+x <- factor(c("red", "yellow", "red","green", "green"))
+x
+```
+
+`levels()` gives the levels in ascending order of the underlying encoding integers.
+```{r}
+levels(x)
+```
+
+The order of the levels can be forced:
+```{r}
+x <- factor(c("red", "yellow", "red","green", "green"), levels=c("green", "yellow", "red"))
+x
+levels(x)
+```
+
+The order of the levels is then used for all function requiring comparisons, e.g. sorting 
+```{r}
+sort(x)
+```
+
+Only level values can be used:
+```{r}
+x <- factor(c("red", "yellow", "red","green", "green"))
+x[2] <- "blue"
+x
+```
+
+**Be aware** that R does not prevent you from combining factors:
+
+Do not try to combine factors, especially if levels are not the same!
+
+```{r}
+c(x, factor("blue"))
+```
+
+## Math
+
+R supports various mathematical and logical operations between scalars, vectors etc.
+
+* Basic mathematical operations: `+`, `*`, `-`, `/`
+* Additional mathematical operations: 
+  * **%* ** Matrix multiplication, for vectors: inner product (dot product)
+  * **%%** Modulo
+  * **%/%** Integer division
+  * **%o%** Outer product
+  * **^** Exponentiation
+* Boolean operations:
+  * **&** element-wise AND
+  * **&&** AND left to right until the result is determined
+  * **|** element-wise OR
+  * **||** OR left to right until the result is determined
+  * **!** NOT
+  * **xor(x,y)** element-wise XOR (exclusive OR)
+
+
+## Binary comparison
+
+- Element-wise Binary comparison return a vector of same length as the input
+  - **==** element-wise equality
+  - **!=** element-wise inequality
+  - **<**, **<=** element-wise smaller (or equal)
+  - **>**, **>=** element-wise greater (or equal)
+
+```{r}
+1:5 == 1:5
+```  
+
+* Binary comparison with a single Boolean statement as output
+  * `identical(x, y)` exact equality
+  * `all(x)` are all TRUE?
+```{r}
+identical(1:5, 1:5)
+```
+
+## Matrices
+
+2-dimensional structures that can be created by `matrix()`. By default 2D structures are populated column-wise.
+
+```{r}
+mat <- matrix(data = 1:12, nrow = 2, ncol = 6, byrow = FALSE)
+mat
+
+mat <- matrix(data = 1:12, nrow = 2, ncol = 6, byrow = TRUE) 
+mat
+
+# work the same as matrix(data = 1:12, nrow = 2, ncol = 6, byrow = FALSE)
+mat <- matrix(1:12, 2, 6) 
+mat
+
+dim(mat)
+```
+
+Vector attributes generalizes differently for matrices as dimensions change:
+
+`length()` becomes `nrow()` and `ncol()`
+```{r}
+nrow(mat)
+ncol(mat)
+```
+
+`names()` becomes `rownames()` and `colnames()`
+```{r}
+colnames(mat) <- c("A", "B", "C", "D", "E", "F")
+rownames(mat) <- c("a", "b")
+mat
+```
+
+`c()` becomes `cbind()` (column-bind)
+```{r}
+mat <- matrix(c(1, 2, 4, 5), 2, 2)
+cmat <- matrix(7:8, 2, 1)
+mat <- cbind(mat, cmat)
+mat
+```
+
+and `rbind()` (row-bind)
+
+```{r}
+rmat <- matrix(c(3, 6, 9), 1, 3)
+mat <- rbind(mat, rmat)
+mat
+```
+
+Operations between a vector and a matrix is done column-wise:
+```{r, eval=FALSE}
+mat <- matrix(1, 3, 2)
+```
+
+```{r}
+vec <- 1:3
+vec
+```
+```{r, eval=FALSE}
+mat*vec
+```
+
+`Can you guess what will happen?`
+
+Operations between a vector and a matrix is done column-wise:
+```{r, eval=FALSE}
+mat <- matrix(1:9, 3, 3)
+```
+
+```{r}
+vec <- 1:3
+vec
+mat*vec
+```
+
+* This behavior comes from the fact that all objects in R are basically vectors, which are just "folded" column-wise
+* Elements of the shorter vector are constantly reused.
+
+```{r}
+as.vector(mat) * vec
+mat * 1:2
+```
+
+
+* Elements of the shorter vector are constantly reused. If the shorter vector is a multiple of the longer vector, the computation succeeds. Otherwise it will run until the end and throw a warning.
+
+```{r}
+mat * 1:4
+```
+
+## Lists
+
+Lists are heterogeneous vectors, that is the elements can be of *any type*, including lists (recursive). Construct lists by using `list()`:
+```{r}
+x <- list(c(1,2,3), "some text", list(c(TRUE, FALSE)))
+x
+```
+
+
+`typeof` list is *list*:
+```{r}
+typeof(x)
+```
+
+List elements are accessed via the ```[[``` operator:
+```{r}
+## Create an A,B,C list
+x <- as.list(LETTERS[1:3])
+x
+## access the third element with `[[`
+x[[3]]
+## modify the third element
+x[[3]] <- 'Z'
+x[[3]]
+## accessed with only a single `[` we get a list of the given index
+x[3]
+```
+
+## Data Frames
+
+* *Data frames* are the most common way to store data
+* It's a list of equal-length vectors
+* Because of this 2-dimensional structure it shares properties of both a *list* and a *matrix*
+* So a data frame has `rownames()` and `colnames()` equivalent to `names()`
+* It has also `nrow()` and `ncol()` equivalent to `length()`
+* `length()` actually returns the number of *list elements*, which is the column dimension
+* Data frames are created with `data.frame()` and named vectors (also lists) or matrices as input
+
+```{r}
+df <- data.frame(number = 1:4, letter = letters[1:4])
+df
+```
+
+Matrices and lists can be without names, but data frames not. If an unnamed vector or matrix is provided, names are set by default. The functions `colnames` and `rownames` can be used to view and set the names.
+```{r}
+rownames(df)
+rownames(df) <- paste0("row_", nrow(df):1)
+rownames(df)
+```
+
+* Merging works with `cbind()` and `rbind()` like in matrices and with `c()` like in lists.
+* If combining column-wise, the number of rows must match
+```{r}
+df <- data.frame(number = 1:2, letter = letters[1:2])
+cbind(df, data.frame(cont = 5:6))
+```
+
+* If combining row-wise, **the column names have to be identical**.
+```{r, error=TRUE}
+rbind(df, data.frame(n = 3, l = letters[3])) # This will cause and Error
+rbind(df, data.frame(number = 3, letter = letters[3])) 
+```
+
+## Sub-setting
+
+* There are three accessing methods
+  * **[** For vectors
+  * **[[** For list-based structures
+  * **$** Similar to the prior
+
+* Six ways of sub-setting
+  * By positive integers
+  * By negative integers
+  * By logical vectors
+  * Empty sub-setting
+  * By Zero
+  * Character vector
+
+### Atomic vectors
+
+```{r}
+x <- LETTERS[1:5]
+x
+## By positive integers
+x[c(1,3)]
+## By negative integers
+x[-c(1,3)]
+```
+
+```{r}
+## By logical vectors
+x[c(TRUE, TRUE, TRUE, FALSE, FALSE)]
+## By logical vectors
+x[x <= "C"]
+```
+
+`NAs` in the input vector will always produce an `NA` in the output:
+```{r}
+x[c(1,2,NA)]
+```
+
+We can also sub-setting by character vectors, if names are present:
+```{r}
+names(x) <- letters[1:5]
+x[c("a", "b")]
+```
+
+
+
+### Lists
+
+Lists behave just like atomic vectors. The output is a list
+```{r}
+myList <- list("char"=c("a", "b"), "int"=1:5, "logic"=TRUE)
+## By positive integers
+myList[[1]] ; myList[1]
+## Character vector
+myList["int"]
+## By logical vectors
+myList[c(FALSE, TRUE, FALSE)]
+## By negative integers
+myList[-c(1,3)] 
+```
+
+
+
+### Matrices
+
+```{r}
+mat <- matrix(1:9, 3, 3)
+colnames(mat) <- LETTERS[1:3]
+mat
+```
+Possible to mix different sub-setting styles
+```{r}
+mat[c(2,3), c(1,2)]
+mat[-1, -3]
+mat[c(2,3), c("A", "B")]
+mat[c(FALSE, TRUE, TRUE), c(TRUE, TRUE, FALSE)]
+mat[-1, 1:2]
+mat[c(FALSE, TRUE, TRUE), c("A", "B")]
+```
+
+
+
+### Data Frames
+
+Data frames share properties of lists and matrices. sub-setting by a single vector will behave as in lists. Note the number of elements in a list
+is the number of columns in the data frame. sub-setting by two vectors will behave as in matrices.
+```{r}
+df <- data.frame(matrix(1:6, 2, 2))
+names(df) <- letters[1:2]
+df[1:2]
+df[-1, c("a", "b")]
+```
+
+
+
+### By accessors: 
+
+The `[[` and `$` operators behave more like accessors to objects. They return only one object and as such can take generally only one input, so they are useful for lists and data frames. The `$` is a shortcut for `x[[name, exact = FALSE]]`
+
+```{r}
+names(df) <- c("Ak", "B")
+df
+df[[2]]
+df[["B"]]
+```
+
+`What will the following return?`
+
+```{r, eval=FALSE}
+df$A 
+```
+
+`What will the following return?`
+
+```{r}
+df$A
+df[["A", exact=TRUE]]
+```
+
+### Sub-setting and assignment
+
+All sub-setting operators can be combined with assignments to modify a subset of values.
+
+```{r}
+x <- c(a = 1, b = 2, c = 3)
+x[2] <- 10
+x
+df <- data.frame(a = 1:2, b = 3:4)
+df
+df$b <- c("first", "second")
+df
+
+```
+
+## Functions
+
+Function are a nice way to break down a big problem (bake a pizza) to smaller, manageable sub-problems (make the dough, make the sauce, add toppings, bake the pizza). They offer code re-usage (save time for important things, like wine drinking), easier testing of functionality and cleaner code!
+
+The syntax to write your own functions is the following:
+
+```{r, eval=FALSE}
+myFunction <- function(args1, args2 = default, ...) {
+  body
+  return(result)
+}
+```
+
+* If the `return` statement is missing, the result of the last line will be returned
+* The parameters can be assigned default values
+* If the default value is a vector, the first value will be used by default
+* The *three dots* (`...`) in the function arguments are called **ellipsis** and are used as a placeholder for any arguments passed to a function call inside. This is useful when you don't want to push all parameters from embodied function to your functions or allow for generic functions without pre-specifying argument names.
+
+```{r, eval=FALSE}
+myFunction <- function(args1, args2 = c("option1", "option2"), ...) {
+  result <- doSomething(args1, ...)
+  return(result)
+}
+myFunction(args1, args2, param1)
+```
+
+
+## Conditional Statements
+
+A typical way to control the flow of the execution of your code is to have conditional statements.
+
+The typical setup is:
+
+```{r, eval=FALSE}
+if(statement_to_test) {
+  print("Statement is true")
+} else {
+  print("Statement is false")
+}
+```
+
+Long version:
+```{r}
+if(1 < 2) {
+  print("TRUE")
+} else {
+  print("FALSE")
+}
+```
+
+
+Short version if the To-Do step fits into one line:
+```{r}
+{
+if(1 > 2) print("TRUE")
+else print("FALSE")
+}
+```
+
+The curly brackets around the if-else statement are only needed in a script to tell R to which *if* the *else* belongs to.
+
+You can also have multiple statement tests. If more than one statements can be satisfied the first that got evaluated will be executed:
+```{r}
+x <- 1
+if(x > 0) {
+  print("X is 0, or maybe not?")
+} else if(x == 1) {
+  print("X is 1")
+} else {
+  print("X is something else")
+}
+```
+
+You can also chain *if-else* statements:
+```{r, eval=FALSE}
+x <- 5
+if(x > 0) {
+  if(x > 3) {
+    if(x == 5) {
+      cat("X is 5")
+    } else {
+      cat("X is greater than 3")
+    }  
+  } else {
+    cat("X positive and less than 3")
+  }
+} else {
+  cat("X less than 0")
+}
+```
+
+R also supports switch statements.
+
+## For loops
+
+R supports looping through the traditional *for* and *while* statements and with the use of the *apply family* functions.
+
+Syntax:
+```
+for(index in sequence) {
+  do something
+}
+```
+
+Again, if the To-Do step is a one-liner, curly brackets can be dropped
+```{r}
+a <- NULL
+for(i in 1:10) a <- c(a, sum(1:i))
+a
+```
+
+
+A sequence can be any vector, including lists
+```{r}
+myList <- list(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+a <- integer(10)
+for(i in myList) a[i] <- sum(1:i)
+a
+```
+
+However, usually looping using *for/while* statements is more time consuming compared to the the functions of the *apply family*. 
+
+
+## The Apply family
+
+* For loops condition each following step on the previous step. That means that after each step the environment is updated. 
+* This leads to long running times (for the already slow looping mechanism of R).
+* In case the single steps are independent of each other, a particular function can be applied to the elements of the steps.
+
+```{r}
+myList <- list(1:10, 11:20, 5:14)
+sapply(myList, sum)
+```
+
+* Also lambda functions can be applied
+
+```{r}
+sapply(myList, function(y) {
+  sum(y)/length(y)
+})
+```
+
+## R Markdown
+
+* This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>. 
+
+* Simply go to File --> New File --> R Markdown
+
+* Select PDF and you get a template.
+
+* You most likely won't need more commands than in on the first page of [this cheat sheet](https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf).
+
+* When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.  
+
+## Useful references
+
+* These slides are mostly based on Hadley Wickham's book [Advanced R](http://adv-r.had.co.nz/)
+
+* [**Everything else** from Hadley Wickham](http://hadley.nz/)
+
+* In-depth documentations:
+
+  * [Introduction to R](https://cran.r-project.org/doc/manuals/r-release/R-intro.pdf)
+
+  * [R language definition](https://cran.r-project.org/doc/manuals/r-release/R-lang.pdf)
+
+  * [R Internals](https://cran.r-project.org/doc/manuals/r-release/R-ints.pdf)
+
+* Last but not least:
+
+  * [Stackoverflow](http://stackoverflow.com/questions/tagged/r)
+

@@ -1,0 +1,241 @@
+---
+title: "CeDoSIA SS2020 - Exercise Sheet 2: Data Analysis and Visualization"
+author: "Vangelis Theodorakis, Xueqi Cao, Daniela Andrade Salazar, Julien Gagneur"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+package: "`r pkg_ver('BiocStyle')`"
+vignette: >
+  %\VignetteIndexEntry{CeDoSIA SS2020 - Exercise Sheet 2: Data Analysis and Visualization}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+output: 
+  BiocStyle::pdf_document
+---
+  
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(
+  fig.width=5, fig.height=4, 
+  echo=F, warning=FALSE, message=FALSE, eval=F,
+  results="hide", fig.show="hide"
+)
+
+library(ggplot2)
+library(data.table)
+```
+
+# Setup
+
+```{r, config, echo = T}
+library(data.table)
+library(magrittr)   # Needed for %>% operator
+library(tidyr)
+library(readxl)
+library(dplyr)
+```
+
+
+# Introduction to ggplot
+The `iris` data is included in the ggplot2 package. First load `ggplot2` package, then load `iris` data by `data(iris)`. Check `iris` data with `head(iris)`. 
+
+1) Are there any relationships/correlations between petal length and width? How would you show it?
+
+2) Do petal lengths and widths correlate in every species?
+
+3) Fit a regression model and visualize the regression line `geom_smooth()`. Add this as an extra layer on the plot of 1).
+
+
+```{r}
+## Answer: 1)
+data(iris)
+ggplot(data = iris, aes(x = Petal.Length, y = Petal.Width)) +
+  geom_point() 
+```
+
+
+```{r}
+## Answer: 2)
+ggplot(data = iris, aes(x = Petal.Length, y = Petal.Width, color = Species)) +
+  geom_point()
+```
+
+```{r}
+## Answer: 3)
+ggplot(data = iris, aes(x = Petal.Length, y = Petal.Width)) +
+  geom_point() +
+  geom_smooth(method = 'lm')
+```
+
+```{r}
+## You can do more like...
+ggplot(data = iris, aes(x = Petal.Length, y = Petal.Width)) +
+  geom_point(aes(color = Species)) +
+  geom_smooth(method = 'lm')
+
+ggplot(data = iris, aes(x = Petal.Length, y = Petal.Width)) +
+  geom_point() +
+  facet_wrap( ~ Species) +
+  geom_smooth(method = 'lm')
+```
+
+# data.table operations
+Load `iris` data, which comes with `ggplot2`. Compute step by step the standard deviation $s = \sqrt{\frac{1}{N-1} \sum_{i=1}^N (x_i - \overline{x})^2}$ of the **petal length** by **species**.
+
+* Copy the iris data.table into a new one, in order not to mess with it. Use ``copy()``.
+
+* Then, add columns with
+
+    + petal length mean per species: $\overline{x}$
+ 
+    + petal length - petal length mean, squared: $(x_i - \overline{x})^2$
+
+    + sum of this squared difference by species
+ 
+    + number of occurrences N per species
+ 
+    + $s$ computed as in the formula. Use ``sqrt()``.
+ 
+* Add another column using the ``sd()`` by species and compare your results with it using ``identical()``.
+
+```{r}
+## Answer: 
+library(data.table)
+
+# load data
+iris_dt <- as.data.table(iris)
+iris2 <- data.table(copy(iris_dt))
+
+# add column
+iris2[, mean_PL := mean(Petal.Length), by = Species]
+iris2[, dif_squared := (Petal.Length - mean_PL)^2]
+iris2[, sum_squares := sum(dif_squared), by = Species]
+iris2[, N := .N, by = Species]
+iris2[, sd_mine := sqrt(1/(N-1)*sum_squares)]
+iris2[, sd := sd(Petal.Length), by = Species]
+
+# check if identical
+iris2[, identical(sd_mine, sd)]  # Or 
+identical(iris2$sd_mine, iris2$sd)
+```
+
+
+# Reading and cleaning up data
+Load pokemon data with `readRDS`. Open the data.tables to check the information inside them.
+```{r echo=TRUE}
+cat(getwd())
+poke_dt <- readRDS('extdata/tidy_pokemon_poke_dt.RDS')
+evolution_dt <- readRDS('extdata/tidy_pokemon_evolution_dt.RDS')
+```
+
+1. Add a column to the poke_dt with the **evolutions** of each pokemon and the **level** it requires to evolve.
+*Hint*: merge() or join()
+```{r}
+# Answer: 
+# Using merge
+poke_merge <- merge(x = poke_dt, 
+                    y = evolution_dt[,.(Name, Evolution, Level)], 
+                    by="Name")  # Only pokemon with evolutions in poke_dt
+poke_merge <- merge(x = poke_dt, 
+                    y = evolution_dt[,.(Name, Evolution, Level)], 
+                    by="Name", all.x = T) # All pokemon in poke_dt 
+```
+
+2. Sort the table with Attack scores. Which pokemon has the highest Attack? 
+```{r}
+## Answer: 
+# Just sort the table
+poke_merge[order(-Attack)] %>% head
+# different way of doing it
+setorder(poke_merge, -Attack) %>% head
+```
+
+# Understanding a messy dataset
+
+
+The following file describes the number of times a person bought a product "a" and "b"
+
+```{r, echo = TRUE, results = "show"}
+messy_file <- file.path('extdata', 'example_product_data.csv')
+messy_dt <- fread(messy_file)
+messy_dt
+```
+
+Why is this data-set messy? Which columns should a tidy version of this table have?
+
+```{r}
+# Answer: 
+# Vales are stored as column names. 
+# Tidy data columns: name, product, n
+```
+
+# Fixing a messy dataset
+
+Read the weather dataset `weather.txt`. It contains the minimal and maximal temperature on a certain city (id) over different dates (year, month, d1-d31). Why is this dataset messy? How would a tidy version of it look like? Create its tidy version.
+
+```{r, echo = T, results = "show"}
+messy_dt <- fread("extdata/weather.txt")
+messy_dt %>% head
+dim(messy_dt)
+```
+
+```{r}
+## Why is it messy?
+
+## Answer: 
+## 1. Variables are stored as columns (days)
+## 2. A single entity is scattered across many cells (date)
+## 3. Element column is not a variable.
+##
+## Tidy version: id, date, tmin, tmax
+```
+
+
+```{r}
+## Fix a messy data
+
+### First melt the table: wide -> long
+dt <- melt(data = messy_dt, 
+           id.vars = c("id", "year", "month", "element"), 
+           variable.name = "day") 
+
+# You can ignore the warning message
+# measure.vars is missing. When missing, measure.vars will become all columns outside id.vars.
+# value.name: name for the molten data values column(s). The default name is 'value'. 
+
+
+### Then make the column day into integer
+dt[, day := as.integer(gsub(pattern = "d", replacement = "", x = day))]
+
+
+### Join all date related columns into one. Use unite or paste
+# 1. Using unite():
+dt <- unite(dt, "date", c("year", "month", "day"), sep = "-", remove = TRUE)
+
+## 2. Using paste():
+# dt[, date := paste(year, month, day, sep = "-")] # convert to date
+# dt[, c("year", "month", "day") := NULL] # remove reduntant columns
+
+
+### Dcast the table: long -> wide
+dt <- dcast(data = dt, formula = ... ~ element, value.var = "value") 
+
+
+### Remove entries with both NA values,
+tidy_dt <- dt[!(is.na(TMAX) & is.na(TMIN))] 
+
+
+## na.omit(dt) would also do the job
+# tidy_dt <- na.omit(dt)
+
+head(tidy_dt)
+
+dim(tidy_dt)
+```
+
+```{r}
+# An alternative tidy code version
+tidy_dt <- messy_dt %>% 
+  melt(id.vars=c('id', 'year', 'month', 'element'), na.rm=TRUE) %>% 
+  .[, variable := gsub('d', '', variable)] %>% 
+  unite(date, year, month, variable, sep='-') %>% 
+  dcast(... ~ element) %>% 
+  .[, date := as.Date(date)]
+```

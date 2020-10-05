@@ -1,0 +1,50 @@
+# Reproducible data analysis with Snakemake
+
+Basic idea:
+
+* Decompose workflow into "rules" (steps).
+* Rules define how to obtain output files from input files.
+* Snakemake infers dependencies and execution order with a Directed Acyclic Graph.
+* Any change in the input, only affected downstream rules will be executed.
+* Disjoint paths in the DAG of jobs can be executed in parallel.
+* Re-run all workflows with single `snakemake` command.
+ 
+Example
+
+```{r, eval=FALSE}
+rule sort:
+    input:
+        "path/to/dataset.txt"
+    output:
+        "dataset.sorted.txt"
+    shell:
+        "sort {input} > {output}"
+```
+
+```{r, eval=FALSE}
+rule sort:
+    input:
+        a="path/to/{dataset}.txt"
+    output:
+        b="{dataset}.sorted.txt"
+    run:
+        with open(output.b, "w") as out:
+            for l in sorted(open(input.a)):
+                print(l, file=out)
+```
+
+```{r, eval=FALSE}
+DATASETS = ["D1", "D2", "D3"] # use native python code
+
+rule all:
+    input:
+        expand("{dataset}.sorted.txt", dataset=DATASETS)
+
+rule sort:
+    input:
+        "path/to/{dataset}.txt"
+    output:
+        "{dataset}.sorted.txt"
+    shell:
+        "sort {input} > {output}"
+```

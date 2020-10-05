@@ -1,0 +1,359 @@
+```{r include=FALSE}
+options("width"=80)
+knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE, cache=F, 
+    results="show",
+    out.width="400px", out.height="250px",
+    fig.align="center",
+    dpi=200, tidy = TRUE, tidy.opts=list(width.cutoff=80))
+
+# This is buggy on last chunk with error=TRUE so I commented it out
+#error_hook <- knitr::knit_hooks$get("error")
+#knitr::knit_hooks$set(error = function(x, options) {
+#  if (!is.null(n <- options$linewidth)) {
+#    x = knitr:::split_lines(x)
+#    if (any(nchar(x) > n)) x = strwrap(x, width = n)
+#    x = paste(x, collapse = '\n')
+#  }
+#  error_hook(x, options)
+#})
+```
+
+
+# Data.table
+
+```{r include=F}
+DATADIR <- file.path('./../extdata')
+```
+
+Similar to a data.frame, but because it modifies columns by *reference*, a data.table is a memory efficient and faster implementation of data.frame offering:
+
+* sub-setting
+* ordering
+* merging
+ 
+It accepts all data.frame functions, it has a shorter and more flexible syntax (not so straightforward in the beginning but pays off) and saves time on two fronts:
+
+* programming (easier to code, read, debug and maintain)
+* computing (fast and memory efficient)
+
+The general form of data.table syntax is:
+
+    DT[ i,  j,  by ] # + extra arguments
+        |   |   |
+        |   |    -------> grouped by what?
+        |    -------> what to do?
+         ---> on which rows?
+         
+The way to read this out loud is: "Take DT, subset rows by i, then compute j grouped by by. Here are some basic usage examples expanding on this definition.
+
+Like data.frame, data.table is a list of vectors. It doesn't have rownames; instead, it's a collection of attributes.
+
+Each column can be a different type, including a list
+
+It has enhanced functionality in `[`. We can make operations inside `[]`.
+
+For a detailed documentation go check the help page for data.table!
+
+To create a data.table we just name its columns and then we populate them. As before with the data.frame, all the columns have to have the same length.
+
+```{r}
+# install.packages("data.table")
+library(data.table)
+DT <- data.table(x = rep(c("a","b","c"), each = 3), y = c(1, 3, 6), v = 1:9)
+DT # note how column y was recycled
+# For comparison, let's make a data.frame from it:
+DF <- as.data.frame(DT)
+```
+
+If we want to converting a data frame to data.table all we have to do it to call the `as.data.table()` function.
+
+```{r}
+# Using the data frame from the previous slide:
+DT <- as.data.table(DF)
+class(DT)
+```
+
+Here you can see that the class function informs us that DT is both a data.table and a data.frame.
+
+The structure of the data.table is that essentially is a list of list. To get the dimensions of our data.table we can either use the `dim()` function to get the dimensions of our data.table (M rows x N columns) or to use the `ncol()` `nrow()` functions.
+
+```{r}
+class(DT)
+is.list(DT)
+summary(DT)
+nrow(DT)   # ncol(DT)
+dim(DT)
+```
+
+
+## Accessing a data.table by rows (*i*)
+
+* The general form of data.table syntax is `DT[i, j, by]`
+* "Take **DT**, subset rows using **i**, then select or calculate **j**, grouped by **by**".
+```{r}
+DT[2, ]   # Access the 2nd row (also DT[2] or DT[i = 2])
+DT[1:2]   # Access multiple consecutive rows.
+DT[c(3, 5)]  # Access multiple rows.
+```
+
+
+## Sub-setting rows according to some condition
+
+We can subset a data table according to different conditions using the operators:
+
+* `==`
+* `<` 
+* `>`
+* `!=`
+* `%in%`
+
+To exemplify this, load the predefined `iris` dataset as a data.table
+
+```{r}
+iris_dt <- as.data.table(iris)
+summary(iris_dt)
+# View the species setosa. Data frame syntax: iris[iris$Species == "setosa", ]
+# Note how we use double [] to subset
+iris_dt[Species == "setosa"][4:6] 
+```
+
+```{r}
+# View all the species except setosa
+# Same as iris_dt[Species %in% c("versicolor", "virginica")]
+iris_dt[Species != "setosa"][1:3]
+# View all flowers with a petal length greater than 6
+iris_dt[Petal.Length > 6][1:3]
+```
+
+
+
+## Accessing a data.table by columns (DT[i, **j**, by])
+
+Once you're inside the ``[]``, you're in the data.table environment. Inside this scope, there's no need to put the column names in quotation marks, as columns are seen as variables already.
+
+It is not advisable to access a column by its number. **Use the column name instead**.
+
+The table format can change (new columns can be added), so using column names prevents bugs e.g. if you have a dataset with 50 columns, how do you know which one is column 18?
+
+This way the code is more readable: `DT[, age]` instead of `DT[, 5]`.
+
+```{r}
+DT[, x]    # Access column x (also DT$x or DT[j=x]). 
+DT[4, x]   # Access a specific cell.
+```
+
+When accessing many columns, we probably want to return a data.table instead of a vector. For that, we need to provide R with a list, so we use ``list(colA, colB)``, or its simplified version ``.(colA, colB)``.
+
+```{r}
+# Note that 1 and 3 were coerced into strings because a vector can have only 1 type
+DT[1:2, c(x,y)]   
+
+# Access a specific subset. Data.frame: DF[1:2, c("x","y")] 
+DT[1:2, list(x,y)]
+
+# Same as before.
+DT[1:2, .(x,y)]   
+```
+
+## Data.table environment
+
+The following examples are to show how the ``[]`` bring us inside the data.table environment.
+
+Using DT and DF, compute the product of columns *y* and *v*.
+
+Use the ``with(data, expr, ...)`` function, which evaluates an R expression in an environment constructed from ``data``.
+
+```{r eval = FALSE}
+# We enter the environment of DT, and simply compute the product
+with(DT, y*v)
+
+# Easier way, with [] we're inside the environment. Data.table 
+# runs a with(dt,...) on the j argument
+DT[, y*v]
+
+# In data.frame, the [] doesn't imply we're inside the environment
+DF[, y*v] 
+```
+
+
+## Basic operations
+
+We saw already that inside the ``[]``, columns are seen as variables, so we can apply functions to them.
+```{r}
+# Similar to mean(iris_dt[, Petal.Length])
+iris_dt[, mean(Petal.Length)]   
+iris_dt[Species == "virginica", mean(Petal.Length)]
+```
+
+To compute operations in multiple columns, we must provide a list (unless we want the result to be a vector).
+
+```{r}
+# Same as iris_dt[, .(mean(PL), median(PL))]
+iris_dt[, list(mean(Petal.Length), median(Petal.Length))]
+
+# Give meaningful names
+iris_dt[, .(mean_PL = mean(Petal.Length), median_PL = median(Petal.Length))] 
+```
+
+We can also apply basic operations on multiple columns
+
+``sapply(DT, FUN)``, applies function FUN column-wise to DT. Remember that ``sapply`` returns a vector, while ``lapply`` returns a list.
+
+```{r, linewidth=80, error=TRUE}
+sapply(iris_dt, class)   # Try the same with lapply
+sapply(iris_dt, sum)
+```
+
+```{r}
+
+# Note that we can access columns stored as variables by setting with=F.
+# In this case, `colnames(iris_dt)!="Species"` returns a logical vector and `
+# iris_dt` is subseted by the logical vector
+
+# Same as sapply(iris_dt[, 1:4], sum)
+sapply(iris_dt[, colnames(iris_dt)!="Species", with = F], sum) 
+```
+
+## The 'by' option (DT[i, j, **by**])
+
+A very useful option used to apply some function to every group of a data table is the by argument. Although usually ``i`` and ``j`` are omitted from the syntax, we do write the ``by``.
+
+```{r}
+# Compute the mean petal length of every species
+iris_dt[, .(mean_PL = mean(Petal.Length)), by = Species]
+
+# Compute the mean and sd of petal length of every species
+iris_dt[, .(mean_PL = mean(Petal.Length), sd_PL = sd(Petal.Length)), by = Species]
+
+```
+
+## The .N command
+
+The ``.N`` is a special in-built variable that counts the number observations of a particular group.
+
+```{r}
+# Get the number of observations for each species
+iris_dt[, .N, by = Species]   
+```
+
+Remember the data.table definition: "Take **DT**, subset rows using **i**, then select or calculate **j**, grouped by **by**"
+
+```{r}
+# For each species, get the number of observations with Sepal.Width greater than 3
+iris_dt[Sepal.Width > 3, .(SW_greater_3 = .N), by = Species]  
+```
+
+## The := command
+
+The ``:=`` operator updates the data.table you are working on, so writing DT <- DT[,... := ...] is redundant. This operator, plus all ``set`` functions, change their input by *reference*. No copy of the object is made, that is why it is faster and uses less memory.
+
+```{r}
+# Add a new column called yv whose value is the product of y and v
+DT[, yv := y*v][1:3]
+# Add columns with sepal and petal area. Note the syntax of multiple assignment.
+iris_dt[, `:=` (Sepal.Area = Sepal.Length * Sepal.Width,
+                Petal.Area = Petal.Length * Petal.Width)][1:3]
+```
+
+You can also delete columns by using the ``:=`` command.
+
+```{r}
+
+# Let's assume setosa flowers are orange, versicolor purple and virginica pink.
+# Add a column with these colors.
+iris_dt[Species == "setosa", color := "orange"] 
+iris_dt[Species == "versicolor", color := "purple"]
+iris_dt[Species == "virginica", color := "pink"]
+unique(iris_dt[, .(Species, color)])
+
+# We can delete this new column by setting it to NULL
+iris_dt[, color := NULL]
+colnames(iris_dt)
+```
+
+## By reference
+
+What do we mean when we say that data.table modifies columns *by reference*? That no new copy of the object is made in the memory, unless we actually create one using ``copy()``.
+```{r}
+or_dt <- data.table(a = 1:10, b = 11:20)
+# No new object is created, both new_dt and or_dt point to the same memory chunk.
+new_dt <- or_dt   
+new_dt[, ab := a*b]
+colnames(or_dt)   # or_dt was also affected by changes in new_dt
+
+or_dt <- data.table(a = 1:10, b = 11:20)
+copy_dt <- copy(or_dt)   # By creating a copy, we have 2 objects in memory
+copy_dt[, ab := a*b]
+colnames(or_dt)    # Changes in the copy don't affect the original
+```
+
+
+  
+## Merging
+
+Merge, join or combine 2 data tables into one by common column(s).
+
+``merge(x, y, by, by.x, by.y, all, all.x, all.y, ...)``
+
+In data.table, the default is to merge by shared *key* columns while in data.frame, the default is to merge by columns with the same name. We can also specify the columns to merge ``by``.
+
+There are different types of merging:
+
+* **Inner (default)**: consider only rows with matching values in the key columns.
+* **Outer or full**: return all rows and columns from x and y. If there are no matching values, return NAs.
+* **Left (all.x)**: consider all rows from x, even if they have no matching row in y.
+* **Right (all.y)**: consider all rows from y, even if they have no matching row in x.
+
+### Merging - inner and outer examples
+```{r}
+( dt1 <- data.table(table = "table1", id = c(1,2,3), a = rnorm(3)) )
+( dt2 <- data.table(table = "table2", id = c(1,2,4), b = rnorm(3)) )
+```
+
+```{r}
+# Inner merge: default one, all = FALSE
+merge(dt1, dt2, by = "id", all = F)
+```
+
+```{r}
+# Outer (full) merge: all = TRUE
+merge(dt1, dt2, by = "id", all = T)
+```
+ 
+Note that the column order got changed after the merging.
+ 
+```{r}
+# Left merge: all.x = TRUE
+merge(dt1, dt2, by = "id", all.x = T)[]
+```
+ 
+```{r}
+# Right merge: all.y = TRUE
+merge(dt1, dt2, by = "id", all.y = T)[]
+```
+
+## Summary
+
+By now, you should be able to answer the following questions:
+
+* Why do we say that data.table is an enhanced data.frame?
+* How to subset by rows or columns? Remember: DT[i, j, by].
+* How to add columns?
+* How to make operations with different columns?
+* Which are the different types of merging?
+
+Even if you were able to answer them, practice:
+
+* Check all vignettes and reference manual from <https://cran.r-project.org/web/packages/data.table/>
+* A really concise cheat sheet: 
+* <https://s3.amazonaws.com/../assets.datacamp.com/img/blog/data+table+cheat+sheet.pdf>
+
+## Data.table resources
+
+<https://cran.r-project.org/web/packages/data.table/>
+
+<https://s3.amazonaws.com/../assets.datacamp.com/img/blog/data+table+cheat+sheet.pdf>
+
+<http://r4ds.had.co.nz/relational-data.html>
+
+<http://adv-r.had.co.nz/Environments.html>
