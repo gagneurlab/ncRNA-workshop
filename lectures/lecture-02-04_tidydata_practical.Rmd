@@ -1,0 +1,616 @@
+---
+title       : Data Analysis and Visualization
+subtitle    : Tidy Data 02
+author      : Ziga Avsec, Vicente Yepez
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : [mathjax, bootstrap, quiz]            # {mathjax, quiz, bootstrap}
+ext_widgets : {rCharts: ["libraries/highcharts", libraries/nvd3"]}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+# output:
+#   slidy_presentation:
+#     incremental: true
+---
+
+
+<!-- Center image on slide -->
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+<script type='text/javascript'>
+$(function() {
+    $("p:has(img)").addClass('centered');
+});
+</script>
+<script type = 'text/javascript'>
+$('p:has(img.build)').addClass('build')
+</script>
+
+<!-- 
+setwd('./lectures/')
+-->
+<!-- reveal an image: https://github.com/ramnathv/slidify/issues/192 -->
+
+<!-- ```{r echo = F, message = F, out.extra="class='build'"} -->
+<!-- require(ggplot2) -->
+<!-- qplot(wt, mpg, data = mtcars) -->
+<!-- ``` -->
+
+<!-- START LECTURE -->
+
+## Overview: Tidy data
+
+* What is tidy data? (Previous lecture)
+* How to tranform a messy dataset into a tidy one?
+  * List -> data.table
+  * Melt and Cast (wide data <-> long data)
+  * Separate and Unite (1 variable <-> more variables)
+* Non-tidy data
+
+<!-- Missing values (explicit, implicit) -->
+
+Resources:
+
+* <http://vita.had.co.nz/papers/tidy-data.pdf> 
+* <http://r4ds.had.co.nz/tidy-data.html>
+* <https://www.r-bloggers.com/reshape-and-aggregate-data-with-the-r-package-reshape2/>
+* [data.table vs dplyr](http://stackoverflow.com/questions/21435339/data-table-vs-dplyr-can-one-do-something-well-the-other-cant-or-does-poorly)
+
+Useful packages: `data.table`, `tidyr`, (`reshape2`, `dplyr`, `plyr`)
+
+```{r, cache=F, echo=F, message=FALSE, warning = F}
+source("../config.R")
+```
+
+---
+
+## Set up
+
+```{r}
+library(data.table) # melt, dcast, ...
+library(magrittr)  # pipe operator %>% 
+suppressMessages(library(tidyr)) # table1, table2, ...
+
+# Data used throughout the lecture
+table1 <- tidyr::table1 %>% as.data.table # use data.table instead of tibble
+table2 <- tidyr::table2 %>% as.data.table
+table3 <- tidyr::table3 %>% as.data.table
+table4a <- tidyr::table4a %>% as.data.table
+table4b <- tidyr::table4b %>% as.data.table
+table5 <- tidyr::table5 %>% as.data.table
+```
+<br>
+* For clarity, I will often use the syntax: 
+  - `tidyr::unite()`
+  - instead of just `unite()`
+
+--- &twocol w1:50% w2: 50% 
+
+
+
+<div class="trasition-slide">
+How to go from un-tidy to tidy data?
+</div>
+
+---
+
+<div class="trasition-slide">
+First, have a data.table as soon as possible
+</div>
+
+---
+
+## List -> data.table
+
+* Very frequent scenario in R
+  - read in a bunch of similar .csv files (date1.csv, date2.csv, ...)
+  - nested data types (json/xml from API)
+  - `lapply` output (say doing a cross-validation, using different parameters, ...)
+* **If possible, have one data.table instead of a (nested) list of data.tables**
+
+--- &twocol w1:30% w2:60%
+
+## JSON example
+
+
+*** =left
+
+```{r}
+sw_json <- '[
+  {
+    "Name": "Anakin",
+    "Gender": "male",
+    "Homeworld": "Tatooine",
+    "Born": "41.9BBY",
+    "Jedi": "yes"
+  },
+  {
+    "Name": "R2-D2",
+    "Gender": "unknown",
+    "Homeworld": "Naboo",
+    "Born": "33BBY",
+    "Jedi": "no"
+  }
+]'
+
+```
+
+*** =right
+JSON -> R list
+
+```{r, echo = FALSE}
+sw_json <- '[
+  {
+    "Name": "Anakin",
+    "Gender": "male",
+    "Homeworld": "Tatooine",
+    "Born": "41.9BBY",
+    "Jedi": "yes"
+  },
+  {
+    "Name": "R2-D2",
+    "Gender": "unknown",
+    "Homeworld": "Naboo",
+    "Born": "33BBY",
+    "Jedi": "no"
+  }
+]'
+```
+
+```{r}
+# for demonstrational purposes 
+# I've put 'simplifyDataFrame = FALSE'
+sw_list <- jsonlite::fromJSON(sw_json, 
+                              simplifyDataFrame = FALSE) 
+str(sw_list)
+```
+
+
+---
+
+## Convert a list to a data.table
+
+* Use `as.data.table` to convert a list to a data.table with one row
+* Use `rbindlist` to stack data.tables
+  - If something is not working as expected try with:
+  - `rbindlist(fill = TRUE, use.names = TRUE)`
+
+```{r}
+sw_dt <- lapply(sw_list, as.data.table) %>% rbindlist
+sw_dt
+```
+
+- prefer data.table's `rbindlist` over `rbind`
+
+---
+
+## Convert a list to a data.table 2
+
+* Very common situation:
+  - **list name is a variable**
+
+```{r, echo = FALSE}
+dt_list <- list(
+  "young" = data.table(x = 1:10, y = 1 * 1:10 + rnorm(10)),
+  "old"   = data.table(x = 1:10, y = 2 * 1:10 + rnorm(10))
+)
+```
+
+```{r}
+dt_list %>% lapply(head, n = 3)
+```
+
+.build **How would you reshape it?**
+
+---
+
+```{r}
+
+dt <- rbindlist(dt_list, idcol = "age")  # call the new variable "age"
+
+dt %>% print(3)
+
+```
+
+
+---
+<div class="trasition-slide">
+Melting and casting (wide <-> long data)
+<div>
+
+
+</div>
+
+--- &twocol w1:60% w2: 40% 
+
+## Melting and casting (wide data <-> long data)
+
+**Typical problem:**
+
+1. One variable might be spread across multiple columns.
+2. One observation might be scattered across multiple rows.
+
+**Un-tidy datasets:**
+
+*** =left 
+```{r}
+## Wide data
+print(table4a)
+```
+
+*** =right
+```{r}
+## Long data
+print(table2)
+```
+
+
+---
+
+
+## Melting and casting (wide data <-> long data)
+
+**Solution in R:**
+
+- Transform wide data -> long data
+  - `data.table::melt()`
+  - `tidyr::gather()`
+  
+
+- Transform long data -> wide data
+  - `data.table::dcast()`
+  - `tidyr::spread()`
+  
+
+---
+
+## Melting, gathering (wide -> long)
+
+![gathering](assets/img/lec05_tidy-gather.png)
+
+---
+
+## Using `data.table::melt`
+
+```{r}
+print(table4a)
+
+table4a %>% data.table::melt(id.vars = "country",
+                             measure.vars = c("1999", "2000"),
+                             # would work also without specifying *either* measure.vars OR id.vars
+                             variable.name = "year",
+                             value.name = "cases")
+## Alternatively: table4a %>% tidyr::gather(`1999`, `2000`, key = "year", value = "cases")
+```	
+
+<!-- --- &twocol w1:60% w2: 40%  -->
+
+<!-- <\!-- ## Final step -\-> -->
+
+
+<!-- ```{r, messages = FALSE} -->
+<!-- tidy4a <- table4a %>% melt(measure.vars = c("1999", "2000"), variable.name = "year", value.name = "cases") -->
+<!-- tidy4b <- table4b %>% melt(measure.vars = c("1999", "2000"), variable.name = "year", value.name = "population") -->
+<!-- tidy4 <- merge(tidy4a, tidy4b, by = c("country", "year"), all.x = TRUE) -->
+<!-- ``` -->
+
+<!-- *** =left  -->
+
+<!-- ```{r} -->
+<!-- print(tidy4) -->
+<!-- ``` -->
+
+<!-- *** =right -->
+<!-- ```{r} -->
+<!-- print(table1) -->
+<!-- ``` -->
+
+---
+
+## Casting, spreading (long -> wide)
+
+![spreading](assets/img/lec05_tidy-spread.png)
+
+
+--- &twocol w1:40% w2: 60% 
+
+## Using `data.table::dcast`
+
+
+```{r, eval=FALSE}
+## Help
+dcast(data, formula, fun.aggregate = NULL, sep = "_", ..., margins = NULL, subset = NULL, fill = NULL, 
+    drop = TRUE, value.var = guess(data), verbose = getOption("datatable.verbose"))
+```
+
+*** =left
+```{r}
+print(table2)
+```
+
+*** =right
+```{r}
+data.table::dcast(table2, ... ~ type, 
+                  value.var = "count")
+
+## equivalently
+# data.table::dcast(table2, country + year ~ type)
+## alternatively
+## tidyr::spread(table2, key = type, value = count)
+```
+
+--- &twocol w1:60% w2: 40% 
+
+## Compare
+
+*** =left 
+
+```{r}
+dcast(table2, ... ~ type, 
+      value.var = "count")
+```
+
+*** =right
+```{r}
+print(table1)
+```
+
+---
+
+## Quiz: What tranformations are required to tidy following data?
+
+![Religion dataset](assets/img/lec05_untidy_rel.png)
+
+- a) Cast
+- b) Melt
+- c) Cast and Melt
+- d) Data are tidy already
+
+---
+
+## Answer: b) Melt
+
+Tidy form:
+
+![Religion dataset](assets/img/lec05_tidy_rel.png)
+
+---
+
+
+<div class="trasition-slide">
+Separating and uniting (1 <-> more variables)
+</div>
+
+--- &twocol w1:60% w2: 40% 
+
+## Separating and uniting (1 <-> more variables)
+
+**Typical problem:**
+
+1. One column contains multiple variables
+2. Multiple columns contain one variable
+
+**Un-tidy datasets**
+
+*** =left 
+```{r}
+## One column contains multiple variables
+print(table3)
+```
+
+*** =right
+```{r}
+## Multiple columns contain one variable
+print(table5)
+```
+
+
+---
+
+## Separating and uniting (1 <-> more variables)
+
+**Typical problem:**
+
+1. One column contains multiple variables
+2. Multiple columns contain one variable
+
+**Solution in R:**
+
+- 1 variable -> multiple variables
+  - `tidyr::separate()`
+
+- multiple variables -> 1 variables
+  - `tidyr::unite()`
+
+- other useful functions: 
+  - `data.table::tstrsplit`, `strsplit`, `paste`, `substr`
+
+
+---
+
+
+## Separate
+
+![separate](assets/img/lec05_tidy-separate.png)
+
+--- &twocol w1:60% w2: 40% 
+
+## `tidyr::separate()`
+
+```{r, eval = FALSE}
+separate(data, col, into, sep = "[^[:alnum:]]+", remove = TRUE,
+  convert = FALSE, extra = "warn", fill = "warn", ...)
+```
+
+
+*** =left
+```{r}
+table3
+```
+
+*** =right
+```{r}
+separate(table3, col = rate, 
+         into = c("cases", "population"))
+separate(table3, col = rate, 
+         into = c("cases", "population")) %>% class
+```
+
+---
+
+## Unite
+
+![unite](assets/img/lec05_tidy-unite.png)
+
+--- &twocol w1:60% w2: 40% 
+
+## `tidyr::unite()`
+
+```{r, eval = FALSE}
+unite(data, col, ..., sep = "_", remove = TRUE)
+```
+
+
+*** =left
+```{r}
+table5
+```
+
+*** =right
+```{r}
+unite(table5, col = new, century, year, sep = "")
+```
+
+
+---
+
+## Quiz: What tranformations are required to tidy following data?
+
+![Weather dataset](assets/img/lec05_untidy_weather.png)
+
+- a) Gather
+- b) Unite
+- c) Melt and cast
+- d) Melt, unite and cast
+
+---
+
+## Answer: d) Melt, unite and cast
+
+Tidy form:
+
+![Weather dataset](assets/img/lec05_tidy_weather.png)
+
+---
+<!-- <div class="trasition-slide"> -->
+<!-- What about missing values? -->
+<!-- </div> -->
+
+<!-- --- -->
+
+<!-- ## Missing values -->
+
+<!-- * Explicit - flagged with some value like `NA`, `""`, `-1`, ... -->
+<!-- * Implicit - some rows are just missing -->
+
+<!-- ```{r} -->
+<!-- stocks <- data.table( -->
+<!--   year   = c(2015, 2015, 2015, 2015, 2016, 2016, 2016), -->
+<!--   qtr    = c(   1,    2,    3,    4,    2,    3,    4), -->
+<!--   return = c(1.88, 0.59, 0.35,   NA, 0.92, 0.17, 2.66) -->
+<!-- ) -->
+<!-- ``` -->
+
+<!-- .build Which missing values are explicit and which ones implicit? -->
+
+<!-- .build - explicit: fourth quarter of 2015 -->
+
+<!-- .build - implicit: first quarter of 2016 -->
+
+<!-- --- &twocol -->
+
+<!-- ## Explicit missing values -->
+
+<!-- * First convert every weird quasi NA value ("", -1, ...) to a proper NA -->
+<!-- * Handy commands: `is.na()`, `sum(<vector>, na.rm = TRUE)` -->
+
+<!-- *** =left -->
+
+<!-- ```{r} -->
+<!-- x <- c(1, 2, NA) -->
+<!-- print(x == NA) ## why is this not working? -->
+<!-- print(is.na(x)) -->
+<!-- print(sum(x)) -->
+<!-- print(sum(x, na.rm = TRUE)) -->
+<!-- mean(is.na(x)) # fraction of missing values -->
+<!-- ``` -->
+
+<!-- *** =right -->
+
+<!-- > - Typical downstream workflow: -->
+<!--   - remove NA rows (`na.omit()`) -->
+<!--   - introduce another column `is_missing := is.na(x)` -->
+<!--   - number/fraction of missing values  -->
+<!--   - impute NA's -->
+
+
+<!-- --- &twocol -->
+
+<!-- ## Implicit missing values -->
+
+<!-- * Annotate the implicitly missing values with NA -->
+<!--   - `tidyr::complete()` -->
+
+<!-- > Turns implicit missing values into explicit missing values. This is a wrapper around expand(), left_join() and replace_na that's useful for completing missing combinations of data. -->
+<!-- ```{r, eval = FALSE} -->
+<!-- complete(data, ..., fill = list()) -->
+<!-- ``` -->
+
+  
+<!-- *** =left -->
+
+<!-- ```{r} -->
+<!-- stocks -->
+<!-- ``` -->
+
+
+<!-- *** =right -->
+
+<!-- ```{r} -->
+<!-- tidyr::complete(stocks, year, qtr) -->
+<!-- ``` -->
+
+
+<!-- --- -->
+<div class="trasition-slide">
+When/why should you use "non-tidy" data?
+</div>
+
+---
+## Non-tidy data
+
+* Performance advantage using certain functions
+  - `colSums()` or `heatmap()` on matrices
+* Field convention
+* Memory efficiency
+  - don't worry, you should be fine with tidy-data in `data.table`
+
+Interesting blog post:
+* <http://simplystatistics.org/2016/02/17/non-tidy-data/>
+
+---
+
+## Thanks! Questions? 
+
+<br> 
+<br> 
+<br> 
+<br> 
+> Happy families are all alike; every unhappy family is unhappy in its own way.
+
+Leo Tolstoy
+
+<br> 
+> Tidy datasets are all alike, but every messy dataset is messy in its own way.
+
+Hadley Wickham

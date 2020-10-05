@@ -1,0 +1,660 @@
+---
+title: "Simple Data Manipulation and Visualization"
+author: "Vicente Yépez, Žiga Avsec, Elaine Zosa"
+ext_widgets:
+  rCharts:
+  - libraries/highcharts
+  - libraries/nvd3"
+output: pdf_document
+highlighter: highlight.js
+hitheme: tomorrow
+knit: slidify::knit2slides
+mode: selfcontained
+framework: io2012
+subtitle: Data Tables and Tidy Data
+widgets: [mathjax, bootstrap, quiz]
+---
+
+<!-- Center image on slide -->
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+<script type='text/javascript'>
+$(function() {
+    $("p:has(img)").addClass('centered');
+});
+</script>
+
+<!-- 
+setwd('./lectures/')
+-->
+
+<!-- START LECTURE -->
+
+## Part I: Dealing with data tables
+* What is a data.table? How is it different from a data.frame?
+* Basic operations on data tables: creating, editing, subsetting, manipulating, sorting
+* Do operations *by* some type or category
+* Add, update or eliminate columns using ``:=``
+* Merge / join data tables
+
+**Resources:**
+* <https://cran.r-project.org/web/packages/data.table/>
+* <https://s3.amazonaws.com/assets.datacamp.com/img/blog/data+table+cheat+sheet.pdf>
+* <http://r4ds.had.co.nz/relational-data.html>
+* <http://adv-r.had.co.nz/Environments.html>
+
+```{r, cache=F, echo=F, message=FALSE}
+source("../config.R")
+DATADIR <- file.path('./extdata')
+options(width = 120)
+
+```
+
+
+---
+## What is a data.table?
+
+* Similar to a data.frame, but because it modifies columns by *reference*, it is more memory efficient and offers faster:
+ * subsetting
+ * ordering
+ * merging
+* Accepts all data.frame functions
+* Shorter and more flexible syntax
+* Saves time on two fronts:
+ * programming (easier to code, read, debug and maintain)
+ * computing
+* Like data.frame, data.table is a list of vectors
+ * Doesn't have rownames; instead, it's a collection of attributes
+* Each column can be a different type, including a list
+* It has enhanced functionality in ``[``. We can make operations inside ``[]``.
+
+---
+## Creating a data.table
+```{r}
+# install.packages("data.table")
+library(data.table)
+DT <- data.table(x = rep(c("a","b","c"), each = 3), y = c(1, 3, 6), v = 1:9)
+DT # note how column y was recycled
+# For comparison, let's make a data.frame from it:
+DF <- as.data.frame(DT)
+```
+
+---
+## Converting a data frame to data.table
+```{r}
+# Using the data frame from the previous slide:
+DT <- as.data.table(DF)
+class(DT)
+```
+
+---
+## Structure
+```{r}
+class(DT)
+is.list(DT)
+summary(DT)
+nrow(DT)   # Get the number of rows. Also try ncol(DT) and dim(DT).
+```
+
+
+---
+## Accessing a data.table by rows (*i*)
+
+* The general form of data.table syntax is DT[i, j, by]
+* "Take **DT**, subset rows using **i**, then select or calculate **j**, grouped by **by**".
+```{r}
+DT[2, ]   # Access the 2nd row (also DT[2] or DT[i = 2])
+DT[1:2]   # Access multiple consecutive rows.
+DT[c(3, 5)]  # Access multiple rows.
+```
+
+---
+## Subsetting rows according to some condition
+* We can subset a data table according to different conditions using the operators ==, <, >, !=, %in%.
+* To exemplify this, load the predefined 'iris' data set as a data.table
+```{r}
+iris_dt <- as.data.table(iris)
+summary(iris_dt)
+# View the species setosa. Data frame syntax: iris[iris$Species == "setosa", ]
+iris_dt[Species == "setosa"][4:6] # Note how we use double [] to subset
+```
+
+---
+## Subsetting (cont.)
+```{r}
+# View all the species except setosa
+iris_dt[Species != "setosa"][1:3]  # Same as iris_dt[Species %in% c("versicolor", "virginica")]
+# View all flowers with a petal length greater than 6
+iris_dt[Petal.Length > 6][1:3]
+```
+
+
+---
+## Accessing a data.table by columns (*j*)
+* DT[i, **j**, by]
+* Once you're inside the ``[]``, you're in the data.table environment.
+  * Inside this scope, there's no need to put the column names in quotation marks, as columns are seen as variables already.
+* It is not advisable to access a column by its number. Use its name instead.
+ * The table format can change (new columns can be added), so using names prevents bugs
+ * If you have a dataset with 50 columns, how do you know which one is column 18?
+ * The code is more readable: DT[, age] instead of DT[, 5].
+ 
+```{r}
+DT[, x]    # Access column x (also DT$x or DT[j=x]). 
+DT[4, x]   # Access a specific cell.
+```
+
+
+---
+## Data.table environment
+* The following examples are to show how the ``[]`` bring us inside the data.table environment.
+* Using DT and DF, compute the product of columns *y* and *v*.
+* Use the ``with(data, expr, ...)`` function, which evaluates an R expression in an environment constructed from ``data``.
+```{r}
+with(DT, y*v) # We enter the environment of DT, and simply compute the product
+DT[, y*v] # Easier way, with [] we're inside the environment. Data.table runs a with(dt,...) on the j argument
+DF[, y*v] # In data.frame, the [] doesn't imply we're inside the environment
+```
+
+
+---
+## Accessing multiple columns
+* When accessing many columns, we probably want to return a data.table instead of a vector.
+* For that, we need to provide R with a list, so we use ``list(colA, colB)``, or its simplified version ``.(colA, colB)``.
+```{r}
+DT[1:2, c(x,y)]   # Note that 1 and 3 were coerced into strings because a vector can have only 1 type
+DT[1:2, list(x,y)]   # Access a specific subset. Data.frame: DF[1:2, c("x","y")] 
+DT[1:2, .(x,y)]   # Same as before.
+```
+
+---
+## Basic Operations
+* We saw already that inside the ``[]``, columns are seen as variables, so we can apply functions to them.
+```{r}
+iris_dt[, mean(Petal.Length)]   # Similar to mean(iris_dt[, Petal.Length])
+iris_dt[Species == "virginica", mean(Petal.Length)]
+```
+
+* To compute operations in multiple columns, we must provide a list (unless we want the result to be a vector).
+```{r}
+iris_dt[, list(mean(Petal.Length), median(Petal.Length))] # Same as iris_dt[, .(mean(PL), median(PL))]
+iris_dt[, .(mean_PL = mean(Petal.Length), median_PL = median(Petal.Length))] # Give meaningful names
+```
+
+
+---
+## Basic Operations on multiple columns
+* ``sapply(DT, FUN)``, applies function FUN columnwise to DT. Remember that ``sapply`` returns a vector, while ``lapply`` returns a list.
+```{r}
+sapply(iris_dt, class)   # Try the same with lapply
+sapply(iris_dt, sum)
+# Note that we can access columns stored as variables by setting with=F.
+# In this case, `colnames(iris_dt)!="Species"` returns a logical vector and `iris_dt` is subseted by the logical vector 
+sapply(iris_dt[, colnames(iris_dt)!="Species", with = F], sum) # Same as sapply(iris_dt[, 1:4], sum)
+```
+
+
+--- &radio
+## Question 2:
+From DT, display a named vector with the means of *y* and *v*. The names of the elements are mean_y and mean_v.
+
+1. A _DT[, c(mean_y = mean(y), mean_v = mean(v))]_
+
+2. B DT[, list(mean_y = mean(y), mean_v = mean(v))]
+
+3. C DT[, .(mean_y = mean(y), mean_v = mean(v))]
+
+***.hint
+Remember which command returns a vector and which one a data.table
+
+***.explanation
+Including the column names inside c() will return a vector.
+
+
+---
+## The 'by' option
+* DT[i, j, **by**]
+* Very useful option used to apply some function to every group of a data table.
+* Although usually ``i`` and ``j`` are ommitted from the syntax, we do write the ``by``.
+```{r}
+# Compute the mean petal length of every species
+iris_dt[, .(mean_PL = mean(Petal.Length)), by = Species]
+
+# Compute the mean and sd of petal length of every species
+iris_dt[, .(mean_PL = mean(Petal.Length), sd_PL = sd(Petal.Length)), by = Species]
+
+```
+
+---
+## The .N command
+* The ``.N`` is a special in-built variable that counts the number observations of a particular group.
+```{r}
+# Get the number of observations for each species
+iris_dt[, .N, by = Species]   
+```
+* "Take **DT**, subset rows using **i**, then select or calculate **j**, grouped by **by**"
+```{r}
+# For each species, get the number of observations with Sepal.Width greater than 3
+iris_dt[Sepal.Width > 3, .(SW_greater_3 = .N), by = Species]  
+```
+
+---
+## Adding columns using :=
+* The ``:=`` operator updates the data.table you are working on, so writing DT <- DT[,... := ...] is redundant.
+* This operator, plus all ``set`` functions, change their input by *reference*. No copy of the object is made, that is why it is faster and uses less memory.
+```{r}
+# Add a new column called yv whose value is the product of y and v
+DT[, yv := y*v][1:3]
+# Add columns with sepal and petal area. Note the syntax of multiple assignment.
+iris_dt[, `:=` (Sepal.Area = Sepal.Length * Sepal.Width,
+                Petal.Area = Petal.Length * Petal.Width)][1:3]
+```
+
+---
+## Manipulating and eliminating columns using :=
+```{r, echo=F}
+options(width = 120)
+```
+```{r}
+# Let's assume setosa flowers are orange, versicolor purple and virginica pink.
+# Add a column with these colors.
+iris_dt[Species == "setosa", color := "orange"] 
+iris_dt[Species == "versicolor", color := "purple"]
+iris_dt[Species == "virginica", color := "pink"]
+unique(iris_dt[, .(Species, color)])
+# We can delete this new column by setting it to NULL
+iris_dt[, color := NULL]
+colnames(iris_dt)
+```
+```{r, echo=F}
+options(width = 80)
+```
+
+---
+## By reference
+
+* What do we mean when we say that data.table modifies columns *by reference*?
+ * No new copy of the object is made in the memory, unless we actually create one using ``copy()``.
+```{r}
+or_dt <- data.table(a = 1:10, b = 11:20)
+new_dt <- or_dt   # No new object is created, both new_dt and or_dt point to the same memory chunk.
+new_dt[, ab := a*b]
+colnames(or_dt)   # or_dt was also affected by changes in new_dt
+
+or_dt <- data.table(a = 1:10, b = 11:20)
+copy_dt <- copy(or_dt)   # By creating a copy, we have 2 objects in memory
+copy_dt[, ab := a*b]
+colnames(or_dt)    # Changes in the copy don't affect the original
+```
+
+
+---  
+## Merging
+* Merge, join or combine 2 data tables into one by common column(s).
+* ``merge(x, y, by, by.x, by.y, all, all.x, all.y, ...)``
+ * In data.table, the default is to merge by shared *key* columns.
+ * In data.frame, the default is to merge by columns with the same name.
+ * We can also specify the columns to merge ``by``.
+* There are different types of merging:
+ * **Inner (default)**: consider only rows with matching values in the key columns.
+ * **Outer or full**: return all rows and columns from x and y. If there are no matching values, return NAs.
+ * **Left (all.x)**: consider all rows from x, even if they have no matching row in y.
+ * **Right (all.y)**: consider all rows from y, even if they have no matching row in x.
+
+
+--- &twocol w1:40% w2: 60% 
+## Merging - inner and outer examples
+```{r}
+( dt1 <- data.table(table = "table1", id = c(1,2,3), a = rnorm(3)) )
+( dt2 <- data.table(table = "table2", id = c(1,2,4), b = rnorm(3)) )
+```
+
+*** =left 
+```{r}
+# Inner merge: default one, all = FALSE
+merge(dt1, dt2, by = "id", all = F)
+```
+
+*** =right
+```{r}
+# Outer (full) merge: all = TRUE
+merge(dt1, dt2, by = "id", all = T)
+```
+
+--- &twocol w1:40% w2: 60% 
+## Merging - left and right examples
+* Note that the column order got changed after the merging.
+*** =left 
+```{r}
+# Left merge: all.x = TRUE
+merge(dt1, dt2, by = "id", all.x = T)[]
+```
+
+*** =right
+```{r}
+# Right merge: all.y = TRUE
+merge(dt1, dt2, by = "id", all.y = T)[]
+```
+
+--- &radio
+## Question 3:
+
+As part of a new project, you got the results of a set of experiments from a lab in a data.table (x) with 3 columns: experiment id, sample id and value. On each experiment, more than one sample was measured. On another data.table (y) you got the dates of all the experiments the lab has made after a certain date. Some experiments are not part of your project, but the lab did not subset the table. Before a certain date, the lab could not find the experiments date, but you don't want to discard those results. You want to merge both data tables in order to have only one with 4 columns: experiment id, sample id, value and experiment date. Which merge would you use?
+
+1. A Inner, all = FALSE
+
+2. B Full, all = TRUE
+
+3. C _Left, all.x = TRUE_
+
+4. D Right, all.y = TRUE
+
+***.hint
+Sketch both data tables if necessary.
+
+***.explanation
+Inner join will omit the experiments whose dates are not provided.
+Full join will add rows of the experiments we are not interested in.
+Left join will leave the rows we are interested in and simply add the dates when available and NAs when not.
+Right join will leave us with experiments we are not interested and omit ones that we are interested but don't have the date.
+
+
+---
+## Summary
+By now, you should be able to answer the following questions:
+* Why do we say that data.table is an enhanced data.frame?
+* How to subset by rows or columns? Remember: DT[i, j, by].
+* How to add columns?
+* How to make operations with different columns?
+* Which are the different types of merging?
+
+Even if you were able to answer them, practice:
+* Check all vignettes and reference manual from <https://cran.r-project.org/web/packages/data.table/>
+* A really concise cheatsheet: 
+ * <https://s3.amazonaws.com/assets.datacamp.com/img/blog/data+table+cheat+sheet.pdf>
+
+---
+
+## Part II: Tidy data
+
+* What is tidy data?
+* How to transform a messy dataset into a tidy one?
+  * Melt and Cast (wide data <-> long data)
+  * Separate and Unite (1 variable <-> more variables)
+* Un-tidy data
+
+<!-- Missing values (explicit, implicit) -->
+
+Resources:
+
+* <http://vita.had.co.nz/papers/tidy-data.pdf> 
+* <http://r4ds.had.co.nz/tidy-data.html>
+* <https://www.r-bloggers.com/reshape-and-aggregate-data-with-the-r-package-reshape2/>
+* [data.table vs dplyr](http://stackoverflow.com/questions/21435339/data-table-vs-dplyr-can-one-do-something-well-the-other-cant-or-does-poorly)
+
+Useful packages: `data.table`, `tidyr`, (`reshape2`, `dplyr`, `plyr`)
+
+```{r, cache=F, echo=F, message=FALSE}
+source("../config.R")
+```
+
+---
+
+## Set up
+
+```{r}
+library(data.table) # melt, dcast, ...
+library(magrittr)  # pipe operator %>% 
+suppressMessages(library(tidyr)) # table1, table2, ...
+
+# Data used throughout the lecture
+table1 <- tidyr::table1 %>% as.data.table # use data.table instead of tibble
+table2 <- tidyr::table2 %>% as.data.table
+table3 <- tidyr::table3 %>% as.data.table
+table4a <- tidyr::table4a %>% as.data.table
+table4b <- tidyr::table4b %>% as.data.table
+table5 <- tidyr::table5 %>% as.data.table
+```
+
+--- &twocol w1:50% w2: 50% 
+
+## Pipe operator `%>%`
+
+- conceptually similar to the unix pipe: `$ cat file.txt | sort -u | head`
+- makes the code more readable
+- typical use cases:
+    - exploratory analysis at the command line: `dt %>% unique %>% head`
+    - dplyr data table operations
+- <http://r4ds.had.co.nz/pipes.html>
+
+*** =left
+
+```{r, eval = FALSE}
+foo <- little_bunny()
+```
+
+```{r, eval = FALSE}
+foo <- hop(foo, through = forest)
+foo <- scoop(foo, up = field_mice)
+foo <- bop(foo, on = head)
+```
+
+```{r, eval = FALSE}
+foo %>%
+  hop(through = forest) %>%
+  scoop(up = field_mouse) %>%
+  bop(on = head)
+```
+
+*** =right
+
+```{r}
+## Argument not occuring first:
+## use .
+"hop_scoop_bop" %>% gsub("_", " ", .)
+```
+
+---
+
+## Tidy data definition
+
+1. Each **variable** must have its own **column**.
+2. Each **observation** must have its own **row**.
+3. Each **value** must have its own **cell**.
+
+```{r}
+table1
+```
+
+
+---
+
+## Tidy data definition
+
+1. Each **variable** must have its own **column**.
+2. Each **observation** must have its own **row**.
+3. Each **value** must have its own **cell**.
+
+![tidy data](assets/img/lec05_tidy-1.png)
+
+---
+
+## Common signs of un-tidy datasets
+
+* Column headers are values, not variable names.
+* Multiple variables are stored in one column.
+* Variables are stored in both rows and columns.
+* Multiple types of observational units are stored in the same table.
+* A single observational unit is stored in multiple tables.
+
+---
+
+## Column headers are values, not variable names
+
+Un-tidy: 1999 and 2000 are values of the variable *year*.
+
+```{r}
+table4a
+```
+
+---
+
+## Column headers are values, not variable names
+
+Un-tidy
+
+![Religion dataset](assets/img/lec05_untidy_rel.png)
+
+---
+
+## Column headers are values, not variable names
+
+Tidy
+
+![Religion dataset](assets/img/lec05_tidy_rel.png)
+
+---
+
+## Multiple variables are stored in one column
+
+Un-tidy
+
+```{r}
+table3
+```
+
+---
+
+## Variables are stored in both rows and columns
+
+* The variable *date* is stored across rows and columns
+* The `element` column is not a variable; it stores the names of variables
+
+Un-tidy: days of the month (d1, d2, ...) are values, not variables
+
+![Weather dataset](assets/img/lec05_untidy_weather.png)
+
+---
+
+## Variables are stored in both rows and columns
+
+Tidy
+
+![Weather dataset](assets/img/lec05_tidy_weather.png)
+
+---
+
+## Multiple types of observational units are stored in the same table
+
+Un-tidy
+
+![songs](assets/img/lec05_untidy_songs.png)
+
+---
+
+## Multiple types of observational units are stored in the same table
+
+Tidy
+
+![songs](assets/img/lec05_tidy_songs.png)
+
+---
+
+## A single observational unit is stored in multiple tables
+
+Un-tidy
+
+```{r, echo = FALSE}
+split(table1, table1$country) %>% lapply(. %>% subset(select = -country) %>% as.data.table)
+```
+
+--- &twocol w1:60% w2: 40% 
+
+## Recap - same dataset, different representations
+
+*** =left
+```{r}
+table1
+head(table2)
+```
+
+*** =right
+
+```{r}
+table3
+table4a
+table4b
+```
+
+---
+
+## Why is having a tidy dataset important?
+
+
+* Easier manipulation using data.table commands
+  * subsetting by rows
+  * subsetting by columns
+  * `by` operations
+* Many other tools work better with tidy data - consistent way of storing data
+  * example: ggplot2
+* Vectorized operations become easier to use
+
+---
+
+## Tidy data can be easily manipulated
+
+```{r}
+dt <- table1
+
+# Compute rate per 10,000
+dt[, rate := cases / population * 10000] # vectorized operations; dt is modified
+
+# Compute cases per year
+dt[, .(cases = sum(cases)), by = year] # note that this does not modify dt 
+```
+
+---
+
+## Tidy data works better with many packages
+
+```{r leture05-ggplot-tidy-data, fig.width = 6, fig.height = 4, out.width="600px",height="400px"}
+ggplot(dt, aes(year, cases, color = country))+
+         ggtitle( "Change over time") + 
+         geom_line()
+```
+
+
+---
+
+## Summary
+
+* In a tidy dataset, each variable must have its own column
+* Each row corresponds to one unique observation
+* Each cell contains a single value
+* Tidy datasets are easier to work with
+* Data.table library has functions to transform un-tidy datasets to tidy
+
+
+---
+
+## Homework
+* Read tidy data paper by Hadley Wickham (Wickham 2004, Journal of Statistical Software)
+* Transform your own dataset into tidy data 
+* Come with a plot from your data that you want to improve on
+
+
+---
+
+## Thanks! Questions? 
+
+<br> 
+<br> 
+<br> 
+<br> 
+> Happy families are all alike; every unhappy family is unhappy in its own way.
+
+Leo Tolstoy
+
+<br> 
+> Tidy datasets are all alike, but every messy dataset is messy in its own way.
+
+Hadley Wickham
