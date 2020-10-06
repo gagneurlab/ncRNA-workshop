@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Simple Data Manipulation and Visualization</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Simple Data Manipulation and Visualization">
+  <meta name="author" content="Daniel Bader, Jun Cheng, Jan Krumsiek, Julien Gagneur">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="libraries/widgets/bootstrap/css/bootstrap.css"></link>
+<link rel=stylesheet href="libraries/widgets/quiz/css/demo.css"></link>
+
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  
+  <hgroup class="auto-fadein">
+    <h1>Simple Data Manipulation and Visualization</h1>
+    <h2>Grammar of graphics and Plotting I</h2>
+    <p>Daniel Bader, Jun Cheng, Jan Krumsiek, Julien Gagneur<br/></p>
+  </hgroup>
+  
+  <article></article>  
+  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  
+  <article data-timings="">
+    <!-- Center image on slide -->
+
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+
+<script type='text/javascript'>
+$(function() {
+    $("p:has(img)").addClass('centered');
+});
+</script>
+
+<p></script></p>
+
+<script type = 'text/javascript'>
+$('p:has(img.build)').addClass('build')
+</script>
+
+<script type='text/javascript'>
+// parameters
+var sections = ["Grammar of graphics", "1 continuous variable", "2 variables - one discrete, one continuous", "2 variables - both continuous", "Axes and labels"];
+var title = "Overview";
+var fontsize = "20pt"
+var unselected_color = "#888888"
+// function
+function toc(cur) {
+  // header
+  document.write("<h2>"+title+"</h2>");
+  // find current
+  ind = sections.indexOf(cur);
+  if (ind==-1 && cur.length>0) {
+     document.write("<br/>Error: section not defined '"+cur+"'");
+     return;
+  }
+  // write all out
+  document.write("<br/><ul>");
+  for (i = 0; i < sections.length; i++) { 
+    if (cur=="") 
+      // all the same
+      document.write("<li style='font-size:"+fontsize+"'>"+sections[i]+"</li>");
+    else {
+      if (i==ind)
+        document.write("<li style='font-size:"+fontsize+"'><b>"+sections[i]+"</b></li>");
+      else
+        document.write("<li style='color:"+unselected_color+";font-size:"+fontsize+"'>"+sections[i]+"</li>");
+    }
+  }
+  document.write("</ul>");
+}
+</script>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-2" style="background:;">
+  
+  <hgroup>
+    <h2>Why plotting?</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Data in scientific publications is shown as plots, sure. But there is more.</p>
+
+<p><strong>A realistic example to warm up</strong>:</p>
+
+<p>A vector containing (hypothetical) height measurements for adults in Germany:</p>
+
+<pre><code class="r">length(height)
+</code></pre>
+
+<pre><code>## [1] 500
+</code></pre>
+
+<pre><code class="r">head(height, n=20)
+</code></pre>
+
+<pre><code>##  [1] 1.706833 1.635319 1.709841 1.707259 1.668659 1.580702 1.608214 1.636738
+##  [9] 1.649740 1.758209 1.684362 1.614045 1.598355 1.636974 1.636535 1.631482
+## [17] 1.661350 1.609864 1.669606 1.594311
+</code></pre>
+
+<p>Calculating the mean height:</p>
+
+<pre><code class="r">mean(height)
+</code></pre>
+
+<pre><code>## [1] 1.976743
+</code></pre>
+
+<p>Wait... what?</p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-3" style="background:;">
+  
+  <article data-timings="">
+    
+<div class="quiz quiz-single well ">
+  <pre><code class="r">mean(height)
+</code></pre>
+
+<pre><code>## [1] 1.976743
+</code></pre>
+
+<p><br/></p>
+
+<p>What happened?</p>
+
+<ol>
+<li><p>A. <code>mean()</code> is not the right function to assess what we want to know.</p></li>
+<li><p>B. Adults in Germany are exceptionally tall</p></li>
+<li><p>C. <em>A decimal point error in one data point.</em></p></li>
+<li><p>D. It&#39;s a multiple testing problem because we are looking at so many data points (n=500).</p></li>
+</ol>
+
+  <button class="quiz-submit btn btn-primary">Submit</button>
+  <button class="quiz-toggle-hint btn btn-info">Show Hint</button>
+  <button class="quiz-show-answer btn btn-success">Show Answer</button>
+  <button class="quiz-clear btn btn-danger">Clear</button>
+  
+  
+<div class="quiz-explanation">
+  <p>See next slide</p>
+
+</div>
+</div>
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  
+  <hgroup>
+    <h2>Solution</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <pre><code class="r">mean(height)
+</code></pre>
+
+<pre><code>## [1] 1.976743
+</code></pre>
+
+<p><strong>What happened?</strong><br/></p>
+
+<ul>
+<li>A. <code>mean()</code> is not the right function to assess what we want to know.
+
+<ul>
+<li><em>No, the mean is exactly what we want.</em></li>
+</ul></li>
+<li>B. Adults in Germany are exceptionally tall.
+
+<ul>
+<li><em>OK, no...</em></li>
+</ul></li>
+<li><strong>C. A decimal point error in one data point.</strong>
+
+<ul>
+<li><em>Yes, see next slide.</em></li>
+</ul></li>
+<li>D. It&#39;s a multiple testing problem because we are looking at so many data points (n=500).
+
+<ul>
+<li><em>This question was intentionally misleading, this does not have anything to do with multiple testing.</em></li>
+</ul></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-5" style="background:;">
+  
+  <hgroup>
+    <h2>The outlier...</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <pre><code class="r">plot(height)
+hist(height)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-6-1.png" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" width="300px" height="400px" /><img src="assets/fig/unnamed-chunk-6-2.png" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" width="300px" height="400px" /></p>
+
+<pre><code class="r">mean(height)
+</code></pre>
+
+<pre><code>## [1] 1.976743
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-6" style="background:;">
+  
+  <hgroup>
+    <h2>The outlier...</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Getting rid of the outlier fixes the dataset</p>
+
+<pre><code class="r">fheight &lt;- height[height &lt; 3]
+</code></pre>
+
+<pre><code class="r">plot(fheight)
+hist(fheight)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-9-1.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" width="300px" height="400px" /><img src="assets/fig/unnamed-chunk-9-2.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" width="300px" height="400px" /></p>
+
+<pre><code class="r">mean(fheight)
+</code></pre>
+
+<pre><code>## [1] 1.650043
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-7" style="background:;">
+  
+  <hgroup>
+    <h2>The outlier...</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>This is how the broken dataset was generated:</p>
+
+<pre><code class="r">height &lt;- c(rnorm(499, mean=1.65, sd=0.045), 165)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-8" style="background:;">
+  
+  <article data-timings="">
+    <script type='text/javascript'>toc("")</script>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-9" style="background:;">
+  
+  <article data-timings="">
+    <script type='text/javascript'>toc("Grammar of graphics")</script>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-10" style="background:;">
+  
+  <hgroup>
+    <h2>Grammar of Graphics</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>The Grammar of Graphics is a visualization theory developed by 
+Leland Wilkinson in 1999.
+<br> </p>
+
+<ul>
+<li>influenced the development of graphics and visualization libraries alike </li>
+<li>3 key principles
+
+<ul>
+<li>Separation of data from aesthetics (e.g. x and y axis, color-coding)</li>
+<li>Definition of common plot/chart elements (e.g. dot plots, boxplots, etc.)</li>
+<li>Composition of these common elements (one can combine elements as layers)</li>
+</ul></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-11" style="background:;">
+  
+  <hgroup>
+    <h2>ggplot2 and Grammar of Graphics</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <pre><code class="r">ggplot(mpg, aes(x=displ, y=cty, colour=class)) +  # Data: how variables in the data are mapped to aesthetic attributes 
+  geom_point() +  # Layers: made up of geometric elements and statistical transformation.
+  facet_wrap(~ class, ncol=4) + # Facets
+  theme(axis.title = element_text(size=15), legend.title = element_text(size=15)) +
+  labs(title=&#39;displ vs cty&#39;, x=&#39;Engine displacement&#39;, y=&#39;city miles per gallon&#39;) +
+  stat_smooth() # Stats
+</code></pre>
+
+<p><img src="assets/fig/lec02_plt1-1.png" title="plot of chunk lec02_plt1" alt="plot of chunk lec02_plt1" width="700px" height="400px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-12" style="background:;">
+  
+  <hgroup>
+    <h2>Grammar Defines Components of Graphics</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p><strong>Data:</strong> data.frame (or data.table) object where columns correspond to variables</p>
+
+<p><strong>Aesthetics:</strong> describes visual characteristics that represent data (<code>aes</code>)</p>
+
+<ul>
+<li>for example: position, size, color, shape, transparency, fill</li>
+</ul>
+
+<p><strong>Layers:</strong> made up of geometric objects that represent data (<code>geom_</code>)</p>
+
+<ul>
+<li>for example: points, lines, polygons, ...</li>
+</ul>
+
+<p><strong>Scales:</strong> for each aesthetic, describes how visual characteristic is converted to display values (<code>scale_</code>)</p>
+
+<ul>
+<li>for example: log scales, color scales, size scales, shape scales, ...</li>
+</ul>
+
+<p><strong>Facets:</strong> describes how data is split into subsets and displayed as multiple sub graphs (<code>facet_</code>)</p>
+
+<p><strong>Stats:</strong> statistical transformations that typically summarize data (<code>stat</code>)</p>
+
+<ul>
+<li>for example: counts, means, medians, regression lines, ...</li>
+</ul>
+
+<p><strong>Coordinate system:</strong> describes 2D space that data is projected onto (<code>coord_</code>)</p>
+
+<ul>
+<li>for example: Cartesian coordinates, polar coordinates, map projections, ...</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-13" style="background:;">
+  
+  <hgroup>
+    <h2>Simple example: Human Development versus Corruption Perception</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <pre><code class="r">ind &lt;- fread(&#39;../extdata/CPI_HDI.csv&#39;)
+ind
+</code></pre>
+
+<pre><code>##       V1     country wbcode CPI   HDI            region
+##   1:   1 Afghanistan    AFG  12 0.465      Asia Pacific
+##   2:   2     Albania    ALB  33 0.733 East EU Cemt Asia
+##   3:   3     Algeria    DZA  36 0.736              MENA
+##   4:   4      Angola    AGO  19 0.532               SSA
+##   5:   5   Argentina    ARG  34 0.836          Americas
+##  ---                                                   
+## 147: 147     Uruguay    URY  73 0.793          Americas
+## 148: 148  Uzbekistan    UZB  18 0.675 East EU Cemt Asia
+## 149: 149       Yemen    YEM  19 0.498              MENA
+## 150: 150      Zambia    ZMB  38 0.586               SSA
+## 151: 151    Zimbabwe    ZWE  21 0.509               SSA
+</code></pre>
+
+<p><br>
+CPI: Corruption Perceptions Index (<a href="http://www.transparency.org/">http://www.transparency.org/</a>)
+HDI: Human Development Index (<a href="http://hdr.undp.org/">http://hdr.undp.org/</a>)
+Year: 2014</p>
+
+<h2><br></h2>
+
+<h2>Simple example: Human Development versus Corruption Perception</h2>
+
+<pre><code class="r">ggplot(ind, aes(CPI, HDI)) + geom_point()
+</code></pre>
+
+<p><img src="assets/fig/lec02_plt2-1.png" title="plot of chunk lec02_plt2" alt="plot of chunk lec02_plt2" width="500px" height="400px" /></p>
+
+<p><br>
+CPI: Corruption Perceptions Index (<a href="http://www.transparency.org/">http://www.transparency.org/</a>)
+HDI: Human Development Index (<a href="http://hdr.undp.org/">http://hdr.undp.org/</a>)
+Year: 2014</p>
+
+<h2><br></h2>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-14" style="background:;">
+  
+  <hgroup>
+    <h2>Simple scatter plot</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <pre><code class="r">ggplot(ind, aes(CPI, HDI)) + 
+  geom_point()
+</code></pre>
+
+<p><img src="assets/fig/lec02_plt3-1.png" title="plot of chunk lec02_plt3" alt="plot of chunk lec02_plt3" width="500px" height="400px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-15" style="background:;">
+  
+  <hgroup>
+    <h2>ggplot returns an object</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <pre><code class="r">p &lt;- ggplot(ind, aes(CPI, HDI)) + geom_point()
+p
+</code></pre>
+
+<p><img src="assets/fig/lec02_plt7-1.png" title="plot of chunk lec02_plt7" alt="plot of chunk lec02_plt7" width="500px" height="400px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-16" style="background:;">
+  
+  <hgroup>
+    <h2>ggplot returns an object</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <pre><code class="r">names(p)
+</code></pre>
+
+<pre><code>## [1] &quot;data&quot;        &quot;layers&quot;      &quot;scales&quot;      &quot;mapping&quot;     &quot;theme&quot;      
+## [6] &quot;coordinates&quot; &quot;facet&quot;       &quot;plot_env&quot;    &quot;labels&quot;
+</code></pre>
+
+<pre><code class="r">saveRDS(p, &quot;../extdata/lec06_p.rds&quot;)
+p &lt;- readRDS(&quot;../extdata/lec06_p.rds&quot;)
+p + geom_hline(yintercept = 0.7)
+</code></pre>
+
+<p><img src="assets/fig/lec02_plt8-1.png" title="plot of chunk lec02_plt8" alt="plot of chunk lec02_plt8" width="400px" height="400px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-17" style="background:;">
+  
+  <hgroup>
+    <h2>Mapping of aesthetics can be done globally at <code>ggplot()</code> or at individual layers</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <pre><code class="r">ggplot(ind, aes(CPI, HDI)) + 
+  geom_point(size=0.5) + 
+  geom_text(aes(label = wbcode), size=2, vjust=0)
+</code></pre>
+
+<p><img src="assets/fig/lec02_plt4-1.png" title="plot of chunk lec02_plt4" alt="plot of chunk lec02_plt4" width="500px" height="400px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-18" style="background:;">
+  
+  <hgroup>
+    <h2>Mapping of aesthetics can be done globally at <code>ggplot()</code> or at individual layers</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <pre><code class="r">ggplot(ind) + 
+  geom_point(aes(CPI, HDI))
+</code></pre>
+
+<p><img src="assets/fig/lec02_plt12-1.png" title="plot of chunk lec02_plt12" alt="plot of chunk lec02_plt12" width="500px" height="400px" /></p>
+
+<p>Global mapping is inherited by default to all geom layers, while <code>aes</code> mapping at individual layer is only recognized at that layer.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-19" style="background:;">
+  
+  <hgroup>
+    <h2>Mapping of aesthetics done at individual layers</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <pre><code class="r">ggplot(ind) + 
+  geom_point(aes(CPI, HDI), size=0.5) + 
+  geom_text(aes(CPI, HDI, label = wbcode), size=2, vjust=0)
+</code></pre>
+
+<p><img src="assets/fig/lec02_plt5-1.png" title="plot of chunk lec02_plt5" alt="plot of chunk lec02_plt5" width="500px" height="400px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-20" style="background:;">
+  
+  <hgroup>
+    <h2>Individual layer mapping cannot be recognized by other layers</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <pre><code class="r">ggplot(ind) + 
+  geom_point(aes(CPI, HDI)) + 
+  geom_text(aes(label = wbcode))
+</code></pre>
+
+<pre><code>## Error: geom_text requires the following missing aesthetics: x and y
+</code></pre>
+
+<p><img src="assets/fig/lec02_plt6-1.png" title="plot of chunk lec02_plt6" alt="plot of chunk lec02_plt6" width="500px" height="400px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-21" style="background:;">
+  
+  <hgroup>
+    <h2>You can easily map variables to different colours, sizes or shapes!</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>ggplot2 automatically scales for you.</p>
+
+<pre><code class="r">ggplot(data = ind) + 
+  geom_point(aes(CPI, HDI, color = region))
+</code></pre>
+
+<p><img src="assets/fig/lec02_plt9-1.png" title="plot of chunk lec02_plt9" alt="plot of chunk lec02_plt9" width="600px" height="400px" /></p>
+
+<p>American <code>color</code> or British <code>colour</code> both acceptable.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-22" style="background:;">
+  
+  <hgroup>
+    <h2>You can easily map variables to different colours, sizes or shapes!</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <pre><code class="r">ggplot(data = ind) + 
+  geom_point(aes(CPI, HDI, shape = region))
+</code></pre>
+
+<p><img src="assets/fig/lec02_plt10-1.png" title="plot of chunk lec02_plt10" alt="plot of chunk lec02_plt10" width="600px" height="400px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-23" style="background:;">
+  
+  <hgroup>
+    <h2>Aesthetic mappings can also be supplied in individual layers</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <pre><code class="r">ggplot(ind, aes(CPI, HDI)) + 
+  geom_point(aes(color = region))
+</code></pre>
+
+<p><img src="assets/fig/lec02_plt11-1.png" title="plot of chunk lec02_plt11" alt="plot of chunk lec02_plt11" width="600px" height="400px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-24" style="background:;">
+  
+  <article data-timings="">
+    
+<div class="quiz quiz-single well ">
+  <p>What&#39;s the result of the following command?</p>
+
+<p><code>ggplot(data = mpg)</code></p>
+
+<ol>
+<li><p>A Nothing happens</p></li>
+<li><p>B <em>A blank figure will be produced</em></p></li>
+<li><p>C A blank figure with axis will be produced</p></li>
+<li><p>D All data in <code>mpg</code> will be visualized</p></li>
+</ol>
+
+  <button class="quiz-submit btn btn-primary">Submit</button>
+  <button class="quiz-toggle-hint btn btn-info">Show Hint</button>
+  <button class="quiz-show-answer btn btn-success">Show Answer</button>
+  <button class="quiz-clear btn btn-danger">Clear</button>
+  
+  
+<div class="quiz-hint">
+  <p>ggplot builds plot layer by layer. </p>
+
+</div>
+
+<div class="quiz-explanation">
+  <p>Neither variables were mapped nor geometry specified. </p>
+
+</div>
+</div>
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-25" style="background:;">
+  
+  <article data-timings="">
+    
+<div class="quiz quiz-single well ">
+  <p>What&#39;s the result of the following command?</p>
+
+<p><code>ggplot(data = mpg, aes(x = hwy, y = cty))</code></p>
+
+<ol>
+<li><p>A Nothing happens</p></li>
+<li><p>B A blank figure will be produced</p></li>
+<li><p>C <em>A blank figure with axis will be produced</em></p></li>
+<li><p>D A scatter plot will be produced</p></li>
+</ol>
+
+  <button class="quiz-submit btn btn-primary">Submit</button>
+  <button class="quiz-toggle-hint btn btn-info">Show Hint</button>
+  <button class="quiz-show-answer btn btn-success">Show Answer</button>
+  <button class="quiz-clear btn btn-danger">Clear</button>
+  
+  
+<div class="quiz-hint">
+  <p>ggplot builds plot layer by layer. </p>
+
+</div>
+
+<div class="quiz-explanation">
+  <p>Axis x and y are mapped. But no geometry specified.</p>
+
+</div>
+</div>
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-26" style="background:;">
+  
+  <article data-timings="">
+    
+<div class="quiz quiz-single well ">
+  <p>What&#39;s the result of the following command?</p>
+
+<p><code>ggplot(data = mpg, aes(x = hwy, y = cty)) + geom_point()</code></p>
+
+<ol>
+<li><p>A Nothing happens</p></li>
+<li><p>B A blank figure will be produced</p></li>
+<li><p>C A blank figure with axis will be produced</p></li>
+<li><p>D <em>A scatter plot will be produced</em></p></li>
+</ol>
+
+  <button class="quiz-submit btn btn-primary">Submit</button>
+  <button class="quiz-toggle-hint btn btn-info">Show Hint</button>
+  <button class="quiz-show-answer btn btn-success">Show Answer</button>
+  <button class="quiz-clear btn btn-danger">Clear</button>
+  
+  
+<div class="quiz-hint">
+  <p>ggplot builds plot layer by layer. </p>
+
+</div>
+
+<div class="quiz-explanation">
+  <p>Axis x and y are mapped. But no geometry specified.</p>
+
+</div>
+</div>
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-27" style="background:;">
+  
+  <hgroup>
+    <h2>Take-home</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <ul>
+<li>Visualization is as important as statistics. Both are needed.</li>
+<li>Visualization can help finding &quot;bugs&quot; in the data</li>
+<li>Grammar of graphics separates data, aesthetics, and geometries</li>
+<li>more to come next week ...</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-28" style="background:;">
+  
+  <hgroup>
+    <h2>Plotting libraries</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <ul>
+<li><a href="http://www.r-graph-gallery.com/portfolio/ggplot2-package/">http://www.r-graph-gallery.com/portfolio/ggplot2-package/</a></li>
+<li><a href="http://ggplot2.tidyverse.org/reference/">http://ggplot2.tidyverse.org/reference/</a></li>
+<li><a href="https://plot.ly/r/">https://plot.ly/r/</a></li>
+<li><a href="https://plot.ly/ggplot2/">https://plot.ly/ggplot2/</a></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='NA'>
+         1
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='Why plotting?'>
+         2
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='NA'>
+         3
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='Solution'>
+         4
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=5 title='The outlier...'>
+         5
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=6 title='The outlier...'>
+         6
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=7 title='The outlier...'>
+         7
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=8 title='NA'>
+         8
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=9 title='NA'>
+         9
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=10 title='Grammar of Graphics'>
+         10
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=11 title='ggplot2 and Grammar of Graphics'>
+         11
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=12 title='Grammar Defines Components of Graphics'>
+         12
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=13 title='Simple example: Human Development versus Corruption Perception'>
+         13
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=14 title='Simple scatter plot'>
+         14
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=15 title='ggplot returns an object'>
+         15
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=16 title='ggplot returns an object'>
+         16
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=17 title='Mapping of aesthetics can be done globally at <code>ggplot()</code> or at individual layers'>
+         17
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=18 title='Mapping of aesthetics can be done globally at <code>ggplot()</code> or at individual layers'>
+         18
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=19 title='Mapping of aesthetics done at individual layers'>
+         19
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=20 title='Individual layer mapping cannot be recognized by other layers'>
+         20
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=21 title='You can easily map variables to different colours, sizes or shapes!'>
+         21
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=22 title='You can easily map variables to different colours, sizes or shapes!'>
+         22
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=23 title='Aesthetic mappings can also be supplied in individual layers'>
+         23
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=24 title='NA'>
+         24
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=25 title='NA'>
+         25
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=26 title='NA'>
+         26
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=27 title='Take-home'>
+         27
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=28 title='Plotting libraries'>
+         28
+      </a>
+    </li>
+    
+    </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  <script src="libraries/widgets/bootstrap/js/bootstrap.min.js"></script>
+<script src="libraries/widgets/bootstrap/js/bootbox.min.js"></script>
+<script src="libraries/widgets/quiz/js/jquery.quiz.js"></script>
+<script src="libraries/widgets/quiz/js/mustache.min.js"></script>
+<script src="libraries/widgets/quiz/js/quiz-app.js"></script>
+
+  <!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true
+      }
+    });
+  </script>
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script> -->
+  
+<script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+
+  <script>  
+  $(function (){ 
+    $("#example").popover(); 
+    $("[rel='tooltip']").tooltip(); 
+  });  
+  </script>  
+  
+  <!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>
