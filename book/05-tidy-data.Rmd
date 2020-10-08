@@ -7,7 +7,6 @@ knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE, cache=F,
     dpi=200, tidy = TRUE, tidy.opts=list(width.cutoff=80))
 ```
 
-
 # Tidy data
 
 ## Tidy data prerequisites
@@ -58,7 +57,7 @@ foo %>%
 
 
 ```{r}
-## Argument not occuring first:
+## Argument not occurring first:
 ## use .
 "hop_scoop_bop" %>% gsub("_", " ", .)
 ```
@@ -97,19 +96,19 @@ Untidy: 1999 and 2000 are values of the variable *year*.
 table4a
 ```
 
-:::::: {.columns}
-::: {.column width="48%"}
+<!-- :::::: {.columns} -->
+<!-- ::: {.column width="48%"} -->
 Untidy
 
 ![](../assets/img/lec05_untidy_rel.png)
-:::
+<!-- ::: -->
 
-::: {.column width="48%"}
+<!-- ::: {.column width="48%"} -->
 Tidy
 
 ![](../assets/img/lec05_tidy_rel.png)
-:::
-::::::
+<!-- ::: -->
+<!-- :::::: -->
 
 ### Multiple variables are stored in one column
 
@@ -125,37 +124,37 @@ table3
 * The variable *date* is stored across rows and columns
 * The `element` column is not a variable; it stores the names of variables
 
-:::::: {.columns}
-::: {.column width="48%"}
+<!-- :::::: {.columns} -->
+<!-- ::: {.column width="48%"} -->
 
 Untidy: days of the month (d1, d2, ...) are values, not variables
 
 ![](../assets/img/lec05_untidy_weather.png)
-:::
+<!-- ::: -->
 
-::: {.column width="48%"}
+<!-- ::: {.column width="48%"} -->
 Tidy
 
 ![](../assets/img/lec05_tidy_weather.png)
-:::
-::::::
+<!-- ::: -->
+<!-- :::::: -->
 
 ### Multiple types of observational units are stored in the same table
 
-:::::: {.columns}
-::: {.column width="48%"}
+<!-- :::::: {.columns} -->
+<!-- ::: {.column width="48%"} -->
 Untidy
 
 ![](../assets/img/lec05_untidy_songs.png)
-:::
+<!-- ::: -->
 
-::: {.column width="48%"}
+<!-- ::: {.column width="48%"} -->
 Tidy
 
 ![](../assets/img/lec05_tidy_songs.png)
 
-:::
-::::::
+<!-- ::: -->
+<!-- :::::: -->
 
 ### A single observational unit is stored in multiple tables
 
@@ -243,8 +242,8 @@ Very frequent scenarios in R
 
 **If possible, have one data.table instead of a (nested) list of data.tables**
 
-:::::: {.columns}
-::: {.column width="60%"}
+<!-- :::::: {.columns} -->
+<!-- ::: {.column width="60%"} -->
 JSON -> R list
 
 ```{r echo = FALSE}
@@ -274,9 +273,9 @@ sw_list <- jsonlite::fromJSON(sw_json,
           simplifyDataFrame = FALSE) 
 str(sw_list)
 ```
-:::
+<!-- ::: -->
 
-::: {.column width="36%"}
+<!-- ::: {.column width="36%"} -->
 
 JSON example
 
@@ -299,8 +298,8 @@ sw_json <- '[
 ]'
 
 ```
-:::
-::::::
+<!-- ::: -->
+<!-- :::::: -->
 
 To convert a list to a data.table, we use `as.data.table` to convert a list to a data.table with one row and `rbindlist` to stack data.tables
 
@@ -345,23 +344,23 @@ dt %>% print(3)
 
 **Untidy datasets:**
 
-:::::: {.columns}
-::: {.column width="48%"}
+<!-- :::::: {.columns} -->
+<!-- ::: {.column width="48%"} -->
 
 ```{r}
 ## Wide data
 print(table4a)
 ```
-:::
+<!-- ::: -->
 
-::: {.column width="48%"}
+<!-- ::: {.column width="48%"} -->
 
 ```{r}
 ## Long data
 print(table2)
 ```
-:::
-::::::
+<!-- ::: -->
+<!-- :::::: -->
 
 **Solution in R:**
 
@@ -400,37 +399,44 @@ dcast(data, formula, fun.aggregate = NULL, sep = "_", ..., margins = NULL, subse
     drop = TRUE, value.var = guess(data), verbose = getOption("datatable.verbose"))
 ```
 
-:::::: {.columns}
-::: {.column width="48%"}
+<!-- :::::: {.columns} -->
+<!-- ::: {.column width="48%"} -->
+
 ```{r}
 data.table::dcast(table2, ... ~ type, 
                   value.var = "count")
 ```
-:::
 
-::: {.column width="48%"}
+<!-- ::: -->
+
+<!-- ::: {.column width="48%"} -->
+
 ```{r}
 print(table2)
 ```
-:::
-::::::
+
+<!-- ::: -->
+<!-- :::::: -->
 
 Compare
 
-:::::: {.columns}
-::: {.columns width="48%"}
+<!-- :::::: {.columns} -->
+<!-- ::: {.columns width="48%"} -->
+
 ```{r}
 dcast(table2, ... ~ type, 
       value.var = "count")
 ```
-:::
 
-::: {.columns width="48%"}
+<!-- ::: -->
+
+<!-- ::: {.columns width="48%"} -->
+
 ```{r}
 print(table1)
 ```
-:::
-::::::
+<!-- ::: -->
+<!-- :::::: -->
 
 ![Dcasted country dataset](../assets/img/lec05_tidy-gather.png)
 
@@ -444,21 +450,24 @@ print(table1)
 
 **Untidy datasets**
 
-:::::: {.columns}
-::: {.column width="52%"}
+<!-- :::::: {.columns} -->
+<!-- ::: {.column width="52%"} -->
+
 ```{r}
 ## One column contains multiple variables
 print(table3)
 ```
-:::
 
-::: {.column width="44%"}
+<!-- ::: -->
+
+<!-- ::: {.column width="44%"} -->
+
 ```{r}
 ## Multiple columns contain one variable
 print(table5)
 ```
-:::
-::::::
+<!-- ::: -->
+<!-- :::::: -->
 
 **Solution in R:**
 
@@ -479,14 +488,17 @@ separate(data, col, into, sep = "[^[:alnum:]]+", remove = TRUE,
   convert = FALSE, extra = "warn", fill = "warn", ...)
 ```
 
-:::::: {.columns}
-::: {.column width="56%"}
+<!-- :::::: {.columns} -->
+<!-- ::: {.column width="56%"} -->
+
 ```{r}
 table3
 ```
-:::
 
-::: {.column width="40%"}
+<!-- ::: -->
+
+<!-- ::: {.column width="40%"} -->
+
 ```{r}
 separate(table3, col = rate, 
          into = c("cases", "population"))
@@ -494,8 +506,9 @@ separate(table3, col = rate,
          into = c("cases", "population")) %>% 
   class
 ```
-:::
-::::::
+
+<!-- ::: -->
+<!-- :::::: -->
 
 ![Seperated country dataset](../assets/img/lec05_tidy-separate.png)
 
@@ -526,3 +539,6 @@ unite(table5, col = new, century, year, sep = "")
 Interesting blog post:
 
 * <http://simplystatistics.org/2016/02/17/non-tidy-data/>
+
+
+\pagebreak

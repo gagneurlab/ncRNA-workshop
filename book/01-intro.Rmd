@@ -4,7 +4,7 @@ knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE, cache=F,
     results="show",
     out.width="400px", out.height="250px",
     fig.align="center",
-    dpi=200, tidy = TRUE, tidy.opts=list(width.cutoff=80))
+    dpi=600, tidy = TRUE, tidy.opts=list(width.cutoff=80))
 ```
 
 # Foreword
@@ -12,6 +12,7 @@ knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE, cache=F,
 The aim of these series of lectures is to provide you with all the knowledge needed in order to make state of the art plots using the R programming language and Grammar of Graphics. The lectures cover the basic concepts of R, how to manipulate data and how to generate clear and meaningful plots for your target audience, using ggplot2 an implementation of Grammar of Graphics for R. 
 
 # Data visualisation introduction
+
 Data Science is crucial for many applications in a variety of fields and is the language of collaboration between biology, computer science, bioinformatics, physics, and mathematics.
 
 Goals of this course include to introduce you to the R and Rstudio, and provide you general analytic techniques to extract knowledge, patterns, and connections between samples and variables, and how to communicate these in an intuitive and clear way. Some of the examples will be expressed in the field of bioinformatics.
@@ -43,7 +44,7 @@ Opposed to many other statistics or machine learning lectures this course is des
 * R is the language of this course. It shares some aspects with python, but the syntax is often unique compared to other languages. All R files are named with a .R extension (dot - R)  
 * Rstudio is an editor, it succinctly organizes your session into 4 windows each set up for you to do certain tasks in each window. Edit and write code (editor), run and execute code (console), list and name objects, and a window to show output in either function help, and plots.
 
-![Rstudio](../assets/img/Rstudio-1.png)
+![Rstudio](../assets/img/RStudio.png)
 
 
 <!-- ![RStudio](../../assets/img/RStudio.png){#id .class width=600px height=400px} -->
@@ -89,42 +90,46 @@ We will introduce further details of the R language as they are needed throughou
 
 ## Introduction to basic RStudio usage
 
+Opening up Rstudio in an fresh R session, we see the R version and the architecture of our system (32-bit or 64-bit)
+\newline
+![RStudio Interface](../assets/img/RStudio-New-Project/Rstudio-1.png)
+
 Now are going to show a super simple tutorial of a project setup.
 
-1. From the menu bar we click File > New Project
+1. From the menu bar we click **File > New Project**
    \newline
-   ![New Project 1](../assets/img/Rstudio-3.png)
-2. Then we choose New Directory > New Project
+   ![New Project 1](../assets/img/RStudio-New-Project/Rstudio-2.png)
+2. Then we choose **New Directory > New Project**
    \newline
-   ![New Project 2](../assets/img/Rstudio-4.png)
+   ![New Project 2](../assets/img/RStudio-New-Project/Rstudio-3.png)
    \newline
-   ![New Project 3](../assets/img/Rstudio-5.png)
+   ![New Project 3](../assets/img/RStudio-New-Project/Rstudio-4.png)
 
-3. Give a name to your New Project eg. dataviz-demo, and set the path where the new project will be created
+3. Give a name to your **New Project** eg. *dataviz-demo*, and set the path where the new project will be created and click **Create Project**
    \newline
-   ![New Project 4](../assets/img/Rstudio-7.png)
+   ![New Project 4](../assets/img/RStudio-New-Project/Rstudio-5.png)
 4. The new project will be loaded and you can see the name of your project on the top bar
    \newline
-   ![New Project 5](../assets/img/Rstudio-8.png)
-5. Now you can start typing command on the console
+   ![New Project 5](../assets/img/RStudio-New-Project/Rstudio-6.png)
+5. Now you can start typing command on the **Console Panel**
    \newline
-   ![New Project 6](../assets/img/Rstudio-9.png)
-6. By assigning a variable, the variable and its value will appear on the environment panel
+   ![New Project 6](../assets/img/RStudio-Use-Console/Rstudio-1.0.png)
+6. By assigning a variable, the variable and its value will appear on the **Environment Panel**
    \newline
-   ![New Project 7](../assets/img/Rstudio-10.png)
-   \newline
-   ![New Project 8](../assets/img/Rstudio-12.png)
-   \newline
-   ![New Project 9](../assets/img/Rstudio-13.png)
-
-7. By calling `?toupper` the toupper function will appear on the help panel
+   ![New Project 7](../assets/img/RStudio-Use-Console/Rstudio-1.1.png)
+   
+7. By typing the `?` before an function name e.g. `?toupper`, the toupper function will appear on the **Help Panel** with all the documentation of the function as well as usefull examples.
   \newline
-   ![New Project 10](../assets/img/Rstudio-15.png)
-8. Typing endlessly commands in the console can cumbersome, so in order for us to be able to reproduce our code, what we do is that we write our commands in a script file. To make a new script file we can either click `File > New File > R` script or click or the `+` icon (below the File menu) and then click `R script` or simply press `Ctrl+Shift+N`
+   ![New Project 10](../assets/img/RStudio-Use-Console/Rstudio-2.png)
+8. Typing endlessly commands in the console can cumbersome, so in order for us to be able to reproduce our code, what we do is that we write our commands in a script file. To make a new script file we can either click **File > New File > R** script or click or the **+** icon (below the File menu) and then click **R script** or simply press **Ctrl+Shift+N**. A new untitled empty script will appear on the **Source panel**
   \newline
-   ![New Project 11](../assets/img/Rstudio-16.png)
+  ![New Project 11](../assets/img/RStudio-Create-Save-Script/Rstudio-1.png)
+  \newline
+  ![New Project 12](../assets/img/RStudio-Create-Save-Script/Rstudio-1.1.png)
+  \newline
+  ![New Project 13](../assets/img/RStudio-Create-Save-Script/Rstudio-1.2.png)
    \newline
-   ![New Project 12](../assets/img/Rstudio-17.png)
+   
 \pagebreak
 
 

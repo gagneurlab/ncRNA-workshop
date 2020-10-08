@@ -19,11 +19,17 @@ knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE, cache=F,
 ```
 
 
-# Data.table
+# Data Wrangling using Data.table
 
 ```{r include=F}
-DATADIR <- file.path('./../extdata')
+DATADIR <- file.path('../extdata')
 ```
+
+Data Wrangling includes tasks of processing raw data into interesting formats....
+
+
+Data.tables are a modern implementation of tables in R. We will exclusively used data.tables in this course. Base R provides a similar structure called data.frames.
+However, those are a lot slower and often a little more complicated to use, so we highly recommend using data.table.
 
 Similar to a data.frame, but because it modifies columns by *reference*, a data.table is a memory efficient and faster implementation of data.frame offering:
 
@@ -46,7 +52,7 @@ The general form of data.table syntax is:
          
 The way to read this out loud is: "Take DT, subset rows by i, then compute j grouped by by. Here are some basic usage examples expanding on this definition.
 
-Like data.frame, data.table is a list of vectors. It doesn't have rownames; instead, it's a collection of attributes.
+Like data.frame, data.table is a list of vectors. It doesn't have row names; instead, it's a collection of attributes.
 
 Each column can be a different type, including a list
 
@@ -54,52 +60,132 @@ It has enhanced functionality in `[`. We can make operations inside `[]`.
 
 For a detailed documentation go check the help page for data.table!
 
-To create a data.table we just name its columns and then we populate them. As before with the data.frame, all the columns have to have the same length.
+## Creating and loading data 
+
+To create a data.table, we just name its columns and populate them. All the columns have to have the same length.
 
 ```{r}
 # install.packages("data.table")
 library(data.table)
 DT <- data.table(x = rep(c("a","b","c"), each = 3), y = c(1, 3, 6), v = 1:9)
 DT # note how column y was recycled
-# For comparison, let's make a data.frame from it:
-DF <- as.data.frame(DT)
 ```
 
-If we want to converting a data frame to data.table all we have to do it to call the `as.data.table()` function.
+If we want to convert any other R object to a data.table, all we have to do is to call the `as.data.table()` function.
 
 ```{r}
-# Using the data frame from the previous slide:
-DT <- as.data.table(DF)
-class(DT)
+# This way we can for example convert any inbuilt data set into a data.table:
+titanic_dt <- as.data.table(Titanic)
+class(titanic_dt)
 ```
 
-Here you can see that the class function informs us that DT is both a data.table and a data.frame.
+Here you can see that the class function informs us that DT is both a data.table and a data.frame as data.tables inherit
+from data.frames, an older table class in R.
 
-The structure of the data.table is that essentially is a list of list. To get the dimensions of our data.table we can either use the `dim()` function to get the dimensions of our data.table (M rows x N columns) or to use the `ncol()` `nrow()` functions.
+Alternativly we can read files from disk and process them using data.table. 
+The easiest way to do so is to use the function `fread()`.
+
+```{r, eval=FALSE}
+flights <- fread('path_to_file/flightsLAX.csv')
+```
+
+```{r, echo=FALSE}
+flights <- fread(file.path(DATADIR, 'flights/flightsLAX.csv'))
+flights <- flights[, .(YEAR, MONTH, DAY, DAY_OF_WEEK, AIRLINE, FLIGHT_NUMBER, TAIL_NUMBER, ORIGIN_AIRPORT,
+                        DESTINATION_AIRPORT, DEPARTURE_TIME, AIR_TIME, DISTANCE, ARRIVAL_TIME)]
+```
+Calling `head()` on the table showes us the first few lines of the table and we observe that reading the file was succesfull.
+```{r}
+head(flights)
+```
+
+## Inspecting tables
+
+A first step in any analysis should involve inspecting the data we just read in. 
+This often starts by looking the head of the table as we did above.
+
+The next information we are often interested in is the size of our data set.
+We can use the following commands to obtain it.
+```{r}
+nrow(flights)   # ncol(flights)
+dim(flights)
+```
+
+### Technical detail
+
+The structure of the data.table essentially is a list of list. To get the dimensions of our data.table we can either use the `dim()` function to get the dimensions of our data.table (M rows x N columns) or to use the `ncol()` `nrow()` functions.
 
 ```{r}
 class(DT)
 is.list(DT)
-summary(DT)
 nrow(DT)   # ncol(DT)
 dim(DT)
 ```
 
 
-## Accessing a data.table by rows (*i*)
+Next we are often interested in the range or the number of occurence of values in certain columns. 
+To obtain this information we can use the summary command on the table.
 
-* The general form of data.table syntax is `DT[i, j, by]`
-* "Take **DT**, subset rows using **i**, then select or calculate **j**, grouped by **by**".
 ```{r}
-DT[2, ]   # Access the 2nd row (also DT[2] or DT[i = 2])
-DT[1:2]   # Access multiple consecutive rows.
-DT[c(3, 5)]  # Access multiple rows.
+summary(flights[,1:6])
+
+```
+
+This provides us already a lot of information about our data. We can for example see that all data is from 2015 as all values in the YEAR column are 2015.
+But for categorical data this is not very insight full, as we can see for the AIRLINE column.
+
+To investigate categorical columns we can have a look at their unique elements using:
+```{r}
+flights[, unique(AIRLINE)]
+
+```
+This command provided us the airline identifiers present in the dataset.
+Another valueable information for categoricals is how often each category occurs. This can be obtained using the following commands:
+```{r}
+flights[, table(AIRLINE)]
+```
+Or:
+
+```{r}
+
+flights[, .N, by = 'AIRLINE']
+
+```
+
+Especially the second command will be explained in detail later.
+
+```{r}
+
+
+
 ```
 
 
+## Accessing rows and columns of data.tables
+
+Data.tables can be subsetted by indices, if we for example care about the second element of the table.
+We can do the following.
+```{r}
+flights[2, ]   # Access the 2nd row (also flights[2] or flights[i = 2])
+flights[1:2]   # Access multiple consecutive rows.
+flights[c(3, 5)]  # Access multiple rows.
+```
+Additionally we can do the same for columns:
+```{r}
+head(flights[, 2 ])
+head(flights[, c(3, 5)])
+```
+Alternatively to subsetting by indices we can subset columns by their names.
+
+```{r}
+head(flights[, .(MONTH)])
+head(flights[, .(DAY, AIRLINE)])
+```
+
 ## Sub-setting rows according to some condition
 
-We can subset a data table according to different conditions using the operators:
+A often more usefull way is to subset rows using conditions!
+We can subset a data table using the following operators:
 
 * `==`
 * `<` 
@@ -107,24 +193,21 @@ We can subset a data table according to different conditions using the operators
 * `!=`
 * `%in%`
 
-To exemplify this, load the predefined `iris` dataset as a data.table
+For example if we are interested in analysing all the flights operated by "AA" (American Airlines) we can do that using the following command:
 
 ```{r}
-iris_dt <- as.data.table(iris)
-summary(iris_dt)
-# View the species setosa. Data frame syntax: iris[iris$Species == "setosa", ]
-# Note how we use double [] to subset
-iris_dt[Species == "setosa"][4:6] 
+head(flights[AIRLINE == "AA"])
 ```
-
+Alternatively if we are interested in all flights from any destination to the airports in NYC (JFK and LGA), we can subset the rows using the following command:
 ```{r}
-# View all the species except setosa
-# Same as iris_dt[Species %in% c("versicolor", "virginica")]
-iris_dt[Species != "setosa"][1:3]
-# View all flowers with a petal length greater than 6
-iris_dt[Petal.Length > 6][1:3]
+flights[DESTINATION_AIRPORT %in% c("LGA", "JFK")]
 ```
 
+Additionally we can concatenate multiple condition using the logical OR `|` or AND `&` operator.
+If we for example want to inspect all flights departing between 6am and 7am operated by American Airlines we can use the following statement:
+```{r}
+head(flights[AIRLINE == "AA" & DEPARTURE_TIME > 600 & DEPARTURE_TIME < 700])
+```
 
 
 ## Accessing a data.table by columns (DT[i, **j**, by])
@@ -133,29 +216,29 @@ Once you're inside the ``[]``, you're in the data.table environment. Inside this
 
 It is not advisable to access a column by its number. **Use the column name instead**.
 
-The table format can change (new columns can be added), so using column names prevents bugs e.g. if you have a dataset with 50 columns, how do you know which one is column 18?
+The table format can change (new columns can be added), so using column names prevents bugs e.g. if you have a data set with 50 columns, how do you know which one is column 18?
 
-This way the code is more readable: `DT[, age]` instead of `DT[, 5]`.
+This way the code is more readable: `flights[, TAIL_NUMBER]` instead of `flights[, 7]`.
 
 ```{r}
-DT[, x]    # Access column x (also DT$x or DT[j=x]). 
-DT[4, x]   # Access a specific cell.
+flights[1:10, TAIL_NUMBER]    # Access column x (also DT$x or DT[j=x]). 
+flights[4, TAIL_NUMBER]   # Access a specific cell.
 ```
 
 When accessing many columns, we probably want to return a data.table instead of a vector. For that, we need to provide R with a list, so we use ``list(colA, colB)``, or its simplified version ``.(colA, colB)``.
 
 ```{r}
 # Note that 1 and 3 were coerced into strings because a vector can have only 1 type
-DT[1:2, c(x,y)]   
+flights[1:2, c(TAIL_NUMBER, ORIGIN_AIRPORT)]   
 
 # Access a specific subset. Data.frame: DF[1:2, c("x","y")] 
-DT[1:2, list(x,y)]
+flights[1:2, list(TAIL_NUMBER, ORIGIN_AIRPORT)]
 
 # Same as before.
-DT[1:2, .(x,y)]   
+flights[1:2, .(TAIL_NUMBER, ORIGIN_AIRPORT)]
 ```
 
-## Data.table environment
+### Technical Detail Data.table environment
 
 The following examples are to show how the ``[]`` bring us inside the data.table environment.
 
@@ -180,22 +263,22 @@ DF[, y*v]
 
 We saw already that inside the ``[]``, columns are seen as variables, so we can apply functions to them.
 ```{r}
-# Similar to mean(iris_dt[, Petal.Length])
-iris_dt[, mean(Petal.Length)]   
-iris_dt[Species == "virginica", mean(Petal.Length)]
+# Similar to mean(flights[, AIR_TIME])
+flights[, mean(AIR_TIME, na.rm=TRUE)]   
+flights[AIRLINE == "OO", mean(AIR_TIME, na.rm=TRUE)]
 ```
 
 To compute operations in multiple columns, we must provide a list (unless we want the result to be a vector).
 
 ```{r}
-# Same as iris_dt[, .(mean(PL), median(PL))]
-iris_dt[, list(mean(Petal.Length), median(Petal.Length))]
+# Same as flights[, .(mean(AIR_TIME), median(AIR_TIME))]
+flights[, list(mean(AIR_TIME, na.rm=TRUE), median(AIR_TIME, na.rm=TRUE))]
 
 # Give meaningful names
-iris_dt[, .(mean_PL = mean(Petal.Length), median_PL = median(Petal.Length))] 
+flights[, .(mean_AIR_TIME = mean(AIR_TIME, na.rm=TRUE), median_AIR_TIME = median(AIR_TIME, na.rm=TRUE))] 
 ```
 
-We can also apply basic operations on multiple columns
+### Technical detail We can also apply basic operations on multiple columns
 
 ``sapply(DT, FUN)``, applies function FUN column-wise to DT. Remember that ``sapply`` returns a vector, while ``lapply`` returns a list.
 
@@ -211,48 +294,87 @@ sapply(iris_dt, sum)
 # iris_dt` is subseted by the logical vector
 
 # Same as sapply(iris_dt[, 1:4], sum)
-sapply(iris_dt[, colnames(iris_dt)!="Species", with = F], sum) 
+#sapply(iris_dt[, colnames(iris_dt)!="Species", with = F], sum) 
 ```
 
 ## The 'by' option (DT[i, j, **by**])
 
-A very useful option used to apply some function to every group of a data table is the by argument. Although usually ``i`` and ``j`` are omitted from the syntax, we do write the ``by``.
+The ``by = `` option allows us to apply a function to groups wtihin a data.table. For example, we can use the ``by = `` to compute the mean flight time per airline:
 
 ```{r}
-# Compute the mean petal length of every species
-iris_dt[, .(mean_PL = mean(Petal.Length)), by = Species]
-
-# Compute the mean and sd of petal length of every species
-iris_dt[, .(mean_PL = mean(Petal.Length), sd_PL = sd(Petal.Length)), by = Species]
-
+# Compute the mean air time of every airline
+flights[, .(mean_AIRTIME = mean(AIR_TIME, na.rm=TRUE)), by = AIRLINE]
 ```
 
-## The .N command
-
-The ``.N`` is a special in-built variable that counts the number observations of a particular group.
+This way we can easily spot that one airline conducts on average shorter flights.
 
 ```{r}
-# Get the number of observations for each species
-iris_dt[, .N, by = Species]   
+# Compute the mean and standard deviation of the air time of every airline
+flights[, .(mean_AIRTIME = mean(AIR_TIME, na.rm=TRUE), sd_AIR_TIME = sd(AIR_TIME, na.rm=TRUE)), by = AIRLINE]
 ```
 
-Remember the data.table definition: "Take **DT**, subset rows using **i**, then select or calculate **j**, grouped by **by**"
+Although we could write ``flights[i = 5, j = AIRLINE]``, we usually ommit the ``i =`` and ``j =`` from the syntax, and write ``flights[5, ARILINE]`` instead. However, for clarity we usually include the ``by =`` in the syntax.
 
+## Counting occurences (the `.N` command)
+
+The ``.N`` is a special in-built variable that counts the number observations within a table.
+
+Evaluating ``.N`` alone is equal to `nrow()` of a table.
 ```{r}
-# For each species, get the number of observations with Sepal.Width greater than 3
-iris_dt[Sepal.Width > 3, .(SW_greater_3 = .N), by = Species]  
+flights[, .N]
+nrow(flights)
 ```
 
-## The := command
-
-The ``:=`` operator updates the data.table you are working on, so writing DT <- DT[,... := ...] is redundant. This operator, plus all ``set`` functions, change their input by *reference*. No copy of the object is made, that is why it is faster and uses less memory.
+But the ``.N`` command becomes a lot more powerful when used with grouping or conditioning.
+We already saw earlier how we can use it to count the number of occurrences of elements in categorical columns.
 
 ```{r}
-# Add a new column called yv whose value is the product of y and v
-DT[, yv := y*v][1:3]
+# Get the number of flights for each AIRLINE
+flights[, .N, by = 'AIRLINE']
+```
+
+Remembering the data.table definition: "Take **DT**, subset rows using **i**, then select or calculate **j**, grouped by **by**",
+we can build even more powerful statements using all three elements.
+```{r}
+# For each airline, get the number of observations to NYC (JFK)
+flights[DESTINATION_AIRPORT == "JFK", .N, by = 'AIRLINE']
+```
+
+## Creating new columns (the := command)
+
+The ``:=`` operator updates the data.table you are working on, so writing DT <- DT[,... := ...] is redundant. This operator, plus all ``set`` functions (TODO clarify), change their input by *reference*. No copy of the object is made, that is why it is faster and uses less memory.
+
+```{r}
+# Add a new column called SPEED whose value is the DISTANCE divided by AIR_TIME
+flights[, SPEED := DISTANCE / AIR_TIME * 60]
+head(flights)
+```
+
+Having computed a new column using the ``:=`` operator we can use it for further analyses.
+```{r}
+flights[, .(mean_AIR_TIME = mean(AIR_TIME, na.rm=TRUE), 
+            mean_SPEED = mean(SPEED, na.rm=TRUE),
+            mean_DISTANCE = mean(DISTANCE, na.rm=TRUE)
+            ), by=AIRLINE] 
+```
+Now we can see that the flights by the carrier "OO" are not just shorter, but also slow. 
+This could for example lead us to the hypothesis, that "OO" is a small regional carrier, which operates slower planes.
+
+Additionally we can use the ``:=`` operator to remove columns. If we for example observe that tail numbers are not important for our analysis we can remove them with the following statement:
+```{r}
+flights[, TAIL_NUMBER := NULL]
+head(flights)
+```
+Here we observe, that the tail numbers are gone from the data.table
+
+### Technical Detail Multiple assignments
+
+With the following syntax we can assign multiple new columns at once. 
+
+```{r}
 # Add columns with sepal and petal area. Note the syntax of multiple assignment.
-iris_dt[, `:=` (Sepal.Area = Sepal.Length * Sepal.Width,
-                Petal.Area = Petal.Length * Petal.Width)][1:3]
+#iris_dt[, `:=` (Sepal.Area = Sepal.Length * Sepal.Width,
+#                Petal.Area = Petal.Length * Petal.Width)][1:3]
 ```
 
 You can also delete columns by using the ``:=`` command.
@@ -261,19 +383,19 @@ You can also delete columns by using the ``:=`` command.
 
 # Let's assume setosa flowers are orange, versicolor purple and virginica pink.
 # Add a column with these colors.
-iris_dt[Species == "setosa", color := "orange"] 
-iris_dt[Species == "versicolor", color := "purple"]
-iris_dt[Species == "virginica", color := "pink"]
-unique(iris_dt[, .(Species, color)])
+#iris_dt[Species == "setosa", color := "orange"] 
+#iris_dt[Species == "versicolor", color := "purple"]
+#iris_dt[Species == "virginica", color := "pink"]
+#unique(iris_dt[, .(Species, color)])
 
 # We can delete this new column by setting it to NULL
-iris_dt[, color := NULL]
-colnames(iris_dt)
+#iris_dt[, color := NULL]
+#colnames(iris_dt)
 ```
 
 ## By reference
 
-What do we mean when we say that data.table modifies columns *by reference*? That no new copy of the object is made in the memory, unless we actually create one using ``copy()``.
+What do we mean when we say that data.table modifies columns *by reference*? It means that no new copy of the object is made in the memory, unless we actually create one using ``copy()``.
 ```{r}
 or_dt <- data.table(a = 1:10, b = 11:20)
 # No new object is created, both new_dt and or_dt point to the same memory chunk.
@@ -304,10 +426,30 @@ There are different types of merging:
 * **Left (all.x)**: consider all rows from x, even if they have no matching row in y.
 * **Right (all.y)**: consider all rows from y, even if they have no matching row in x.
 
-### Merging - inner and outer examples
+### Merging - example
+
+If we for example want to know how the airports are called behind the IATA_CODE codes, we can load another tabe containing additional information about the airports.
+```{r, eval=FALSE}
+airports <- fread('path_to_file/airports.csv')
+```
+
+```{r, echo=FALSE}
+airports <-  fread(file.path(DATADIR, 'flights/airports.csv'))
+```
 ```{r}
-( dt1 <- data.table(table = "table1", id = c(1,2,3), a = rnorm(3)) )
-( dt2 <- data.table(table = "table2", id = c(1,2,4), b = rnorm(3)) )
+head(airports)
+```
+
+```{r}
+head(merge(flights, airports, by.x = "DESTINATION_AIRPORT", by.y = 'IATA_CODE'))
+```
+
+### Merging - inner and outer examples
+
+Below we created some artificial tables to showcase the differences between the different types of merges.
+```{r}
+dt1 <- data.table(table = "table1", id = c(1,2,3), a = rnorm(3))
+dt2 <- data.table(table = "table2", id = c(1,2,4), b = rnorm(3))
 ```
 
 ```{r}
@@ -319,7 +461,7 @@ merge(dt1, dt2, by = "id", all = F)
 # Outer (full) merge: all = TRUE
 merge(dt1, dt2, by = "id", all = T)
 ```
- 
+
 Note that the column order got changed after the merging.
  
 ```{r}
@@ -357,3 +499,5 @@ Even if you were able to answer them, practice:
 <http://r4ds.had.co.nz/relational-data.html>
 
 <http://adv-r.had.co.nz/Environments.html>
+
+\pagebreak

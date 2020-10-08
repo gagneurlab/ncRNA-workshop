@@ -1,0 +1,17 @@
+base
+data.table
+magrittr
+RColorBrewer
+ggplot2
+plotly
+htmlwidgets
+knitr
+dplyr
+rmarkdown
+gridExtra
+gapminder
+ggbeeswarm
+ggrepel
+MASS
+GGally
+tidyr
