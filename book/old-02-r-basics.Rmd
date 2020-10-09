@@ -1,0 +1,798 @@
+```{r include=FALSE}
+options("width"=80)
+knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE, cache=T, 
+    results="show",
+    out.width="400px", out.height="250px",
+    fig.align="center",
+    dpi=200, tidy = TRUE, tidy.opts=list(width.cutoff=80))
+
+error_hook <- knitr::knit_hooks$get("error")
+knitr::knit_hooks$set(
+  error = function(x, options) {
+    if (!is.null(n <- options$linewidth)) {
+      x = knitr:::split_lines(x)
+      if (any(nchar(x) > n))
+        x = strwrap(x, width = n)
+      x = paste(x, collapse = '\n')
+    }
+    error_hook(x, options)
+  }
+)
+```
+
+## Assignments
+
+Assignments in R are preferably of this form:
+
+```{r eval=F}
+objectName <- value
+```
+
+It is also possible to assign with the *equal* sign.
+
+```{r eval=F}
+objectName = value
+```
+
+```{r}
+x <- 5 # Both methods have the same outcome
+y = 5
+```
+
+```{r}
+x
+y
+```
+
+However, the "equal" sign is used for argument passing to functions. Thus if nesting, the equal sign will be interpreted as a argument assignment and might throw an error:
+
+```{r, linewidth=80, error=TRUE}
+## We want to measure the running time of the inner product of a large vector and 
+## assign the outcome of the function to a variable simultaneously
+system.time(a <- t(1:1e6)%*%(1:1e6))
+system.time(a = t(1:1e6)%*%(1:1e6)) ## This would cause an error
+```
+
+Right Alt + - gives a quick shortcut to add **<-** ;)
+
+
+## Vectors
+
+Vectors are 1-dimensional data structures which can contain one or more variables, regardless of their type.
+
+Usually created with `c()` (from *concatenation*):
+```{r}
+c(1, 5, 8, 10)
+str(c(1, 5, 8, 10))
+length(c(1, 5, 8, 10))
+c("a", "B", "cc")
+c(TRUE, FALSE, c(TRUE, TRUE))
+c(1, "B", FALSE)
+```
+
+There are multiple ways to create a numeric sequence depending on the desired result.
+
+Usually for an integer sequence *from:to* is enough. For different results we may need to use `seq()` function utilizing its arguments to increase by a *step* of our choice or to split the range depending on the desired length of the output.
+
+```{r}
+1:10 
+seq(from = 1, to = 10, by = .3)
+seq(from = 1, to = 10, length.out = 12)
+```
+
+Keep in mind that sometimes different approaches, give different data types as results so when weird things happen, always check the documentation (devil is in the details)!
+
+For non numeric values e.g. logical, character, `rep()` function comes also in handy. 
+
+The *replicate* function `rep()` replicates a vector a certain number of *times* and concatenates them: 
+```{r}
+rep(c(TRUE, FALSE), times = 5)
+```
+
+To replicate *each* entry of the input vector at the time:
+```{r}
+rep(c(TRUE, FALSE), each = 5)
+```
+
+Vector elements are accessed via the ```[``` operator:
+```{r}
+## Create an A,B,C,D,E vector
+x <- LETTERS[1:5]
+x
+## access the third entry
+x[3]
+## modify the third entry
+x[3] <- 'Z'
+x
+```
+
+Elements in vectors can have names. 
+Using names instead of index to access entries in a vector make code more robust to re-ordering, sub-setting, and changes in data input.  
+Names can be created at initialization or set afterwards with `names()`. 
+
+```{r}
+x <- c(a = 1, b = 2, c = 3)
+x
+names(x) <- c("A", "B", "C")
+x
+```
+
+Names don't have to be unique, but should preferably be, as sub-setting by names will only return the first match
+```{r}
+x <- c(a = 1, a = 2, b = 3)
+x["a"]
+```
+
+Not all elements need to have names.
+```{r}
+c(a = 1, 2, 3)
+```
+
+## Factors
+
+```{r}
+x <- factor(c("red", "yellow", "red","green", "green"))
+x
+```
+
+* A factor is a is used to store categorical data. The distinct categories are called 'levels'.
+
+* They belong to a special `class()`, *factor*, which makes them behave differently from regular integer vectors.
+
+* Factors cannot be altered in the same way as vectors. Only their levels can be altered.
+
+* Factors are built on top of integer vectors: the values are integer indexes in the dictionary of levels.
+
+* They occupy less space in memory than characters, since they are stored as integers.
+
+
+Level | Integer 
+------|--------
+green  | 1 
+red | 2 
+yellow | 3 
+
+* Factors are typically constructed with `factor()`. By default the levels are the unique values, sorted by alphanumerical order. 
+```{r}
+x <- factor(c("red", "yellow", "red","green", "green"))
+x
+```
+
+`levels()` gives the levels in ascending order of the underlying encoding integers.
+```{r}
+levels(x)
+```
+
+The order of the levels can be forced:
+```{r}
+x <- factor(c("red", "yellow", "red","green", "green"), levels=c("green", "yellow", "red"))
+x
+levels(x)
+```
+
+The order of the levels is then used for all function requiring comparisons, e.g. sorting 
+```{r}
+sort(x)
+```
+
+Only level values can be used:
+```{r}
+x <- factor(c("red", "yellow", "red","green", "green"))
+x[2] <- "blue"
+x
+```
+
+**Be aware** that R does not prevent you from combining factors:
+
+Do not try to combine factors, especially if levels are not the same!
+
+```{r}
+c(x, factor("blue"))
+```
+
+# Data Wrangling using Data.table
+
+```{r include=F}
+DATADIR <- file.path('extdata')
+```
+
+Data Wrangling includes tasks of processing raw data into interesting formats....
+
+Data.tables are a modern implementation of tables in R. We will exclusively used data.tables in this course. Base R provides a similar structure called data.frames.
+However, those are a lot slower and often a little more complicated to use, so we highly recommend using data.table.
+
+Similar to a data.frame, but because it modifies columns by *reference*, a data.table is a memory efficient and faster implementation of data.frame offering:
+
+* sub-setting
+* ordering
+* merging
+ 
+It accepts all data.frame functions, it has a shorter and more flexible syntax (not so straightforward in the beginning but pays off) and saves time on two fronts:
+
+* programming (easier to code, read, debug and maintain)
+* computing (fast and memory efficient)
+
+The general form of data.table syntax is:
+
+    DT[ i,  j,  by ] # + extra arguments
+        |   |   |
+        |   |    -------> grouped by what?
+        |    -------> what to do?
+         ---> on which rows?
+         
+The way to read this out loud is: "Take DT, subset rows by i, then compute j grouped by by. Here are some basic usage examples expanding on this definition.
+
+Like data.frame, data.table is a list of vectors. It doesn't have row names; instead, it's a collection of attributes.
+
+Each column can be a different type, including a list
+
+It has enhanced functionality in `[`. We can make operations inside `[]`.
+
+For a detailed documentation go check the help page for data.table!
+
+## Creating and loading data 
+
+To create a data.table, we just name its columns and populate them. All the columns have to have the same length.
+
+```{r}
+# install.packages("data.table")
+library(data.table)
+DT <- data.table(x = rep(c("a","b","c"), each = 3), y = c(1, 3, 6), v = 1:9)
+DT # note how column y was recycled
+```
+
+If we want to convert any other R object to a data.table, all we have to do is to call the `as.data.table()` function.
+
+```{r}
+# This way we can for example convert any inbuilt data set into a data.table:
+titanic_dt <- as.data.table(Titanic)
+class(titanic_dt)
+```
+
+Here you can see that the class function informs us that DT is both a data.table and a data.frame as data.tables inherit
+from data.frames, an older table class in R.
+
+Alternativly we can read files from disk and process them using data.table. 
+The easiest way to do so is to use the function `fread()`.
+
+```{r, eval=FALSE}
+flights <- fread('path_to_file/flightsLAX.csv')
+```
+
+```{r, echo=FALSE}
+flights <- fread(file.path(DATADIR, '../extdata/flightsLAX.csv'))
+flights <- flights[, .(YEAR, MONTH, DAY, DAY_OF_WEEK, AIRLINE, FLIGHT_NUMBER, TAIL_NUMBER, ORIGIN_AIRPORT,
+                        DESTINATION_AIRPORT, DEPARTURE_TIME, AIR_TIME, DISTANCE, ARRIVAL_TIME)]
+```
+
+Calling `head()` on the table shows us the first few lines of the table and we observe that reading the file was succesfull.
+
+```{r}
+head(flights)
+```
+
+## Inspecting tables
+
+A first step in any analysis should involve inspecting the data we just read in. 
+This often starts by looking the head of the table as we did above.
+
+The next information we are often interested in is the size of our data set.
+We can use the following commands to obtain it.
+
+```{r}
+nrow(flights)   # ncol(flights)
+dim(flights)
+```
+
+### Technical detail
+
+The structure of the data.table essentially is a list of list. To get the dimensions of our data.table we can either use the `dim()` function to get the dimensions of our data.table (M rows x N columns) or to use the `ncol()` `nrow()` functions.
+
+```{r}
+class(DT)
+is.list(DT)
+nrow(DT)   # ncol(DT)
+dim(DT)
+```
+
+
+Next we are often interested in the range or the number of occurence of values in certain columns. 
+To obtain this information we can use the summary command on the table.
+
+```{r}
+summary(flights[,1:6])
+
+```
+
+This provides us already a lot of information about our data. We can for example see that all data is from 2015 as all values in the YEAR column are 2015.
+But for categorical data this is not very insight full, as we can see for the AIRLINE column.
+
+To investigate categorical columns we can have a look at their unique elements using:
+```{r}
+flights[, unique(AIRLINE)]
+
+```
+
+This command provided us the airline identifiers present in the dataset.
+
+Another valueable information for categoricals is how often each category occurs. This can be obtained using the following commands:
+
+```{r}
+flights[, table(AIRLINE)]
+```
+
+Or:
+
+```{r}
+
+flights[, .N, by = 'AIRLINE']
+
+```
+
+Especially the second command will be explained in detail later.
+
+## Accessing rows and columns of data.tables
+
+Data.tables can be subsetted by indices, if we for example care about the second element of the table.
+We can do the following.
+```{r}
+flights[2, ]   # Access the 2nd row (also flights[2] or flights[i = 2])
+flights[1:2]   # Access multiple consecutive rows.
+flights[c(3, 5)]  # Access multiple rows.
+```
+
+Additionally we can do the same for columns:
+
+```{r}
+head(flights[, 2 ])
+head(flights[, c(3, 5)])
+```
+
+Alternatively to subsetting by indices we can subset columns by their names.
+
+```{r}
+head(flights[, .(MONTH)])
+head(flights[, .(DAY, AIRLINE)])
+```
+
+## Sub-setting rows according to some condition
+
+A often more usefull way is to subset rows using conditions!
+We can subset a data table using the following operators:
+
+* `==`
+* `<` 
+* `>`
+* `!=`
+* `%in%`
+
+For example if we are interested in analysing all the flights operated by "AA" (American Airlines) we can do that using the following command:
+
+```{r}
+head(flights[AIRLINE == "AA"])
+```
+
+Alternatively if we are interested in all flights from any destination to the airports in NYC (JFK and LGA), we can subset the rows using the following command:
+
+```{r}
+flights[DESTINATION_AIRPORT %in% c("LGA", "JFK")]
+```
+
+Additionally we can concatenate multiple condition using the logical OR `|` or AND `&` operator.
+If we for example want to inspect all flights departing between 6am and 7am operated by American Airlines we can use the following statement:
+
+```{r}
+head(flights[AIRLINE == "AA" & DEPARTURE_TIME > 600 & DEPARTURE_TIME < 700])
+```
+
+## Accessing a data.table by columns (DT[i, **j**, by])
+
+Once you're inside the ``[]``, you're in the data.table environment. Inside this scope, there's no need to put the column names in quotation marks, as columns are seen as variables already.
+
+It is not advisable to access a column by its number. **Use the column name instead**.
+
+The table format can change (new columns can be added), so using column names prevents bugs e.g. if you have a data set with 50 columns, how do you know which one is column 18?
+
+This way the code is more readable: `flights[, TAIL_NUMBER]` instead of `flights[, 7]`.
+
+```{r}
+flights[1:10, TAIL_NUMBER]    # Access column x (also DT$x or DT[j=x]). 
+flights[4, TAIL_NUMBER]   # Access a specific cell.
+```
+
+When accessing many columns, we probably want to return a data.table instead of a vector. For that, we need to provide R with a list, so we use ``list(colA, colB)``, or its simplified version ``.(colA, colB)``.
+
+```{r}
+# Note that 1 and 3 were coerced into strings because a vector can have only 1 type
+flights[1:2, c(TAIL_NUMBER, ORIGIN_AIRPORT)]   
+
+# Access a specific subset. Data.frame: DF[1:2, c("x","y")] 
+flights[1:2, list(TAIL_NUMBER, ORIGIN_AIRPORT)]
+
+# Same as before.
+flights[1:2, .(TAIL_NUMBER, ORIGIN_AIRPORT)]
+```
+
+## Basic operations
+
+We saw already that inside the ``[]``, columns are seen as variables, so we can apply functions to them.
+
+```{r}
+# Similar to mean(flights[, AIR_TIME])
+flights[, mean(AIR_TIME, na.rm=TRUE)]   
+flights[AIRLINE == "OO", mean(AIR_TIME, na.rm=TRUE)]
+```
+
+To compute operations in multiple columns, we must provide a list (unless we want the result to be a vector).
+
+```{r}
+# Same as flights[, .(mean(AIR_TIME), median(AIR_TIME))]
+flights[, list(mean(AIR_TIME, na.rm=TRUE), median(AIR_TIME, na.rm=TRUE))]
+
+# Give meaningful names
+flights[, .(mean_AIR_TIME = mean(AIR_TIME, na.rm=TRUE), median_AIR_TIME = median(AIR_TIME, na.rm=TRUE))] 
+```
+
+
+```{r}
+
+# Note that we can access columns stored as variables by setting with=F.
+# In this case, `colnames(iris_dt)!="Species"` returns a logical vector and `
+# iris_dt` is subseted by the logical vector
+
+# Same as sapply(iris_dt[, 1:4], sum)
+#sapply(iris_dt[, colnames(iris_dt)!="Species", with = F], sum) 
+```
+
+## The 'by' option (DT[i, j, **by**])
+
+The ``by = `` option allows us to apply a function to groups wtihin a data.table. For example, we can use the ``by = `` to compute the mean flight time per airline:
+
+```{r}
+# Compute the mean air time of every airline
+flights[, .(mean_AIRTIME = mean(AIR_TIME, na.rm=TRUE)), by = AIRLINE]
+```
+
+This way we can easily spot that one airline conducts on average shorter flights.
+
+```{r}
+# Compute the mean and standard deviation of the air time of every airline
+flights[, .(mean_AIRTIME = mean(AIR_TIME, na.rm=TRUE), sd_AIR_TIME = sd(AIR_TIME, na.rm=TRUE)), by = AIRLINE]
+```
+
+Although we could write ``flights[i = 5, j = AIRLINE]``, we usually ommit the ``i =`` and ``j =`` from the syntax, and write ``flights[5, ARILINE]`` instead. However, for clarity we usually include the ``by =`` in the syntax.
+
+## Counting occurences (the `.N` command)
+
+The ``.N`` is a special in-built variable that counts the number observations within a table.
+
+Evaluating ``.N`` alone is equal to `nrow()` of a table.
+```{r}
+flights[, .N]
+nrow(flights)
+```
+
+But the ``.N`` command becomes a lot more powerful when used with grouping or conditioning.
+We already saw earlier how we can use it to count the number of occurrences of elements in categorical columns.
+
+```{r}
+# Get the number of flights for each AIRLINE
+flights[, .N, by = 'AIRLINE']
+```
+
+Remembering the data.table definition: "Take **DT**, subset rows using **i**, then select or calculate **j**, grouped by **by**",
+we can build even more powerful statements using all three elements.
+```{r}
+# For each airline, get the number of observations to NYC (JFK)
+flights[DESTINATION_AIRPORT == "JFK", .N, by = 'AIRLINE']
+```
+
+## Creating new columns (the := command)
+
+The ``:=`` operator updates the data.table you are working on, so writing DT <- DT[,... := ...] is redundant. This operator, plus all ``set`` functions (TODO clarify), change their input by *reference*. No copy of the object is made, that is why it is faster and uses less memory.
+
+```{r}
+# Add a new column called SPEED whose value is the DISTANCE divided by AIR_TIME
+flights[, SPEED := DISTANCE / AIR_TIME * 60]
+head(flights)
+```
+
+Having computed a new column using the ``:=`` operator we can use it for further analyses.
+
+```{r}
+flights[, .(mean_AIR_TIME = mean(AIR_TIME, na.rm=TRUE), 
+            mean_SPEED = mean(SPEED, na.rm=TRUE),
+            mean_DISTANCE = mean(DISTANCE, na.rm=TRUE)
+            ), by=AIRLINE] 
+```
+
+Now we can see that the flights by the carrier "OO" are not just shorter, but also slow. 
+This could for example lead us to the hypothesis, that "OO" is a small regional carrier, which operates slower planes.
+
+Additionally we can use the ``:=`` operator to remove columns. If we for example observe that tail numbers are not important for our analysis we can remove them with the following statement:
+
+```{r}
+flights[, TAIL_NUMBER := NULL]
+head(flights)
+```
+Here we observe, that the tail numbers are gone from the data.table
+
+## By reference
+
+What do we mean when we say that data.table modifies columns *by reference*? It means that no new copy of the object is made in the memory, unless we actually create one using ``copy()``.
+```{r}
+or_dt <- data.table(a = 1:10, b = 11:20)
+# No new object is created, both new_dt and or_dt point to the same memory chunk.
+new_dt <- or_dt   
+new_dt[, ab := a*b]
+colnames(or_dt)   # or_dt was also affected by changes in new_dt
+
+or_dt <- data.table(a = 1:10, b = 11:20)
+copy_dt <- copy(or_dt)   # By creating a copy, we have 2 objects in memory
+copy_dt[, ab := a*b]
+colnames(or_dt)    # Changes in the copy don't affect the original
+```
+
+## Math
+
+R supports various mathematical and logical operations between scalars, vectors etc.
+
+* Basic mathematical operations: `+`, `*`, `-`, `/`
+
+
+
+## Binary comparison
+
+- Element-wise Binary comparison return a vector of same length as the input
+  - **==** element-wise equality
+  - **!=** element-wise inequality
+  - **<**, **<=** element-wise smaller (or equal)
+  - **>**, **>=** element-wise greater (or equal)
+
+```{r}
+1:5 == 1:5
+```  
+
+* Binary comparison with a single Boolean statement as output
+  * `identical(x, y)` exact equality
+  * `all(x)` are all TRUE?
+```{r}
+identical(1:5, 1:5)
+```
+
+## Sub-setting
+
+* There are three accessing methods
+  * **[** For vectors
+
+* Six ways of sub-setting
+  * By positive integers
+  * By negative integers
+  * By logical vectors
+  * Empty sub-setting
+  * By Zero
+  * Character vector
+
+### Atomic vectors
+
+```{r}
+x <- LETTERS[1:5]
+x
+## By positive integers
+x[c(1,3)]
+## By negative integers
+x[-c(1,3)]
+```
+
+```{r}
+## By logical vectors
+x[c(TRUE, TRUE, TRUE, FALSE, FALSE)]
+## By logical vectors
+x[x <= "C"]
+```
+
+`NAs` in the input vector will always produce an `NA` in the output:
+```{r}
+x[c(1,2,NA)]
+```
+
+We can also sub-setting by character vectors, if names are present:
+```{r}
+names(x) <- letters[1:5]
+x[c("a", "b")]
+```
+
+### Sub-setting and assignment
+
+All sub-setting operators can be combined with assignments to modify a subset of values.
+
+```{r}
+x <- c(a = 1, b = 2, c = 3)
+x[2] <- 10
+x
+df <- data.frame(a = 1:2, b = 3:4)
+df
+df$b <- c("first", "second")
+df
+
+```
+
+## Functions
+
+Function are a nice way to break down a big problem (bake a pizza) to smaller, manageable sub-problems (make the dough, make the sauce, add toppings, bake the pizza). They offer code re-usage (save time for important things, like wine drinking), easier testing of functionality and cleaner code!
+
+The syntax to write your own functions is the following:
+
+```{r, eval=FALSE}
+myFunction <- function(args1, args2 = default, ...) {
+  body
+  return(result)
+}
+```
+
+* If the `return` statement is missing, the result of the last line will be returned
+* The parameters can be assigned default values
+* If the default value is a vector, the first value will be used by default
+* The *three dots* (`...`) in the function arguments are called **ellipsis** and are used as a placeholder for any arguments passed to a function call inside. This is useful when you don't want to push all parameters from embodied function to your functions or allow for generic functions without pre-specifying argument names.
+
+```{r, eval=FALSE}
+myFunction <- function(args1, args2 = c("option1", "option2"), ...) {
+  result <- doSomething(args1, ...)
+  return(result)
+}
+myFunction(args1, args2, param1)
+```
+
+
+## Conditional Statements
+
+A typical way to control the flow of the execution of your code is to have conditional statements.
+
+The typical setup is:
+
+```{r, eval=FALSE}
+if(statement_to_test) {
+  print("Statement is true")
+} else {
+  print("Statement is false")
+}
+```
+
+Long version:
+```{r}
+if(1 < 2) {
+  print("TRUE")
+} else {
+  print("FALSE")
+}
+```
+
+
+Short version if the To-Do step fits into one line:
+```{r}
+{
+if(1 > 2) print("TRUE")
+else print("FALSE")
+}
+```
+
+The curly brackets around the if-else statement are only needed in a script to tell R to which *if* the *else* belongs to.
+
+You can also have multiple statement tests. If more than one statements can be satisfied the first that got evaluated will be executed:
+```{r}
+x <- 1
+if(x > 0) {
+  print("X is 0, or maybe not?")
+} else if(x == 1) {
+  print("X is 1")
+} else {
+  print("X is something else")
+}
+```
+
+You can also chain *if-else* statements:
+```{r, eval=FALSE}
+x <- 5
+if(x > 0) {
+  if(x > 3) {
+    if(x == 5) {
+      cat("X is 5")
+    } else {
+      cat("X is greater than 3")
+    }  
+  } else {
+    cat("X positive and less than 3")
+  }
+} else {
+  cat("X less than 0")
+}
+```
+
+R also supports switch statements.
+
+## For loops
+
+R supports looping through the traditional *for* and *while* statements and with the use of the *apply family* functions.
+
+Syntax:
+```
+for(index in sequence) {
+  do something
+}
+```
+
+Again, if the To-Do step is a one-liner, curly brackets can be dropped
+```{r}
+a <- NULL
+for(i in 1:10) a <- c(a, sum(1:i))
+a
+```
+
+
+A sequence can be any vector, including lists
+```{r}
+myList <- list(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+a <- integer(10)
+for(i in myList) a[i] <- sum(1:i)
+a
+```
+
+## R Markdown
+
+* This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>. 
+
+* Simply go to File --> New File --> R Markdown
+
+* Select PDF and you get a template.
+
+* You most likely won't need more commands than in on the first page of [this cheat sheet](https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf).
+
+* When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.  
+
+## Summary
+
+By now, you should be able to answer the following questions:
+
+* Why do we say that data.table is an enhanced data.frame?
+* How to subset by rows or columns? Remember: DT[i, j, by].
+* How to add columns?
+* How to make operations with different columns?
+* Which are the different types of merging?
+
+Even if you were able to answer them, practice:
+
+* Check all vignettes and reference manual from <https://cran.r-project.org/web/packages/data.table/>
+* A really concise cheat sheet: 
+* <https://s3.amazonaws.com/../assets.datacamp.com/img/blog/data+table+cheat+sheet.pdf>
+
+## Data.table resources
+
+<https://cran.r-project.org/web/packages/data.table/>
+
+<https://s3.amazonaws.com/../assets.datacamp.com/img/blog/data+table+cheat+sheet.pdf>
+
+<http://r4ds.had.co.nz/relational-data.html>
+
+<http://adv-r.had.co.nz/Environments.html>
+
+## Useful references
+
+* These slides are mostly based on Hadley Wickham's book [Advanced R](http://adv-r.had.co.nz/)
+
+* [**Everything else** from Hadley Wickham](http://hadley.nz/)
+
+* In-depth documentations:
+
+  * [Introduction to R](https://cran.r-project.org/doc/manuals/r-release/R-intro.pdf)
+
+  * [R language definition](https://cran.r-project.org/doc/manuals/r-release/R-lang.pdf)
+
+  * [R Internals](https://cran.r-project.org/doc/manuals/r-release/R-ints.pdf)
+
+* Last but not least:
+
+  * [Stackoverflow](http://stackoverflow.com/questions/tagged/r)
+  
+
+
+\pagebreak

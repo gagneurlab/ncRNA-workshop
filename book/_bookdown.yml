@@ -1,12 +1,10 @@
 book_filename: "ncRNA-workshop-book"
 rmd_files: 
   latex: ["index.Rmd",
-    #"01-intro.Rmd",
-    #"02-r-basics.Rmd",
-    "03-simple-data-visualisation.Rmd"]
-    #"04-data-table.Rmd",
-    #"05-tidy-data.Rmd"]
-    #"06-advanced-plotting.Rmd",
-    #"07-snakemake.Rmd",
-    #"08-quizes.Rmd",
-    #"09-quiz-solutions.Rmd"]
+    "01-intro.Rmd",
+    "02-data-wrangling.Rmd",
+    "03-tidy-data.Rmd",
+    "04-plotting-I.Rmd",
+    "07-snakemake.Rmd",
+    "08-quizes.Rmd",
+    "09-quiz-solutions.Rmd"]

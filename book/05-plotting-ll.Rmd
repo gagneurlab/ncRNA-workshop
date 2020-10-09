@@ -1,0 +1,414 @@
+\pagebreak
+
+# High dimensional visualizations
+
+<!-- The aim of this chapter is to ... -->
+
+
+<!-- Heatmap + hierarchical clustering + k-means -->
+<!-- Rand Index -->
+<!-- PCA -->
+<!-- Boule -->
+
+## Heatmaps
+
+For the representation of high dimensional datasets with several variables, we can use heatmaps.
+A heatmap is a graphical representation of data that uses a system of color-coding to represent different values. 
+
+In the next example, we present a heatmap constructed from the melted version of the `mtcars` dataset. Here, we display the values corresponding to the variables of the different vehicles. 
+
+```{r lec04_heatmap }
+mtcars_melted <- as.data.table(scale(mtcars[1:10,]), keep.rownames = "Cars") %>% 
+                                                                melt(id.var = "Cars")
+ggplot(mtcars_melted, aes(variable, Cars)) +
+  geom_tile(aes(fill=value)) +
+   scale_fill_gradient2(low='darkblue', mid= 'white', high='darkred') + mytheme
+```
+
+There is an alternative way to plot heatmaps in R with the library `pheatmap` for pretty heatmaps. We can construct the same heatmap for the `mtcars` dataset as before in an easier manner without the need for previously melting the data. 
+
+```{r lec-07-heatmap222, fig.height=6, fig.width=7}
+library(pheatmap) ## pretty heatmap
+pheatmap(mtcars[1:10,], cluster_rows=F, cluster_cols=F, show_rownames=T)
+```
+
+
+With `pheatmap` we can also scale the data by rows or columns by setting the argument `scale` accordingly:
+
+```{r lec-07-heatmap, fig.height=6, fig.width=7}
+library(pheatmap) ## pretty heatmap
+pheatmap(mtcars[1:10,], cluster_rows=F, cluster_cols=F, 
+         scale='column', show_rownames=T)
+```
+
+## Clustering
+
+Clustering is the task of dividing a dataset of observations into a number of groups such that observations in the same group are more similar to the observations in the same group than to those in other groups. Groups are often referred to as clusters. 
+
+There are several algorithms for solving clustering tasks such as spectral clustering, Gaussian mixture models, Hierarchical clustering and k-Means clustering. In the following sections, we will focus exclusively on Hierarchical clustering and k-Means clustering. 
+
+<!-- ![cluster comparison](../assets/img/lec07_cluster_comparison.png) -->
+<!-- # ```{r, out.width = "900px", echo=FALSE} -->
+<!-- # knitr::include_graphics(paste0(getwd(), "/../../../assets/img/lec07_cluster_comparison.png")) -->
+<!-- # ``` -->
+
+### Hierarchical clustering
+
+Hierarchical clustering builds a hierarchy of clusters. The algorithm starts with all the observations assigned to a cluster of their own. Then two nearest clusters are merged into the same cluster. In a bottom-up approach, clusters are successively merged until there is only a single cluster left.
+
+The two clusters selected for merging are defined according to a distance metric, which plays a fundamental role in Hierarchical clustering. One possibility for the distance metric is to consider the mean or average linkage or UPGMA. Here, the distance between each pair of observations in each cluster is added up and divided by the number of pairs to get an average inter-cluster distance. This can be computed as:
+
+$${\displaystyle {\frac {1}{|A||B|}} \sum_{a\in A} \sum_{b\in B} d(a,b),} $$
+
+where $A$ and $B$ are two different clusters and $d$ is a function (e.g. Euclidean distance or correlation metric) which measures the distance between two elements $a$ and $b$. 
+
+#### Hierarchical clustering in R
+
+In R, Hierarchical clustering can be performed in two simple steps. First, we can compute the distance between observations (rows of a `data.table`) across variables (columns of a `data.table`) with the help of the function `dist()`. Here, the Euclidean distance between rows is computed by default. Alternatives include the Manhattan or Minkowski distance. As an example, we provide the distance matrix of the `mpg` and `cyl` columns of the dataset `mtcars`:
+
+```{r}
+d <- dist( mtcars[, c('mpg','cyl')] )   # find distance matrix 
+```
+
+Then, we can use the resulting distance matrix to perform Hierarchical clustering with the help of the function `hclust()`:
+
+```{r}
+hc <- hclust(d)                         # apply hierarchical clustering 
+names(hc)
+```
+
+
+The results of Hierarchical clustering can be shown using a dendrogram. Here, observations that are determined to be similar by the clustering algorithm are displayed close to each other in the `x`-axis. The height in the dendrogram at which two clusters are merged represents the distance between those two clusters.
+
+```{r lec-07-hclust, fig.width=12, fig.height=9}
+par(cex=1.8)
+plot(hc, hang=-1, labels= paste(rownames(mtcars), mtcars[,'cyl']))
+```
+
+Now we can ask ourselves the question of how to actually obtain a partition from Hierarchical clustering. For this, we can apply a very ad-hoc method: we can simply cut the dendrogram at a certain height. 
+
+For example, we decide to cut the dendrogram at a height of 5, which results in 6 clusters: 
+
+```{r lec-071-hclust, fig.width=12, fig.height=9}
+par(cex=1.8)
+plot(hc, hang=-1, labels= paste(rownames(mtcars), mtcars[,'cyl']))
+abline(h=5, col='red')
+```
+
+
+We can often decide on the height threshold based on visual inspection or on the number of groups we wish to obtain. 
+
+For instance, we can set the height threshold to 10. This results in 3 clusters:
+```{r}
+cl1 = cutree(hc, h=10)
+table(cl1)
+```
+
+Alternatively, we can set the number of desired clusters to three:
+
+```{r}
+cl2 = cutree(hc, k=3)
+table(cl2)
+```
+
+We can compare both alternatives with the help of the function `table()` which returns a contingency table of the counts of each cluster:
+
+```{r}
+table(cl1, cl2)
+```
+
+#### Pretty heatmaps including Hierarchical clustering
+
+As illustrated before, the library `pheatmap` enables the easy creation of heatmaps. In the previous example, we set the parameters `cluster_rows` and `cluster_cols` to `FALSE` to avoid the default computation of Hierarchical clustering. If we want to include Hierarchical clustering, we can simply set these parameters to `TRUE` or let R consider its default values.
+
+```{r lec-07111-heatmap, fig.height=8, fig.width=9}
+pheatmap(mtcars, cluster_rows=T, cluster_cols=F, scale='column')
+```
+
+### k-Means clustering
+
+The most popular partitioning method is probably k-Means clustering. This clustering algorithm aims to partition $n$ observations into $k$ clusters. It is an iterative algorithm that aims to find local maxima in each iteration. Each observation is assigned to the cluster with the nearest mean, which serves as a prototype of the cluster. The Euclidean distance is typically used as a metric to define the distance between observations. 
+
+#### Steps for performing k-Means clustering
+
+```{r, out.width = "600px", echo=FALSE}
+ knitr::include_graphics("../assets/img/kMeansD.png")
+```
+
+1. First, we have to specify the number of clusters $k$, e.g. $k=3$. Then, we have to choose the $k$ initial centroids (one for each cluster). Different methods such as random sampling are available for this task.
+
+2. Next, we assign each sample to its nearest centroid by computing the Euclidean distance between each observation to each centroid. Here, we want to minimize the distance between the samples and its assigned centroids. Formally, it can be expressed as:
+$$\underset{\mathbf{S}= \{S_1,..., S_k\}} {\operatorname{arg\,min}}  \sum_{i=1}^{k} \sum_{\mathbf x \in S_i} \left\| \mathbf x - \boldsymbol\mu_i \right\|^2,$$
+where $\mathbf{S}$ a the set of clusters, which together contain the $n$ observations and $\mu_i$ is the centroid of cluster $S_i$.
+
+3. Afterwards, we create new centroids by taking the mean value of all of the observations assigned to each previous centroid.
+
+4. Then, we compute the difference between the old and the new centroids. We repeat steps 2 and 3 until the difference between centroids is less than a previously defined threshold.
+
+#### Considerations and drawbacks of k-Means clustering
+
+Even though k-Means clustering works properly in many applications, it requires the analyst to specify the number of clusters $k$ to extract, which is not always a trivial task. The algorithm starts and ends with a fixed number of clusters. 
+
+Furthermore, the performance of k-Means clustering strongly depends on the initialization of the centroids for each cluster. 
+
+We also remark that convergence to a local minimum may produce counterintuitive ("wrong") results.
+
+
+#### Assumptions in k-Means clustering 
+
+In these examples, k-Means will not work properly: 
+
+<!-- <img src="../assets/img/lec07_kmeans_assumptions.png" style="height:600px"> -->
+```{r, out.width = "1000px", echo=FALSE}
+knitr::include_graphics("../assets/img/lec07_kmeans_assumptions.png")
+```
+
+We have to make sure that the following assumptions are met when performing k-Means clustering:
+
+* The number of clusters $k$ is properly selected
+* The clusters are isotropically distributed
+* The cluster have equal (or similar) variance
+* The clusters are of similar size
+
+#### k-Means clustering in R
+
+As an example, we want to cluster the observations in the `iris` dataset according to their petal lengths and their petal widths. Similar lengths and widths should be found in the same cluster. Intuitively, observations from the same species (e.g. Setosa) should be found in the same cluster.
+
+Since it is not clear at first, how many clusters we should build, we first try to plot the data:
+
+```{r lec-07-iris}
+library(datasets)
+data(iris)
+qplot(Petal.Length, Petal.Width, data=iris)
+```
+
+After observing the previous plot, we aim to group the observations into 3 clusters. In R, this can be easily achieved with the function `kmeans()`:
+
+```{r}
+k <- 3
+clust_km <- kmeans(iris[,c("Petal.Length", "Petal.Width")], k)
+names(clust_km)
+table(clust_km$cluster)
+```
+
+We can then assign the result of the clustering algorithm as a new column of the iris dataset:
+
+```{r}
+iris <- cbind(iris, cluster=factor(clust_km$cluster))
+head(iris)
+```
+
+We can compare the actual `Species` column to the resulting clustering results with the two following plots:
+
+```{r lec-07-col-species}
+qplot(Petal.Length, Petal.Width, 
+      color=Species, data=iris)
+```
+
+```{r lec-07-col-cluster}
+qplot(Petal.Length, Petal.Width, 
+      color=cluster, data=iris)
+```
+
+#### Annotating heatmaps with clustering results
+
+We can conveniently include annotations to the heatmaps created by the library `pheatmap`. In this manner, we can compare the results of the k-Means clustering to the Hierarchical clustering and to the actual species of every observation:
+
+```{r lec-07-heatmap-annot, fig.height=8, fig.width=10}
+plot.data <- iris[, 1:4]
+rownames(plot.data) <- paste("iris", 1:nrow(plot.data), sep=".")
+row.ann <- data.frame(species=iris[,5], kmeans=iris[,6])
+rownames(row.ann) <- rownames(plot.data)
+pheatmap(plot.data, annotation_row=row.ann, show_rownames=F)
+```
+
+In this example, we see that both clustering methods seem to coincide with the actual species of most observations. 
+
+### Difference between k-Means and Hierarchical clustering
+
+Both Hierarchical clustering and k-Means clustering are established clustering algorithms. Here, we briefly state a few differences that may be considered, when deciding which algorithm to apply in practice. 
+
+The time complexity of k-Means clustering is linear, while that of Hierarchical clustering is quadratic. This implies that Hierarchical clustering can not handle extremely large datasets as efficiently as k-Means clustering. 
+
+In k-Means clustering, we start with a random choice of centroids for each cluster. Hence, the results produced by the algorithm are strongly dependent on the initialization method. Therefore, the results might differ when running the algorithm multiple times. Hierarchical clustering produces reproducible results.
+
+Another difference is that k-Means clustering requires prior knowledge of the number of clusters we want to divide our observations into. However, we flexibly choose the number of clusters we find appropriate in Hierarchical clustering by interpreting the dendrogram and setting a height threshold. 
+
+### Rand Index for cluster comparison
+
+The proper evaluation and comparison of clustering results is certainly a challenging task. When clustering in only two groups, we could use evaluation measures from classification, which we will introduce later. Moving from two partitions of the data into arbitrarily many groups requires new ideas.
+
+We remark that a partition is in our context the result from a clustering algorithm and, therefore, the divided dataset into clusters. Generally, two partitions (from different clustering algorithms) are considered to be similar when many pairs of points are grouped together in both partitions.
+
+The Rand index is a measure of the similarity between two partitions. Formally, we introduce the following definitions:
+
+* $S = \{o_1, \dots, o_n\}$ a set of $n$ elements (or observations)
+
+* First partition $X = \{X_1, \dots, X_k\}$ of $S$ into $k$ sets
+
+* Second partition $Y = \{Y_1, \dots, Y_l\}$ of $S$ into $l$ sets
+
+* $a$ number of **pairs** of elements of $S$ that are **in the same set** in $X$ and in $Y$
+
+* $b$ number of **pairs** of elements of $S$ that are **in different sets** in $X$ and in $Y$
+
+* ${n}\choose{2}$ total number of pairs of elements of $S$
+
+Then, the Rand index can be computed as
+$$R = \frac{a + b}{ {N\choose 2} } $$
+
+#### Properties of the Rand index
+
+By definition, the Rand index has values between 0 and 1. A Rand index of 1 means that all pairs that are in the same cluster in the partition $X$ are also in the same cluster in the partition $Y$ **and** all pairs that are not in the same cluster in $X$ are also not in the same cluster in $Y$. Hence, the two partitions are identical with a Rand index of 1. In general, the higher the Rand index, the more similar are both partitions. 
+
+#### Application of the Rand index in Hierarchical clustering
+
+We can compute the Rand index for Hierarchical clustering if we fix the number of clusters. For instance: we perform a Hierarchical clustering and cut the tree in order to get 10 clusters. On the other hand, someone else had run k-Means clustering with $k=9$  on the same data. We wonder how your two clusterings agree. The Rand index gives some similarity measure for that.
+
+## Dimensionality reduction with PCA
+
+As described in the previous chapters, visualizing data is a crucial task of data analysis. However, this becomes challenging with high dimensional data. This contributes to the motivation for developing and using dimensionality reduction techniques. Moreover, dimensionality reduction allows for easier exploration and analysis of data. 
+
+Principal component analysis, or PCA, is widely used for dimensionality reduction. PCA is a statistical procedure that uses an orthogonal transformation to convert a (large) set of observations of possibly correlated variables into a set of values of linearly uncorrelated variables, which are denoted as principal components. In this manner, PCA aims to reduce the number of variables, while preserving as much information from the original dataset as possible.
+
+Intuitively, PCA can be thought of as fitting an n-dimensional ellipsoid to the data, where each axis of the ellipsoid represents a principal component. If some axis of the ellipsoid is small, then the variance along that axis is also small, and, by omitting that axis and its corresponding principal component from our representation of the dataset, we lose only a commensurately small amount of information.
+
+Principal components are the underlying structure in the data. Each of these explains a percentage of the total variation in the dataset. The first principal component has the largest possible variance. Respectively, the second principal component has the second-largest possible variance. High-dimensional data is often visualized by plotting the first two principal components after performing PCA. 
+
+## An example for introducing PCA
+
+As an example, we can study the motion of the physicist's ideal spring. We know a priori that the dynamics can be expressed as a function of a single variable $x$. Since we are rather ignorant experimenters in this field, we do not know how many axes we have and which of these axes are important.
+
+<!-- <img src="../assets/img/lec07_pca_toy_example.png" width=500/> -->
+```{r, out.width = "300px", echo=FALSE}
+knitr::include_graphics("../assets/img/lec07_pca_toy_example.png")
+```
+
+We set up an experiment by first placing three cameras around the system. Each camera records a two dimensional image at 200 Hz. We do not know the correct $x, y, z$ so we set up the cameras with axes $a, b, c$ at arbitrary angles.
+
+We now want to answer the question of how to get from our experiment to a simple equation for $x$. We know that we often have more dimensions measured than actually needed and that the data is sometimes noisy. In this scenario, the goal of PCA is to identify the most meaningful basis to re-express the data to reveal hidden dynamics and to determine that a unit basis in the direction of $x$ is the most important dimension. More precisely we want to investigate, whether there is another basis that is a linear combination of the original basis, that best represents our data.
+
+### PCA terminology
+
+Formally, we consider a dataset represented by a  $\mathbf X$  with $n$ samples and $p$ measured variables. We assume that the data is centered, i.e. all column means are equal to zero. We can possibly also assumed that the data is scaled, i.e. the standard deviation of all columns is equal to one. 
+
+In PCA, the matrix $X$ is linearly transformed by a matrix $W$, which is called the loading or rotation matrix. The columns of $W$ are the new basis vectors, which we refer to as the principal components. The column vectors of ${\mathbf T} = XW$ represent the projection of the data on the principal components. 
+
+We can now formulate the following questions we want to address:
+
+* What is the "best" way to re-express the data?
+* What is a good choice for the new basis?
+* Which properties would we like the transformed data to exhibit?
+
+Mainly, we want to guarantee a **high signal to noise ratio**  (SNR)
+<!-- ![](../assets/img/lec07_pca_toy_example_scatter.png) -->
+```{r, out.width = "200px", echo=FALSE}
+knitr::include_graphics("../assets/img/lec07_pca_toy_example_scatter.png")
+```
+
+$$SNR = \frac{\sigma^2_{signal}}{\sigma^2_{noise}}$$
+and **low redundancy** after PCA. 
+
+<!-- ![](../assets/img/lec07_pca_toy_example_redundancy.png) -->
+```{r, out.width = "200px", echo=FALSE}
+knitr::include_graphics("../assets/img/lec07_pca_toy_example_redundancy.png")
+```
+
+For formalizing these criteria, we denote the covariance matrix of $X$ as
+$$ S(X) = X^TX,$$
+where $S_{ii}$ is variance of variable $i$ ($=\sigma^2_i$) and $S_{ij}$ is covariance between variables $i$ and $j$ as measure of redundancy. Then, the covariance matrix of the transformed data is defined as
+
+$$S(Y) = Y^TY = (XW)^TXW$$
+
+In PCA, we aim to  select first the direction with largest variance $S_{ii}$ (best SNR) and we should have no redundancy, so $S_{ij} = 0$ for $i \neq j$. This last aspect corresponds to an orthonormal basis $W$.
+
+### Algorithm for PCA
+
+Intuitively, we can describe the PCA algorithm in three main steps:
+
+1. Find the direction $w_1$ that maximizes the variance in $X$
+2. Look for the next direction $w_2$ perpendicular to $w_1$ that maximizes the variance
+3. continue until all $p$ directions have been identified
+
+These steps can be translated into computation steps in linear algebra:
+
+1. Compute the covariance matrix $S(X) = X^TX$
+2. Set $W$ to the matrix of eigenvectors of the covariance matrix $S(X)$
+3. The eigenvalues of $X^TX$ equal to the variance of the projection of $X$
+
+
+We remark that the principal components of a matrix $X$ are the orthonormal directions maximizing the variance when $X$ is projected onto. The principal components are the new basis of the data.
+
+### PCA in R
+
+PCA can be easily performed in R by using the built-in function `prcomp()`. In the following examples, we perform PCA on the first four variables of the built-in dataset `mtcars`. We set the two arguments `scale` and `center` to `TRUE` so that the data is first centered and scaled before performing PCA. 
+
+```{r}
+pca_res <- prcomp(mtcars[,1:4], center = TRUE, scale. = TRUE) 
+names(pca_res)
+```
+
+The output can be stored in `pca_res`, which contains information about the center point (`center`), scaling (`scale`), standard deviation (`sdev`) of each principal component, as well as the values of each sample in terms of the principal components (`x`) and the relationship between the initial variables and the principal components (`rotation`).
+
+An overview of the PCA result can be obtained with the function `summary()`, which describes the standard deviation, portion of variance and cumulative proportion of variance of each of the resulting principal components (`PC1`, `PC2`, ...). We remark that the cumulative proportion is always equal to one for the last principal component.
+
+```{r}
+pca_sum <- summary(pca_res)
+pca_sum
+```
+
+In this example, the first principal component explains 87.55% of the total variance and the second one 5.986%.  So, just `PC1` and `PC2` can explain approximately 93.5% of the total variance.
+
+#### Plotting  PCA results in R
+
+Plotting the results of  PCA is particularly important. The so-called **scree plot** is a good first step for visualizing the PCA output, since it may be used as a diagnostic tool to check whether PCA works well on the selected dataset or not.  
+
+```{r lec-07-scree_plot, fig.width = 7, fig.height = 7}
+plot(pca_res, type='l')
+```
+
+The scree plot shows the variance in each projected direction. The y-axis is eigenvalues, which essentially stand for the amount of variation. We can use a scree plot to select the principal components to keep. If the scree plot has an 'elbow' shape, it can be used to decide how many principal components to use for further analysis. For example, we may achieve dimensionality reduction by transforming the original four dimensional data (first four variables of `mtcars`) to a two-dimensional space by using the first two principal components.
+
+A variant of the scree plot can be considered by plotting the proportion of the total variance for every principal component. 
+
+```{r lec-07-scree-plot-variant, fig.width = 7, fig.height = 7}
+plot(pca_sum$importance[2,], type='l',
+     xlab='Principal components', ylab="Proportion of total variance")
+points(pca_sum$importance[2,])
+```
+
+The **biplot** shows the projection of the data on the first two principal components. It includes both the position of each sample in terms of `PC1` and `PC2` and also shows how the initial variables map onto this. The correlation between variables can be derived from the angle between the vectors.
+
+```{r lec-07-biplot, fig.width = 9, fig.height = 9}
+biplot(pca_res)
+```
+
+We can access the projection of the original data on the principal components by using the function `predict` as follows:
+
+```{r}
+predict(pca_res)
+```
+
+## Summary 
+
+In this chapter, we introduced heatmaps as a powerful and useful visualization for high dimensional data. Heatmaps can be generated in R with both libraries `ggplot` and `pheatmap`.
+
+We also described two clustering algorithms: Hierarchical clustering and k-Means. Comparing clustering results can be achieved by computing the Rand index.
+
+Furthermore, we introduced dimensionality reduction with PCA, which can be used for easier visualization of high dimensional data in a two dimensional space.  
+  
+  
+## Resources
+
+* This chapter is partly based on Hadley Wickham's book [ggplot2: elegant graphics for data analysis](https://github.com/hadley/ggplot2-book)
+
+* Graphic Principles cheat sheet: https://graphicsprinciples.github.io/
+
+* In-depth documentations:
+
+  * [ggplot2 cheetsheet](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf)
+  * [Introduction to ggplot2](https://opr.princeton.edu/workshops/Downloads/2015Jan_ggplot2Koffman.pdf)
+  * [plotly for R](https://cpsievert.github.io/plotly_book/)
+  * [Data Analysis and Prediction Algorithms with R](https://rafalab.github.io/dsbook/)
+
+\pagebreak

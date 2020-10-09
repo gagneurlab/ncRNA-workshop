@@ -1,0 +1,541 @@
+```{r include=FALSE}
+options("width"=80)
+knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE, cache=F, 
+                      results="show",
+                      out.width="400px", out.height="250px",
+                      fig.align="center",
+                      dpi=200, tidy = TRUE, tidy.opts=list(width.cutoff=80))
+
+
+library(ggplot2)
+```
+
+```{r, echo=FALSE}
+library(data.table) # melt, dcast, ...
+library(magrittr)  # pipe operator %>% 
+suppressMessages(library(tidyr)) # table1, table2, ...
+library(dslabs)
+
+# Data used throughout the lecture
+table1 <- tidyr::table1 %>% as.data.table # use data.table instead of tibble
+table2 <- tidyr::table2 %>% as.data.table
+table3 <- tidyr::table3 %>% as.data.table
+table4a <- tidyr::table4a %>% as.data.table
+table4b <- tidyr::table4b %>% as.data.table
+table5 <- tidyr::table5 %>% as.data.table
+```
+
+
+# Tidy data
+
+This chapter is partially adopted from "Introduction to Data Science" by Rafael A. Irizarry (https://rafalab.github.io/dsbook/).
+
+We say that a data table is in  _tidy_ format if each row represents one observation and columns represent the different variables available for each of these observations. The `murders` dataset is an example of a tidy dataset.
+
+```{r, echo=FALSE}
+library(dslabs)
+data(murders)
+head(murders)
+```
+
+Each row represent a state with each of the five columns providing a different variable related to these states: name, abbreviation, region, population, and total murders.
+
+To see how the same information can be provided in different formats, consider the following example:
+  
+  ```{r, echo=FALSE}
+# library(dslabs)
+# data("gapminder")
+# gapminder_dt <- as.data.table(gapminder)
+# tidy_data <- gapminder_dt[country %in% c("South Korea", "Germany")& !is.na(fertility), .(country, year, fertility)]
+# head(tidy_data, 6)
+```
+
+This tidy dataset provides fertility rates for two countries across the years. This is a tidy dataset because each row presents one observation with the three variables being country, year, and fertility rate. However, this dataset originally came in another format and was reshaped for the __dslabs__ package. Originally, the data was in the following format:
+  
+  
+  ```{r, echo=FALSE, message=FALSE}
+# path <- system.file("extdata", package="dslabs")
+# filename <- file.path(path, "fertility-two-countries-example.csv")
+# wide_data <- readr::read_csv(filename)
+#dplyr::select(wide_data, country, `1960`:`1962`) %>% as.data.frame
+```
+
+The same information is provided, but there are two important differences in the format: 1) each row includes several observations and 2) one of the variables, year, is stored in the header. 
+
+Although not immediately obvious, as you go through the script you will start to appreciate the advantages of working in a framework in which functions use tidy formats for both inputs and outputs. You will see how this permits the data analyst to focus on more important aspects of the analysis rather than the format of the data. 
+
+
+## Tidy data definition
+
+![**Tidy data table layout.** Each variable has a column, each observation a row and each value a cell.](../assets/img/lec05_tidy-1.png)
+
+One can briefly summarize the tidy definition in the three following statements:
+  
+  1. Each **variable** must have its own **column**.
+2. Each **observation** must have its own **row**.
+3. Each **value** must have its own **cell**.
+
+
+## Common signs of untidy datasets
+
+On the other hand one can often quickly identify untidy datasets by one or more of the following statements:
+  
+  * Column headers are values, not variable names.
+* Multiple variables are stored in one column.
+* Variables are stored in both rows and columns.
+* Multiple types of observational units are stored in the same table.
+* A single observational unit is stored in multiple tables.
+
+## Advantages of tidy data
+
+* Easier manipulation using data.table commands
+* sub-setting by rows
+* sub-setting by columns
+* `by` operations
+* Many other tools work better with tidy data - consistent way of storing data
+* example: ggplot2
+* Vectorized operations become easier to use
+
+
+Tidy data can be easily manipulated
+
+```{r, echo = FALSE}
+dt <- table1
+```
+```{r}
+head(dt)
+```
+
+For example in the table above we can easily compute the rate of cases within the population or the number of cases per year using the following commands:
+  
+  ```{r}
+# Compute rate per 10,000
+dt[, rate := cases / population * 10000] # vectorized operations; dt is modified
+head(dt)
+
+# Compute cases per year
+dt[, .(cases = sum(cases)), by = year] # note that this does not modify dt
+```
+
+Additionally, tidy data works better with many packages like ggplot2 which we are going to use in this course.
+
+```{r leture05-ggplot-tidy-data}
+ggplot(dt, aes(year, cases, color = country))+
+  ggtitle( "Change over time") +
+  geom_line()
+```
+
+
+
+In the remaining part of this chapter we will learn how to transform untidy datasets into tidy ones using data.table functions.
+
+
+
+
+
+
+
+
+
+
+
+### Column headers are values, not variable names
+
+Untidy: 1999 and 2000 are values of the variable *year*.
+
+```{r}
+table4a
+```
+
+![Melting the country dataset](../assets/img/lec05_tidy-gather.png)
+
+This can be solved by using the __data.table__ function `melt()`. See the code below.
+When melting all values in all columns specified in the `measure.vars` argument are gathered into one column whose name can be specified using the `value.name` argument.
+Additionally a new column named using the argument `variable.name` is created containing all the values which where previously stored in the column names.
+
+```{r}
+melt(table4a,
+     id.vars = "country",
+     measure.vars = c("1999", "2000"),
+     variable.name = "year",
+     value.name = "cases")
+# would work also without specifying *either* measure.vars OR id.vars
+```
+
+### Multiple variables are stored in one column
+
+Untidy: multiple variables are stored in the *count* column.
+
+```{r}
+table2
+```
+
+
+![Decasting the country dataset](../assets/img/lec05_tidy-spread.png)
+
+This problem can be solved using the dcast function. Here is the help of that function:
+  ```{r, eval=FALSE}
+## Help
+dcast(data, formula, fun.aggregate = NULL, sep = "_", ..., margins = NULL, subset = NULL, fill = NULL,
+      drop = TRUE, value.var = guess(data), verbose = getOption("datatable.verbose"))
+```
+
+To use it for our case we only need to specify which column is the key in the "formula" and which value should be spread.
+
+```{r}
+dcast(table2, ... ~ type,  value.var = "count")
+```
+
+
+
+
+
+## Separating and Uniting (1 <-> more variables)
+
+**Typical problem:**
+  
+  1. One column contains multiple variables
+2. Multiple columns contain one variable
+
+**Untidy datasets**
+  
+  
+  ```{r}
+## One column contains multiple variables
+print(table3)
+```
+
+```{r}
+## Multiple columns contain one variable
+print(table5)
+```
+
+**Solution in R:**
+  
+  1) variable -> multiple variables
+- `tidyr::separate()`
+
+2) multiple variables -> 1 variables
+- `tidyr::unite()`
+
+other useful functions:
+  
+  - `data.table::tstrsplit`, `strsplit`, `paste`, `substr`
+
+To separate 1 variable to multiple variables we use `tidyr::separate()`.
+
+```{r, eval = FALSE}
+separate(data, col, into, sep = "[^[:alnum:]]+", remove = TRUE,
+         convert = FALSE, extra = "warn", fill = "warn", ...)
+```
+
+
+```{r}
+table3
+```
+
+```{r}
+separate(table3, col = rate,
+         into = c("cases", "population"))
+separate(table3, col = rate,
+         into = c("cases", "population")) %>%
+  class
+```
+
+
+![Seperated country dataset](../assets/img/lec05_tidy-separate.png)
+
+To unite multiple variables to 1 variable we use `tidyr::unite()`.
+
+```{r, eval = FALSE}
+unite(data, col, ..., sep = "_", remove = TRUE)
+```
+
+```{r}
+table5
+unite(table5, col = new, century, year, sep = "")
+```
+
+![United country dataset](../assets/img/lec05_tidy-unite.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##### List of data.tables
+```{r}
+split(table1, table1$country) %>% lapply(. %>% subset(select = -country) %>% as.data.table)
+```
+
+<!-- ### Recap - same dataset, different representations -->
+  
+  <!-- ```{r} -->
+  <!-- table1 -->
+  <!-- head(table2) -->
+  <!-- ``` -->
+  
+  <!-- ```{r} -->
+  <!-- table3 -->
+  <!-- table4a -->
+  <!-- table4b -->
+  <!-- ``` -->
+  
+  
+  
+  
+  <!-- ## Lists to data.table -->
+  
+  <!-- Very frequent scenarios in R -->
+  
+  <!-- * read in a bunch of similar `.csv` files (`date1.csv`, `date2.csv`, ...) -->
+  <!-- * nested data types (json/xml from API) -->
+  <!-- * `lapply` output (say doing a cross-validation, using different parameters, ...) -->
+  
+  <!-- **If possible, have one data.table instead of a (nested) list of data.tables** -->
+  
+  <!-- :::::: {.columns} -->
+  <!-- ::: {.column width="60%"} -->
+  <!-- JSON -> R list -->
+  
+  <!-- ```{r echo = FALSE} -->
+  <!-- sw_json <- '[ -->
+<!--   { -->
+<!--     "Name": "Anakin", -->
+<!--     "Gender": "male", -->
+<!--     "Homeworld": "Tatooine", -->
+<!--     "Born": "41.9BBY", -->
+<!--     "Jedi": "yes" -->
+<!--   }, -->
+<!--   { -->
+<!--     "Name": "R2-D2", -->
+<!--     "Gender": "unknown", -->
+<!--     "Homeworld": "Naboo", -->
+<!--     "Born": "33BBY", -->
+<!--     "Jedi": "no" -->
+<!--   } -->
+<!-- ]' -->
+  
+  <!-- ``` -->
+  
+  <!-- ```{r} -->
+  <!-- # for demonstrational purposes -->
+  <!-- # I've put 'simplifyDataFrame = FALSE' -->
+  <!-- sw_list <- jsonlite::fromJSON(sw_json, -->
+                                       <!--           simplifyDataFrame = FALSE) -->
+  <!-- str(sw_list) -->
+  <!-- ``` -->
+  <!-- ::: -->
+  
+  <!-- ::: {.column width="36%"} -->
+  
+  <!-- JSON example -->
+  
+  <!-- ```{r} -->
+  <!-- sw_json <- '[ -->
+<!--   { -->
+<!--     "Name": "Anakin", -->
+<!--     "Gender": "male", -->
+<!--     "Homeworld": "Tatooine", -->
+<!--     "Born": "41.9BBY", -->
+<!--     "Jedi": "yes" -->
+<!--   }, -->
+<!--   { -->
+<!--     "Name": "R2-D2", -->
+<!--     "Gender": "unknown", -->
+<!--     "Homeworld": "Naboo", -->
+<!--     "Born": "33BBY", -->
+<!--     "Jedi": "no" -->
+<!--   } -->
+<!-- ]' -->
+  
+  <!-- ``` -->
+  <!-- ::: -->
+  <!-- :::::: -->
+  
+  <!-- To convert a list to a data.table, we use `as.data.table` to convert a list to a data.table with one row and `rbindlist` to stack data.tables -->
+  
+  <!-- If something is not working as expected try with: -->
+  <!-- * `rbindlist(fill = TRUE, use.names = TRUE)` -->
+  <!-- * prefer data.table's `rbindlist` over `rbind` -->
+
+<!-- ```{r} -->
+<!-- sw_dt <- lapply(sw_list, as.data.table) %>% rbindlist -->
+<!-- sw_dt -->
+<!-- ``` -->
+
+<!-- A very common situation: **list name is a variable** -->
+
+<!-- ```{r, echo = FALSE} -->
+<!-- dt_list <- list( -->
+<!--   "young" = data.table(x = 1:10, y = 1 * 1:10 + rnorm(10)), -->
+<!--   "old"   = data.table(x = 1:10, y = 2 * 1:10 + rnorm(10)) -->
+<!-- ) -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- dt_list %>% lapply(head, n = 3) -->
+<!-- ``` -->
+
+<!-- **How would you reshape it?** -->
+
+<!-- ```{r} -->
+
+<!-- dt <- rbindlist(dt_list, idcol = "age")  # call the new variable "age" -->
+
+<!-- dt %>% print(3) -->
+
+<!-- ``` -->
+
+<!-- ## Melting and Casting (wide data <-> long data) -->
+
+<!-- **Typical problem:** -->
+
+<!-- 1. One variable might be spread across multiple columns. -->
+<!-- 2. One observation might be scattered across multiple rows. -->
+
+<!-- **Untidy datasets:** -->
+
+<!-- :::::: {.columns} -->
+<!-- ::: {.column width="48%"} -->
+
+<!-- ```{r} -->
+<!-- ## Wide data -->
+<!-- print(table4a) -->
+<!-- ``` -->
+<!-- ::: -->
+
+<!-- ::: {.column width="48%"} -->
+
+<!-- ```{r} -->
+<!-- ## Long data -->
+<!-- print(table2) -->
+<!-- ``` -->
+<!-- ::: -->
+<!-- :::::: -->
+
+<!-- **Solution in R:** -->
+
+<!-- Transform wide data -> long data -->
+
+<!-- - `data.table::melt()` -->
+<!-- - `tidyr::gather()` -->
+
+<!-- Transform long data -> wide data -->
+
+<!-- - `data.table::dcast()` -->
+<!-- - `tidyr::spread()` -->
+
+
+<!-- To make wide data into long data we use `data.table::melt` -->
+
+<!-- ```{r} -->
+<!-- print(table4a) -->
+
+<!-- table4a %>% data.table::melt(id.vars = "country", -->
+<!--                              measure.vars = c("1999", "2000"), -->
+<!--                              # would work also without specifying *either* measure.vars OR id.vars -->
+<!--                              variable.name = "year", -->
+<!--                              value.name = "cases") -->
+<!-- ## Alternatively: table4a %>% tidyr::gather(`1999`, `2000`, key = "year", value = "cases") -->
+<!-- ``` -->
+
+<!-- ![Melted country dataset](../assets/img/lec05_tidy-spread.png) -->
+
+
+<!-- To make long data into wide data we use `data.table::dcast` -->
+
+<!-- ```{r, eval=FALSE} -->
+<!-- ## Help -->
+<!-- dcast(data, formula, fun.aggregate = NULL, sep = "_", ..., margins = NULL, subset = NULL, fill = NULL, -->
+<!--     drop = TRUE, value.var = guess(data), verbose = getOption("datatable.verbose")) -->
+<!-- ``` -->
+
+<!-- :::::: {.columns} -->
+<!-- ::: {.column width="48%"} -->
+<!-- ```{r} -->
+<!-- data.table::dcast(table2, ... ~ type, -->
+<!--                   value.var = "count") -->
+<!-- ``` -->
+<!-- ::: -->
+
+<!-- ::: {.column width="48%"} -->
+<!-- ```{r} -->
+<!-- print(table2) -->
+<!-- ``` -->
+<!-- ::: -->
+<!-- :::::: -->
+
+<!-- Compare -->
+
+<!-- :::::: {.columns} -->
+<!-- ::: {.columns width="48%"} -->
+<!-- ```{r} -->
+<!-- dcast(table2, ... ~ type, -->
+<!--       value.var = "count") -->
+<!-- ``` -->
+<!-- ::: -->
+
+<!-- ::: {.columns width="48%"} -->
+<!-- ```{r} -->
+<!-- print(table1) -->
+<!-- ``` -->
+<!-- ::: -->
+<!-- :::::: -->
+
+<!-- ![Dcasted country dataset](../assets/img/lec05_tidy-gather.png) -->
+
+
+
+
+To sum up:
+
+* In a tidy dataset, each variable must have its own column
+* Each row corresponds to one unique observation
+* Each cell contains a single value
+* Tidy datasets are easier to work with
+* Data.table library has functions to transform untidy datasets to tidy
+
+
+Words to live by
+
+**Happy families are all alike; every unhappy family is unhappy in its own way.**
+
+*- Leo Tolstoy*
+
+**Tidy datasets are all alike, but every messy dataset is messy in its own way.**
+
+*- Hadley Wickham*
+
+
+
+
+## Non-tidy data
+
+* Performance advantage using certain functions
+  + `colSums()` or `heatmap()` on matrices
+
+* Field convention
+
+* Memory efficiency
+
+  + don't worry, you should be fine with tidy-data in `data.table`
+
+Interesting blog post:
+  
+  * <http://simplystatistics.org/2016/02/17/non-tidy-data/>
+  
+  
+  
+  
