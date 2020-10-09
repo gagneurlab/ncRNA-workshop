@@ -30,7 +30,12 @@ $('p:has(img.build)').addClass('build')
 
 <script type='text/javascript'>
 // parameters
-var sections = ["Grammar of graphics", "1 continuous variable", "2 variables - one discrete, one continuous", "2 variables - both continuous", "Axes and labels"];
+var sections = ["Why we plot",
+"Grammar of graphics and ggplot2",
+"Plots for one single continuous variable",
+"Plots for two variables: one continuous, one discrete",
+"Plots for two continuous variables"];
+
 var title = "Overview";
 var fontsize = "20pt"
 var unselected_color = "#888888"
@@ -65,16 +70,55 @@ function toc(cur) {
 
 <!-- START LECTURE -->
 
-<img src="assets/img/lec05_syllabus.png" title="plot of chunk unnamed-chunk-1" alt="plot of chunk unnamed-chunk-1" width="800px" height="400px" />
+<img src="assets/img/lec05_syllabus.png" title="plot of chunk syllabus" alt="plot of chunk syllabus" width="800px" height="400px" />
 
+---
+
+<script type='text/javascript'>toc("")</script>
+
+---
+
+<script type='text/javascript'>toc("Why we plot")</script>
+
+---
+
+## Do you see a common pattern in these plots?
+
+<img src="assets/img/missleading-data-1.png" title="plot of chunk unnamed-chunk-1" alt="plot of chunk unnamed-chunk-1" width="1200px" height="1200px" />
+
+---
+
+## Maybe now?
+
+<!-- ![Datasaurus tex](../assets/img/missleading-data-2.png){#id .class width=400px height=400px} -->
+
+</br>
+
+<img src="assets/img/missleading-data-2.png" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" width="500px" height="500px" />
+
+---
+
+## Same statistics, different visualizations
+
+</br>
+<img src="assets/img/missleading-data.png" title="plot of chunk unnamed-chunk-3" alt="plot of chunk unnamed-chunk-3" width="500px" height="500px" />
 
 ---
 
 ## Why plotting?
 
-Data in scientific publications is shown as plots, sure. But there is more.
+It is nearly impossible for a single person to go through data line-by-line and see distinct patterns and make observations.
 
-**A realistic example to warm up**:
+Data visualization becomes crucial for gaining **insight** into data that traditional descriptive statistics cannot.
+
+**Plotting can give hints about bugs in our code (or even in the data!) and can help us to develop and improve methods and models.**
+
+
+<img src="assets/img/lec05_scientific-method.png" title="plot of chunk unnamed-chunk-4" alt="plot of chunk unnamed-chunk-4" width="300px" height="300px" />
+
+---
+
+## A realistic example to warm up
 
 A vector containing 500 (hypothetical) height measurements for adults in Germany:
 
@@ -90,13 +134,12 @@ length(height)
 ```
 
 ```r
-head(height, n=20)
+head(height, n=10)
 ```
 
 ```
 ##  [1] 1.706833 1.635319 1.709841 1.707259 1.668659 1.580702 1.608214 1.636738
-##  [9] 1.649740 1.758209 1.684362 1.614045 1.598355 1.636974 1.636535 1.631482
-## [17] 1.661350 1.609864 1.669606 1.594311
+##  [9] 1.649740 1.758209
 ```
 
 We want to know their average height:
@@ -170,7 +213,7 @@ plot(height)
 hist(height)
 ```
 
-<img src="assets/fig/unnamed-chunk-7-1.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" width="300px" height="400px" /><img src="assets/fig/unnamed-chunk-7-2.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" width="300px" height="400px" />
+<img src="assets/fig/unnamed-chunk-10-1.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" width="300px" height="400px" /><img src="assets/fig/unnamed-chunk-10-2.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" width="300px" height="400px" />
 
 
 ```r
@@ -184,12 +227,15 @@ mean(height)
 ---
 ## The outlier...
 
-Getting rid of the outlier fixes the dataset
+A quick way to fix our dataset is to remove our outlier.
 
 
 ```r
 fheight <- height[height < 3]
 ```
+
+---
+## The outlier...
 
 
 ```r
@@ -197,7 +243,7 @@ plot(fheight)
 hist(fheight)
 ```
 
-<img src="assets/fig/unnamed-chunk-10-1.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" width="300px" height="400px" /><img src="assets/fig/unnamed-chunk-10-2.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" width="300px" height="400px" />
+<img src="assets/fig/unnamed-chunk-13-1.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" width="300px" height="400px" /><img src="assets/fig/unnamed-chunk-13-2.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" width="300px" height="400px" />
 
 
 ```r
@@ -219,17 +265,6 @@ This is how the broken dataset was generated:
 height <- c(rnorm(499, mean=1.65, sd=0.045), 165)
 ```
 
-
----
-
-## Visualization and the scientific method
-
-Data visualization is important for:
-* Exploring the data. Reveal surprising facts.
-* Convingly showing interesting relationships.  
-
-<img src="assets/img/lec05_scientific-method.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" width="400px" height="400px" />
-
 ---
 
 ## Our 2 visualization lectures
@@ -242,11 +277,7 @@ This lecture and the one that follows will cover:
 
 ---
 
-<script type='text/javascript'>toc("")</script>
-
----
-
-<script type='text/javascript'>toc("Grammar of graphics")</script>
+<script type='text/javascript'>toc("Grammar of graphics and ggplot2")</script>
 
 ---
 ## Grammar of Graphics
@@ -264,17 +295,32 @@ Leland Wilkinson in 1999.
 ---
 ## ggplot2 and Grammar of Graphics
 
+ggplot2 is a powerfull implementation of the grammar of graphics. Plotting with the help of the package ggplot2 has become widely used by R programmers. 
+
+Lets see a sophisticated example...
+
+
 ```r
-ggplot(mpg, aes(x=displ, y=cty, colour=class)) +  # Data: how variables in the data are mapped to aesthetic attributes 
-  geom_point() +  # Layers: made up of geometric elements and statistical transformation.
-  facet_wrap(~ class, ncol=4) + # Facets
-  theme(axis.title = element_text(size=15), legend.title = element_text(size=15)) +
-  labs(title='displ vs cty', x='Engine displacement', y='city miles per gallon') +
-  stat_smooth() # Stats
+# install.packages('gapminder')
+library(gapminder)
+
+gm_dt <- as.data.table(gapminder)[year %in% c(1977, 2007)]
+
+ggplot(data = gm_dt, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point(aes(color = continent,size = pop)) +
+  facet_grid(~year) +
+  scale_x_log10() +
+  labs(y = "Life expectation at birth", x = "per-capita GDP", size = "Population") +
+  mytheme
 ```
 
-<img src="assets/fig/lec05_plt1-1.png" title="plot of chunk lec05_plt1" alt="plot of chunk lec05_plt1" width="700px" height="400px" />
+---
 
+## ggplot2 and Grammar of Graphics
+
+<img src="assets/fig/unnamed-chunk-17-1.png" title="plot of chunk unnamed-chunk-17" alt="plot of chunk unnamed-chunk-17" width="700px" height="400px" />
+
+But how we create such a plot step by step?
 
 --- .eighteen
 
@@ -299,77 +345,86 @@ ggplot(mpg, aes(x=displ, y=cty, colour=class)) +  # Data: how variables in the d
 **Coordinate system:** describes 2D space that data is projected onto (`coord_`)
  - Cartesian coordinates, polar coordinates, map projections, ...
 
----
-<br>
 
-## Simple example: Human Development versus Corruption Perception
+---
+
+</br>
+
+## Grammar Defines Components of Graphics
+
+
+<img src="assets/img/pyramid-of-graphics.png" title="plot of chunk unnamed-chunk-18" alt="plot of chunk unnamed-chunk-18" width="800px" height="800px" />
+
+---
+
+## Defining the data and layers
+
+Lets have a quick look in our data
 
 ```r
-ind <- fread('../../../extdata/CPI_HDI.csv')
-ind
+head(gm_dt[, .(country, continent, gdpPercap, lifeExp, year)])
 ```
 
 ```
-##       V1     country wbcode CPI   HDI            region
-##   1:   1 Afghanistan    AFG  12 0.465      Asia Pacific
-##   2:   2     Albania    ALB  33 0.733 East EU Cemt Asia
-##   3:   3     Algeria    DZA  36 0.736              MENA
-##   4:   4      Angola    AGO  19 0.532               SSA
-##   5:   5   Argentina    ARG  34 0.836          Americas
-##  ---                                                   
-## 147: 147     Uruguay    URY  73 0.793          Americas
-## 148: 148  Uzbekistan    UZB  18 0.675 East EU Cemt Asia
-## 149: 149       Yemen    YEM  19 0.498              MENA
-## 150: 150      Zambia    ZMB  38 0.586               SSA
-## 151: 151    Zimbabwe    ZWE  21 0.509               SSA
+##        country continent gdpPercap lifeExp year
+## 1: Afghanistan      Asia  786.1134  38.438 1977
+## 2: Afghanistan      Asia  974.5803  43.828 2007
+## 3:     Albania    Europe 3533.0039  68.930 1977
+## 4:     Albania    Europe 5937.0295  76.423 2007
+## 5:     Algeria    Africa 4910.4168  58.014 1977
+## 6:     Algeria    Africa 6223.3675  72.301 2007
 ```
 
-<br>
-CPI: Corruption Perceptions Index (http://www.transparency.org/)
-HDI: Human Development Index (http://hdr.undp.org/)
-Year: 2014
-<br>
 ---
 
-## Simple example: Human Development versus Corruption Perception
+## Defining the data and layers
+
+For starting with the visualization we initiate a `ggplot` object which generates a plot with background:
 
 ```r
-ggplot(ind, aes(CPI, HDI)) + geom_point()
+ggplot()
 ```
 
-<img src="assets/fig/lec05_plt2-1.png" title="plot of chunk lec05_plt2" alt="plot of chunk lec05_plt2" width="500px" height="400px" />
-
-<br>
-CPI: Corruption Perceptions Index (http://www.transparency.org/)
-HDI: Human Development Index (http://hdr.undp.org/)
-Year: 2014
-<br>
----
+<img src="assets/fig/unnamed-chunk-20-1.png" title="plot of chunk unnamed-chunk-20" alt="plot of chunk unnamed-chunk-20" width="400px" height="300px" />
 
 ---
-## Simple scatter plot
+
+## Defining the data and layers
+
+This `aes()` function defines which columns in the `data.table` object map to `x` and `y` coordinates and if they should be colored or have different shapes and sizes based on the values in a different column. These elements are called “aesthetic” elements, which we observe in the plot. 
+
 
 ```r
-ggplot(ind, aes(CPI, HDI)) + 
-  geom_point()
+ggplot(data = gm_dt, aes(x = gdpPercap, y = lifeExp))
 ```
 
-<img src="assets/fig/lec05_plt3-1.png" title="plot of chunk lec05_plt3" alt="plot of chunk lec05_plt3" width="500px" height="400px" />
+<img src="assets/fig/unnamed-chunk-21-1.png" title="plot of chunk unnamed-chunk-21" alt="plot of chunk unnamed-chunk-21" width="400px" height="300px" />
+
 
 ---
-## ggplot returns an object
+## Defining the data and layers
+
+In R, a scatter plot can be plotted with ggplot2 using the function `geom_point`. We want to construct a
+scatter plot containing the gdpPercap on the x-axis and the lifeExp on the y-axis.
+
 
 ```r
-p <- ggplot(ind, aes(CPI, HDI)) + geom_point()
-p
+ggplot(data = gm_dt, aes(x = gdpPercap, y = lifeExp)) + geom_point()
 ```
 
-<img src="assets/fig/lec05_plt7-1.png" title="plot of chunk lec05_plt7" alt="plot of chunk lec05_plt7" width="500px" height="400px" />
+<img src="assets/fig/unnamed-chunk-22-1.png" title="plot of chunk unnamed-chunk-22" alt="plot of chunk unnamed-chunk-22" width="400px" height="300px" />
 
 ---
-## ggplot returns an object
+
+## Defining the data and layers
+
+One of the advantages of plotting with ggplot is that it returns an object which can be stored (e.g. in a variable
+called p). The stored object can be further edited and you can also inspect its elements with the `names()` function:
+
+
 
 ```r
+p <- ggplot(data = gm_dt, aes(x = gdpPercap, y = lifeExp)) + geom_point()
 names(p)
 ```
 
@@ -378,101 +433,143 @@ names(p)
 ## [6] "coordinates" "facet"       "plot_env"    "labels"
 ```
 
-```r
-saveRDS(p, "../../../extdata/lec06_p.rds")
-p <- readRDS("../../../extdata/lec06_p.rds")
-p + geom_hline(yintercept = 0.7)
-```
-
-<img src="assets/fig/lec05_plt8-1.png" title="plot of chunk lec05_plt8" alt="plot of chunk lec05_plt8" width="400px" height="400px" />
-
 ---
-## Mapping of aesthetics done globally at `ggplot()` 
+  
+## Defining the data and layers
 
-```r
-ggplot(ind, aes(CPI, HDI)) + 
-  geom_point(size=0.5) + 
-  geom_text(aes(label = wbcode), size=2, vjust=0)
-```
+We can also save the ggplot object with the help of the function saveRDS(). Then, we can read the saved object
+again with the help of the function readRDS() and add a horizontal line at y=50 to the plot:
 
-<img src="assets/fig/lec05_plt4-1.png" title="plot of chunk lec05_plt4" alt="plot of chunk lec05_plt4" width="500px" height="400px" />
-
-
----
-## Mapping of aesthetics can be done globally at `ggplot()` or at individual layers
-
-Global mapping is inherited by default to all geom layers, while `aes` mapping at individual layer is only recognized at that layer.
-
----
-## Mapping of aesthetics done globally
-
-```r
-ggplot(ind, aes(CPI, HDI)) + 
-  geom_point()
-```
-
-<img src="assets/fig/lec05_plt12-1.png" title="plot of chunk lec05_plt12" alt="plot of chunk lec05_plt12" width="500px" height="400px" />
-
----
-## Mapping of aesthetics done at individual layers
-
-```r
-ggplot(ind) + 
-  geom_point(aes(CPI, HDI), size=0.5) + 
-  geom_text(aes(CPI, HDI, label = wbcode), size=2, vjust=0)
-```
-
-<img src="assets/fig/lec05_plt5-1.png" title="plot of chunk lec05_plt5" alt="plot of chunk lec05_plt5" width="500px" height="400px" />
-
----
-## Individual layer mapping cannot be recognized by other layers
-
-```r
-ggplot(ind) + 
-  geom_point(aes(CPI, HDI)) + 
-  geom_text(aes(label = wbcode))
-```
-
-```
-## Error: geom_text requires the following missing aesthetics: x and y
-```
-
-<img src="assets/fig/lec05_plt6-1.png" title="plot of chunk lec05_plt6" alt="plot of chunk lec05_plt6" width="500px" height="400px" />
-
----
-## You can easily map variables to different colours, sizes or shapes!
-ggplot2 automatically scales for you.
-
-```r
-ggplot(data = ind) + 
-  geom_point(aes(CPI, HDI, color = region))
-```
-
-<img src="assets/fig/lec05_plt9-1.png" title="plot of chunk lec05_plt9" alt="plot of chunk lec05_plt9" width="600px" height="400px" />
-
-
----
-## You can easily map variables to different colours, sizes or shapes!
 
 
 ```r
-ggplot(data = ind) + 
-  geom_point(aes(CPI, HDI, shape = region))
+saveRDS(p, "extdata/my_first_plot.rds")
+p <- readRDS("extdata/my_first_plot.rds")
 ```
 
-<img src="assets/fig/lec05_plt10-1.png" title="plot of chunk lec05_plt10" alt="plot of chunk lec05_plt10" width="600px" height="400px" />
+
 
 ---
-## Aesthetic mappings can also be supplied in individual layers
+  
+## Defining the data and layers
+
+We can also save the ggplot object with the help of the function saveRDS(). Then, we can read the saved object
+again with the help of the function readRDS() and add a horizontal line at y=50 to the plot:
+
 
 ```r
-ggplot(ind, aes(CPI, HDI)) + 
-  geom_point(aes(color = region))
+p + geom_hline(yintercept = 50)
 ```
 
-<img src="assets/fig/lec05_plt11-1.png" title="plot of chunk lec05_plt11" alt="plot of chunk lec05_plt11" width="600px" height="400px" />
+<img src="assets/fig/unnamed-chunk-26-1.png" title="plot of chunk unnamed-chunk-26" alt="plot of chunk unnamed-chunk-26" width="400px" height="300px" />
+
+---
+
+## Mapping of aesthetics `color`
+
+We can easily map variables to different colors, sizes or shapes depending on the value of the specified variable using the `aes` function. 
+
+```r
+ggplot(data = gm_dt, aes(x = gdpPercap, y = lifeExp, color = continent)) + geom_point()
+```
+
+<img src="assets/fig/unnamed-chunk-27-1.png" title="plot of chunk unnamed-chunk-27" alt="plot of chunk unnamed-chunk-27" width="800px" height="300px" />
+
+---
+
+## Mapping of aesthetics `shape`
+
+To change the shape of our points we can override the `shape` argument of the `aes`
+
+
+```r
+ggplot(data = gm_dt, aes(x = gdpPercap, y = lifeExp, shape = continent)) + geom_point()
+```
+
+<img src="assets/fig/unnamed-chunk-28-1.png" title="plot of chunk unnamed-chunk-28" alt="plot of chunk unnamed-chunk-28" width="800px" height="300px" />
+
+---
+
+## Mapping of aesthetics `size`
+
+Additionally, we distinguish the population of each country by giving a size to the points in the scatter plot:
+
+
+```r
+ggplot(data = gm_dt, aes(x = gdpPercap, y = lifeExp, color = continent, size = pop)) +
+geom_point()
+```
+
+<img src="assets/fig/unnamed-chunk-29-1.png" title="plot of chunk unnamed-chunk-29" alt="plot of chunk unnamed-chunk-29" width="800px" height="300px" />
+
+---
+
+## Global versus individual mapping
+
+Global mapping is inherited by default to all geom layers (geom_point in the previous example), while mapping at individual layers is only recognized at that layer.
+
+
+```r
+ggplot(data = gm_dt, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point(aes(color = continent,size = pop))
+```
+
+<img src="assets/fig/unnamed-chunk-30-1.png" title="plot of chunk unnamed-chunk-30" alt="plot of chunk unnamed-chunk-30" width="800px" height="300px" />
+
+---
+
+## Global versus individual mapping
+
+Individual layer mapping cannot be recognized by other layers. For instance, we can add another layer for
+smoothing with `stat_smooth()`.
+
+
+```r
+# this doesn't work as stat_smooth didn't know aes(x , y)
+ggplot(data = gm_dt) + geom_point(aes(x = gdpPercap, y = lifeExp)) + stat_smooth()
+```
+
+```
+## Error: stat_smooth requires the following missing aesthetics: x and y
+```
+
+<img src="assets/fig/unnamed-chunk-31-1.png" title="plot of chunk unnamed-chunk-31" alt="plot of chunk unnamed-chunk-31" width="500px" height="400px" />
+
+---
+
+## Global versus individual mapping
+
+Individual layer mapping cannot be recognized by other layers. For instance, we can add another layer for
+smoothing with `stat_smooth()`.
+
+
+```r
+# this would work but too redundant
+ggplot(data = gm_dt) + geom_point(aes(x = gdpPercap, y = lifeExp)) + 
+  stat_smooth(aes(x = gdpPercap, y = lifeExp))
+```
+
+<img src="assets/fig/unnamed-chunk-32-1.png" title="plot of chunk unnamed-chunk-32" alt="plot of chunk unnamed-chunk-32" width="400px" height="300px" />
+
+---
+
+## Global versus individual mapping
+
+Individual layer mapping cannot be recognized by other layers. For instance, we can add another layer for
+smoothing with `stat_smooth()`.
+
+
+```r
+# the common aes(x, y) shared by all the layers can be put in the ggplot()
+ggplot(data = gm_dt, aes(x = gdpPercap, y = lifeExp, color = continent)) + geom_point(aes(size = pop)) +
+stat_smooth()
+```
+
+<img src="assets/fig/unnamed-chunk-33-1.png" title="plot of chunk unnamed-chunk-33" alt="plot of chunk unnamed-chunk-33" width="800px" height="300px" />
 
 --- &radio
+
+## Quiz
 
 What's the result of the following command?
 
@@ -495,6 +592,8 @@ Neither variables were mapped nor geometry specified.
 
 --- &radio
 
+## Solution
+
 What's the result of the following command?
 
 `ggplot(data = mpg, aes(x = hwy, y = cty))`
@@ -516,6 +615,8 @@ Axis x and y are mapped. But no geometry specified.
 
 --- &radio
 
+## Quiz
+
 What's the result of the following command?
 
 `ggplot(data = mpg, aes(x = hwy, y = cty)) + geom_point()`
@@ -535,7 +636,9 @@ ggplot builds plot layer by layer.
 Data, axes and geometry specified.
 
 ---
-## Answers
+
+## Solutions
+
 `ggplot(data = mpg)`: a blank figure will be produced
 
 `ggplot(data = mpg, aes(x = hwy, y = cty))`: A blank figure with axes will be produced
@@ -543,107 +646,119 @@ Data, axes and geometry specified.
 `ggplot(data = mpg, aes(x = hwy, y = cty)) + geom_point()`: A scatter plot will be produced
 
 ---
-<script type='text/javascript'>toc("1 continuous variable")</script>
+
+## Exercise Iris
 
 ---
-## Histogram
-Histogram of Human Development Index (HDI) in the ind dataset: 
+
+<script type='text/javascript'>toc("Plots for one single continuous variable")</script>
+
+---
+
+## Low dimensional plots
+
+In the previous examples, we had a look at scatter plots which are suitable for plotting the relationship between
+two continuous variables. However, there are many more types of plots (e.g. histograms, boxplots) which can be
+used for plotting in different scenarios. Mainly, we distinguish between plotting one or two variables and whether the
+variables are continuous or discrete.
+
+---
+
+## Low dimensional plots
+Lets prepare some data for plotting using the Human Development Index (HDI) dataset: 
+
 
 ```r
-ind
+ind <- fread('extdata/CPI_HDI.csv')
+```
+
+
+```r
+head(ind)
 ```
 
 ```
-##       V1     country wbcode CPI   HDI            region
-##   1:   1 Afghanistan    AFG  12 0.465      Asia Pacific
-##   2:   2     Albania    ALB  33 0.733 East EU Cemt Asia
-##   3:   3     Algeria    DZA  36 0.736              MENA
-##   4:   4      Angola    AGO  19 0.532               SSA
-##   5:   5   Argentina    ARG  34 0.836          Americas
-##  ---                                                   
-## 147: 147     Uruguay    URY  73 0.793          Americas
-## 148: 148  Uzbekistan    UZB  18 0.675 East EU Cemt Asia
-## 149: 149       Yemen    YEM  19 0.498              MENA
-## 150: 150      Zambia    ZMB  38 0.586               SSA
-## 151: 151    Zimbabwe    ZWE  21 0.509               SSA
+##    V1     country wbcode CPI   HDI            region
+## 1:  1 Afghanistan    AFG  12 0.465      Asia Pacific
+## 2:  2     Albania    ALB  33 0.733 East EU Cemt Asia
+## 3:  3     Algeria    DZA  36 0.736              MENA
+## 4:  4      Angola    AGO  19 0.532               SSA
+## 5:  5   Argentina    ARG  34 0.836          Americas
+## 6:  6     Armenia    ARM  37 0.733 East EU Cemt Asia
 ```
 
 ---
-## Histogram
-Histogram of Human Development Index (HDI) in the ind dataset: 
+## Histograms
+
+To plot the values of a vector with continuous values we can use a histogram. A histogram represents the frequencies of values of a variable bucketed into ranges, using the function geom_histogram():
+
 
 ```r
-ggplot(ind, aes(HDI)) +
-  geom_histogram() + mytheme
+ggplot(ind, aes(HDI)) + geom_histogram() + mytheme
 ```
 
-<img src="assets/fig/lec05_hist1-1.png" title="plot of chunk lec05_hist1" alt="plot of chunk lec05_hist1" width="600px" height="400px" />
+<img src="assets/fig/unnamed-chunk-36-1.png" title="plot of chunk unnamed-chunk-36" alt="plot of chunk unnamed-chunk-36" width="800px" height="400px" />
 
 ---
 ## Histogram: setting the number of bins
-Histogram of Human Development Index (HDI) in the ind dataset: 
 
-```r
-ggplot(ind, aes(HDI)) +
-  geom_histogram(bins=10) + mytheme
-```
-
-<img src="assets/fig/lec05_hist2-1.png" title="plot of chunk lec05_hist2" alt="plot of chunk lec05_hist2" width="600cm" height="500cm" />
-
-
----
-## Density plots
-Histograms are sometimes not optimal to investigate the distribution of a variable due to discretization effects during the binning process.<br/><br/>
-Solution: smoothed distribution plot by kernel density estimation:<br/>
-[https://en.wikipedia.org/wiki/Kernel_density_estimation](https://en.wikipedia.org/wiki/Kernel_density_estimation)
-
-Density plot of Human Development Index (HDI) in the ind dataset: 
-
-```r
-ggplot(ind, aes(HDI)) +
-  geom_density() + mytheme
-```
-
-<img src="assets/fig/lec05_density1-1.png" title="plot of chunk lec05_density1" alt="plot of chunk lec05_density1" width="380px" height="400px" />
-
-
----
-## Kernel density plots - smoothing bandwidth
-
-Can be set manually. Default option is a bandwidth rule (which is usually a good choice). Be careful with density plots as the bandwith can have a huge impact on the visualization -> histograms can be better.
+By default, the number of bins in ggplot2 is 30. We can simply change this by defining the number of desired bins
+in the `bins` argument of the `geom_histogram()` function:
 
 
 ```r
-ggplot(ind, aes(HDI)) +  geom_density(bw=0.01) + mytheme  # small bandwith
-
-ggplot(ind, aes(HDI)) +  geom_density(bw=1) + mytheme  # large bandwith
+ggplot(ind, aes(HDI)) + geom_histogram(bins=10) + mytheme
 ```
 
-<img src="assets/fig/lec05_density3-1.png" title="plot of chunk lec05_density3" alt="plot of chunk lec05_density3" width="600px" height="400px" />
+<img src="assets/fig/unnamed-chunk-37-1.png" title="plot of chunk unnamed-chunk-37" alt="plot of chunk unnamed-chunk-37" width="800px" height="400px" />
 
 ---
 
-## Boxplot
-<img src="assets/img/lec06_Boxplot_vs_PDF.png" title="plot of chunk unnamed-chunk-16" alt="plot of chunk unnamed-chunk-16" width="300px" height="100px" />
-
-from https://en.wikipedia.org/wiki/Box_plot<br/><br/>
-
-* median = the center of the data, middle value in sorted list, 50% quantile of the data
-* quartiles = 25% and 75% quantiles of the data. IQR: interquartile range
-* lines coming out of the box are called "whiskers"
-* whiskers reach to the most extreme datapoint within $\pm  1.5\times IQR$
-* anything outside of the "whiskers" is plotted as an "outlier"
+## Exercise Histograms
 
 ---
 
-## A boxplot example
+<script type='text/javascript'>toc("Plots for two variables: one continuous, one discrete")</script>
 
-<img src="assets/fig/lec05_boxplot1-1.png" title="plot of chunk lec05_boxplot1" alt="plot of chunk lec05_boxplot1" width="600px" height="400px" />
+---
+
+## Boxplots by category
+
+Boxplots are well suited for plotting one continuous variable. However, we can also use boxplots
+to show distributions of continuous variables with respect to some categories. This can be particularly interesting for
+comparing the different distributions of each category.
+
+
+```r
+ggplot(mpg, aes(class, hwy)) + geom_boxplot() + mytheme
+```
+
+<img src="assets/fig/unnamed-chunk-38-1.png" title="plot of chunk unnamed-chunk-38" alt="plot of chunk unnamed-chunk-38" width="800px" height="400px" />
+
+---
+
+## Violin plots
+
+A violin plot is an alternative to the boxplot for visualizing either one continuous variable (grouped by categories). An advantage of the violin plot over the boxplot is that it also shows the entire distribution of the data. This can be particularly interesting when dealing with multimodal data. You can make a violin plot using the `geom_violin()` function.
+
+
+
+```r
+ggplot(mpg, aes(class, hwy)) + geom_violin() + mytheme
+```
+
+<img src="assets/fig/unnamed-chunk-39-1.png" title="plot of chunk unnamed-chunk-39" alt="plot of chunk unnamed-chunk-39" width="800px" height="400px" />
+
+---
+
+## Boxplots and Violin plots
 
 It is possible to not show the outliers. However, we strongly recommend to keep them.
 Outliers can reveal interesting data points (discoveries "out of the box") or bugs in data preprocessing. 
 
 --- &radio
+
+## Quiz
 
 For which type of data will boxplots produce meaningful visualizations? (2 possible answers)
 
@@ -655,11 +770,11 @@ For which type of data will boxplots produce meaningful visualizations? (2 possi
 
 4. D. For exponentially distributed data.
 
-***.explanation
-See next slide
-
 ---
+
 ## Solution
+
+For which type of data will boxplots produce meaningful visualizations? (2 possible answers)
 
 **For which type of data will boxplots produce meaningful visualizations?**
 * **C. For non-Gaussian, symmetric data.**
@@ -685,195 +800,74 @@ ggplot(dt, aes(group, value)) + geom_boxplot() + facet_wrap(~variable) + mytheme
 
 Boxplots are bad for bimodal data since they only show one mode (the median), but are ok for both symmetric and non-symmetric data, since the quartiles are not symmetric.
 
-<img src="assets/fig/lec05_boxplot3-1.png" title="plot of chunk lec05_boxplot3" alt="plot of chunk lec05_boxplot3" width="500px" height="400px" />
+<img src="assets/fig/unnamed-chunk-41-1.png" title="plot of chunk unnamed-chunk-41" alt="plot of chunk unnamed-chunk-41" width="500px" height="400px" />
 
 ---
 
-## Boxplots and multi-modal distributions
+## Boxplots/Violin plots exercise
 
+---
+
+<script type='text/javascript'>toc("Plots for two continuous variables")</script>
+
+---
+
+## Scatter plots
+
+Scatter plots are a useful plot type for easily visualizing the relationship between two continuous variables. To make a scatter plot we use the `geom_point()` function.
 
 
 ```r
-x = c(rnorm(100,1), rnorm(100,1)+5)
-hist(x)
-boxplot(x)
+ggplot(mpg, aes(displ, hwy)) + geom_point() + mytheme
 ```
 
-<img src="assets/fig/lec05_boxplot4-1.png" title="plot of chunk lec05_boxplot4" alt="plot of chunk lec05_boxplot4" width="400px" height="400px" /><img src="assets/fig/lec05_boxplot4-2.png" title="plot of chunk lec05_boxplot4" alt="plot of chunk lec05_boxplot4" width="400px" height="400px" />
-
-
-Boxplot does not properly represent the distribution.
-
-
-
+<img src="assets/fig/unnamed-chunk-42-1.png" title="plot of chunk unnamed-chunk-42" alt="plot of chunk unnamed-chunk-42" width="600px" height="400px" />
 
 ---
 
-<script type='text/javascript'>toc("2 variables - one discrete, one continuous")</script>
+## Scatter plots grouped by discrete variable
 
-
----
-## Boxplot by category
+We can modify the previous plot by coloring the points depending on the vehicle class:
 
 
 ```r
-ggplot(mpg, aes(class, hwy)) +
-  geom_boxplot() + mytheme
+ggplot(mpg, aes(displ, hwy, color = class)) + geom_point() + mytheme
 ```
 
-<img src="assets/fig/lec05_boxplot5-1.png" title="plot of chunk lec05_boxplot5" alt="plot of chunk lec05_boxplot5" width="600px" height="400px" />
+<img src="assets/fig/unnamed-chunk-43-1.png" title="plot of chunk unnamed-chunk-43" alt="plot of chunk unnamed-chunk-43" width="600px" height="400px" />
 
 ---
-## Violin plot
+
+## Scatter plots grouped by discrete variable
+
+Sometimes, too many colors can be hard to distinguish. In such cases, we can use facet to separate them into different plots:
+
+```r
+ggplot(mpg, aes(displ, hwy)) + geom_point() + facet_wrap(~class) + mytheme
+```
+
+<img src="assets/fig/unnamed-chunk-44-1.png" title="plot of chunk unnamed-chunk-44" alt="plot of chunk unnamed-chunk-44" width="600px" height="400px" />
+
+---
+
+## Line plots
+
+A line plot can be considered for connecting a series of individual data points or to display the trend of a series of
+data points. This can be particularly useful to show the shape of data as it flows and changes from point to point.
+We can also show the strength of the movement of values up and down through time.
 
 
 ```r
-ggplot(mpg, aes(class, hwy)) +
-  geom_violin() + mytheme
+ggplot(economics, aes(date, unemploy/pop)) + geom_line() + mytheme
 ```
 
-<img src="assets/fig/lec05_boxplot6-1.png" title="plot of chunk lec05_boxplot6" alt="plot of chunk lec05_boxplot6" width="600px" height="400px" />
-
----
-## Beanplot
-Useful only up to a certain number of data points. Use the package ggbeeswarm:
-
-
-```r
-# install.packages("ggbeeswarm")
-library(ggbeeswarm)
-ggplot(mpg, aes(class, hwy)) + 
-  geom_beeswarm() + mytheme
-```
-
-<img src="assets/fig/lec05_beeswarm-1.png" title="plot of chunk lec05_beeswarm" alt="plot of chunk lec05_beeswarm" width="600px" height="400px" />
-
----
-## Barplots
-
-* bars are visual `heavyweights` compared to dots and lines 
-* combining two attributes of 2-D location and 
-  line length to encode quantitative values
-* bars emphasize the individual values 
-  of the thing being measured per categorical subdivision
-* focus attention primarily on individual 
-  values and support the comparison of one to another
-
-
-
-
-```r
-ggplot(countries_dt, aes(Continent, Number_countries)) + 
-  geom_bar(stat = 'identity', width = .7) + mytheme
-```
-
-<img src="assets/fig/lec05_coun, -1.png" title="plot of chunk lec05_coun, " alt="plot of chunk lec05_coun, " width="500px" height="400px" />
-
+<img src="assets/fig/unnamed-chunk-45-1.png" title="plot of chunk unnamed-chunk-45" alt="plot of chunk unnamed-chunk-45" width="600px" height="400px" />
 
 --- &radio
-## When to use a Barplot?
 
-1. A To show a connection between a series of individual data points
-2. B To show a correlation between two quantitative variables
-3. C _To highlight individual quantitative values per category_
-4. D To compare distributions of quantitative values across categories
+## Quiz
 
---- 
-## When to use a Barplot?
-
-C **To highlight individual quantitative values per category**
-
-
----
-## Visualize uncertainty
-
-Visualizing uncertainty is important, otherwise barplots can be misleading. One way to visualize uncertainty is with error bars.
-
-* Standard deviation (SD) and standard error of the mean (SEM) as error bars. SD and SEM are completely different concepts!
-  * SD indicates the variation of quantity in the sample.
-  * SEM represents how well the mean is estimated.
-  
-The central limit theorem implies that: $SEM = SD / \sqrt{(n)}$ , where $n$ is the sample size (number of observations).
-
-With large $n$, SEM tends to 0.
-
----
-## Barplots with error bars
-
-Explain what this code does:
-
-```r
-as.data.table(mpg) %>% 
-  .[, .(mean = mean(hwy),
-        sd = sd(hwy)),
-    by = class] %>% 
-  ggplot(aes(class, mean, ymax=mean+sd, ymin=mean-sd)) + 
-  geom_bar(stat='identity') +
-  geom_errorbar(width = 0.3) + mytheme
-```
-
-<img src="assets/fig/lec05_erb, -1.png" title="plot of chunk lec05_erb, " alt="plot of chunk lec05_erb, " width="500px" height="400px" />
-
----
-
-<script type='text/javascript'>toc("2 variables - both continuous")</script>
-
-
----
-## Scatterplot
-
-Scatterplots are useful for easily visualizing the relationship between two continuous variables 
-
-
-```r
-ggplot(mpg, aes(displ, hwy)) +
-  geom_point() + mytheme
-```
-
-<img src="assets/fig/lec05_point1-1.png" title="plot of chunk lec05_point1" alt="plot of chunk lec05_point1" width="500px" height="400px" />
-
----
-## Scatterplot with too many colors can be hard to read 
-
-```r
-ggplot(mpg, aes(displ, hwy, color=class)) +
-  geom_point() + mytheme
-```
-
-<img src="assets/fig/lec05_point2-1.png" title="plot of chunk lec05_point2" alt="plot of chunk lec05_point2" width="600px" height="400px" />
-
-Too many colors, hard to distinguish. One can use `facet` to separate them into different plots.
-
----
-
-## 2D density plots
-
-2D plots count the number of observations within a particular area of the 2D space and are better suited than scatter plots for large datasets
-
-
-```r
-x <- rnorm(10000); y=x+rnorm(10000)
-data.table(x, y) %>% ggplot(aes(x, y)) +
-  geom_hex() + mytheme
-```
-
-<img src="assets/fig/lec05_hex-1.png" title="plot of chunk lec05_hex" alt="plot of chunk lec05_hex" width="500px" height="400px" />
-
----
-## When to use a line plot?
-
-Two main goals:
-* To `connect` a series of individual data points
-* To display the `trend` of a series of data points.
-
-Why:
-* showing the shape of data as it flows and changes from point to point. 
-* strength: movement of values up and down through time
-* it's often difficult to discern the overall trend of scatter plots, 
-  but a simple trend line can bring it into sharp focus.
-
---- &radio
-## When to use a line plot?
+When to use a line plot?
 
 1. A _To show a connection between a series of individual data points_
 2. B To show a correlation between two quantitative variables
@@ -881,128 +875,16 @@ Why:
 4. D To compare distributions of quantitative values across categories
 
 --- 
-## When to use a line plot?
+
+## Solution
+
+When to use a line plot?
 
 A **To show a connection between a series of individual data points**
 
-
-
----
-## Line plot
-
-
-```r
-ggplot(economics, aes(date, unemploy / pop)) +
-  geom_line() + mytheme
-```
-
-<img src="assets/fig/lec05_line-1.png" title="plot of chunk lec05_line" alt="plot of chunk lec05_line" width="500px" height="400px" />
-
-
 ---
 
-<script type='text/javascript'>toc("Axes and labels")</script>
-
-
-
----
-## Every aesthetic has a scale
-ggplot automatically scales aesthetics, e.g. `x, y, colour, size, shape, fill...`. 
-
-What happens to:
-
-```r
-ggplot(ind, aes(CPI, HDI)) +
-  geom_point(aes(color=region)) + mytheme
-```
-
-is actually:
-
-```r
-ggplot(ind, aes(CPI, HDI)) +
-  geom_point(aes(color=region)) +
-  scale_x_continuous() +
-  scale_y_continuous() + mytheme
-```
-
-You can **overwrite** them with `scale_*` commands.
-
----
-## Overwrite scales, example:
-* log scale
-
-```r
-ggplot(ind, aes(CPI, HDI)) +
-  geom_point(aes(color=region)) +
-  scale_x_log10() + mytheme
-```
-
-<img src="assets/fig/lec05_point6-1.png" title="plot of chunk lec05_point6" alt="plot of chunk lec05_point6" width="600px" height="400px" />
-
-
----
-## Specify axis breaks
-
-```r
-ggplot(ind, aes(CPI, HDI)) +
-  geom_point(aes(color=region)) +
-  scale_x_log10(breaks=c(10, 20, 50, 100)) + mytheme
-```
-
-<img src="assets/fig/lec05_point8-1.png" title="plot of chunk lec05_point8" alt="plot of chunk lec05_point8" width="600px" height="400px" />
-
-Same operations apply to y axis. 
-
----
-## Change axis title
-Changing label is a so frequent task that ggplot has several ways to do it:
-
-
-```r
-ggplot(ind, aes(CPI, HDI)) +
-  geom_point(aes(color=region)) +
-  labs(x = 'Corruption Perceptions Index', 
-       y = 'Human Development Index',
-       title = 'Corruption vs Human Development',
-       color = 'Region') + mytheme
-```
-
-<img src="assets/fig/lec05_point10-1.png" title="plot of chunk lec05_point10" alt="plot of chunk lec05_point10" width="500px" height="400px" />
-
-Try also with `xlabs`, `ylabs`, `ggtitle`, `scale_x_continuous`, `scale_y_continuous`.
-
----
-## Change axis limits
-
-```r
-df <- data.table(x = rep(c("A", "B"), each = 100),
-                 y = c(rnorm(100, 20, 8), rnorm(100, 10, 7)))
-ggplot(df, aes(x, y)) +
-  geom_boxplot() + mytheme
-ggplot(df, aes(x, y)) +
-  geom_boxplot() +
-  scale_y_continuous(limits = c(10, 30)) + mytheme # I want cut my y axis from 10 to 30.
-```
-
-<img src="assets/fig/lec05_boxplot8-1.png" title="plot of chunk lec05_boxplot8" alt="plot of chunk lec05_boxplot8" width="500px" height="400px" />
-
-Note that the computed median changed! 
-
----
-## When you use `limits` in `scale_`, ggplot will treat data points outside the range as `NA`.
-
-* If you don't want this to happen, but simply "zoom in", use `coord_cartesian`. More details later. 
-
-* Axis limits can also be changed with `xlim`, `ylim` as in base plots.
-
-```r
-ggplot(df, aes(x, y)) +
-  geom_boxplot() +
-  ylim(10, 30) + mytheme
-```
-
-<img src="assets/fig/lec05_boxplot9-1.png" title="plot of chunk lec05_boxplot9" alt="plot of chunk lec05_boxplot9" width="400px" height="400px" />
-
+## Scatterplot exercise
 
 ---
 ## Take-home
