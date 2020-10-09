@@ -123,6 +123,10 @@ It is also possible to assign with the *equal* sign.
 objectName = value
 ```
 
+---
+
+## Assignments
+
 ```{r}
 x <- 5 # Both methods have the same outcome
 y = 5
@@ -172,6 +176,12 @@ Usually for an integer sequence *from:to* is enough. For different results we ma
 ```{r}
 1:10 
 seq(from = 1, to = 10, by = .3)
+```
+---
+
+## Vectors
+
+```{r}
 seq(from = 1, to = 10, length.out = 12)
 ```
 
