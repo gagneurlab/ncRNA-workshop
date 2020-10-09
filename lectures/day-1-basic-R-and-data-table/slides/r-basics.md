@@ -30,8 +30,10 @@ $('p:has(img.build)').addClass('build')
 
 <script type='text/javascript'>
 // parameters
-var sections = [
-"Data Wrangling using Data.table"];
+var sections = ["R basics",
+"Data Wrangling using Data.table",
+"Analysis execution flow",
+"Reproducible science with Rmardown reports"];
 
 var title = "Overview";
 var fontsize = "20pt"
@@ -74,6 +76,286 @@ function toc(cur) {
 ---
 
 <script type='text/javascript'>toc("")</script>
+
+---
+
+<script type='text/javascript'>toc("R basics")</script>
+
+---
+
+## Assignments
+
+All big (programming) journeys start with a small step (or assignment). In R assignments are done using the `<-` operator :
+
+
+```r
+objectName <- value
+```
+
+It is also possible to assign with the *equal* sign.
+
+
+```r
+objectName = value
+```
+
+
+```r
+x <- 5 # Both methods have the same outcome
+y = 5
+x
+```
+
+```
+## [1] 5
+```
+
+```r
+y
+```
+
+```
+## [1] 5
+```
+
+---
+
+## Assignments
+
+However, the "equal" sign is used for argument passing to functions. Thus if nesting, the equal sign will be interpreted as a argument assignment and might throw an error:
+
+
+```r
+## We want to measure the running time of the inner product of a large vector and 
+## assign the outcome of the function to a variable simultaneously
+system.time(a <- t(1:1e6)%*%(1:1e6))
+```
+
+```
+##    user  system elapsed 
+##   0.048   0.006   0.053
+```
+
+```r
+system.time(a = t(1:1e6)%*%(1:1e6)) ## This would cause an error
+```
+
+```
+## Error in system.time(a = t(1:1e+06) %*% (1:1e+06)): unused argument (a = t(1:1e+06) %*% (1:1e+06))
+```
+
+Right Alt + - gives a quick shortcut to add **<-** ;)
+
+---
+
+## Vectors
+
+Vectors are 1-dimensional data structures which can contain one or more variables, regardless of their type.
+
+Usually created with `c()` (from *concatenation*):
+
+```r
+c(1, 5, 8, 10)
+```
+
+```
+## [1]  1  5  8 10
+```
+
+```r
+str(c(1, 5, 8, 10))
+```
+
+```
+##  num [1:4] 1 5 8 10
+```
+
+```r
+length(c(1, 5, 8, 10))
+```
+
+```
+## [1] 4
+```
+
+```r
+c("a", "B", "cc")
+```
+
+```
+## [1] "a"  "B"  "cc"
+```
+
+```r
+c(TRUE, FALSE, c(TRUE, TRUE))
+```
+
+```
+## [1]  TRUE FALSE  TRUE  TRUE
+```
+
+```r
+c(1, "B", FALSE)
+```
+
+```
+## [1] "1"     "B"     "FALSE"
+```
+
+---
+
+## Vectors
+
+There are multiple ways to create a numeric sequence depending on the desired result.
+
+Usually for an integer sequence *from:to* is enough. For different results we may need to use `seq()` function utilizing its arguments to increase by a *step* of our choice or to split the range depending on the desired length of the output.
+
+
+```r
+1:10 
+```
+
+```
+##  [1]  1  2  3  4  5  6  7  8  9 10
+```
+
+```r
+seq(from = 1, to = 10, by = .3)
+```
+
+```
+##  [1]  1.0  1.3  1.6  1.9  2.2  2.5  2.8  3.1  3.4  3.7  4.0  4.3  4.6  4.9  5.2
+## [16]  5.5  5.8  6.1  6.4  6.7  7.0  7.3  7.6  7.9  8.2  8.5  8.8  9.1  9.4  9.7
+## [31] 10.0
+```
+
+```r
+seq(from = 1, to = 10, length.out = 12)
+```
+
+```
+##  [1]  1.000000  1.818182  2.636364  3.454545  4.272727  5.090909  5.909091
+##  [8]  6.727273  7.545455  8.363636  9.181818 10.000000
+```
+
+Keep in mind that sometimes different approaches, give different data types as results so when weird things happen, always check the documentation (devil is in the details)!
+
+---
+
+## Vectors
+
+For non numeric values e.g. logical, character, `rep()` function comes also in handy. 
+
+The *replicate* function `rep()` replicates a vector a certain number of *times* and concatenates them: 
+
+```r
+rep(c(TRUE, FALSE), times = 5)
+```
+
+```
+##  [1]  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE FALSE
+```
+
+To replicate *each* entry of the input vector at the time:
+
+```r
+rep(c(TRUE, FALSE), each = 5)
+```
+
+```
+##  [1]  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE
+```
+
+---
+
+## Vectors
+
+Vector elements are accessed via the ```[``` operator:
+
+```r
+## Create an A,B,C,D,E vector
+x <- LETTERS[1:5]
+x
+```
+
+```
+## [1] "A" "B" "C" "D" "E"
+```
+
+```r
+## access the third entry
+x[3]
+```
+
+```
+## [1] "C"
+```
+
+```r
+## modify the third entry
+x[3] <- 'Z'
+x
+```
+
+```
+## [1] "A" "B" "Z" "D" "E"
+```
+
+---
+
+## Vectors
+
+Elements in vectors can have names. 
+Using names instead of index to access entries in a vector make code more robust to re-ordering, sub-setting, and changes in data input.  
+Names can be created at initialization or set afterwards with `names()`. 
+
+
+```r
+x <- c(a = 1, b = 2, c = 3)
+x
+```
+
+```
+## a b c 
+## 1 2 3
+```
+
+```r
+names(x) <- c("A", "B", "C")
+x
+```
+
+```
+## A B C 
+## 1 2 3
+```
+
+Names don't have to be unique, but should preferably be, as sub-setting by names will only return the first match
+
+```r
+x <- c(a = 1, a = 2, b = 3)
+x["a"]
+```
+
+```
+## a 
+## 1
+```
+
+Not all elements need to have names.
+
+```r
+c(a = 1, 2, 3)
+```
+
+```
+## a     
+## 1 2 3
+```
+
+---
+
+## Vector exercise
 
 ---
 
@@ -737,4 +1019,6 @@ head(flights)
 ```
 Here we observe, that the tail numbers are gone from the data.table
 
+---
 
+## Data.table exercise

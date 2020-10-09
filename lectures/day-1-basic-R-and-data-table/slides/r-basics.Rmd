@@ -30,8 +30,10 @@ $('p:has(img.build)').addClass('build')
 
 <script type='text/javascript'>
 // parameters
-var sections = [
-"Data Wrangling using Data.table"];
+var sections = ["R basics",
+"Data Wrangling using Data.table",
+"Analysis execution flow",
+"Reproducible science with Rmardown reports"];
 
 var title = "Overview";
 var fontsize = "20pt"
@@ -100,6 +102,142 @@ knitr::include_graphics("assets/img/lec05_syllabus.png")
 ---
 
 <script type='text/javascript'>toc("")</script>
+
+---
+
+<script type='text/javascript'>toc("R basics")</script>
+
+---
+
+## Assignments
+
+All big (programming) journeys start with a small step (or assignment). In R assignments are done using the `<-` operator :
+
+```{r eval=F}
+objectName <- value
+```
+
+It is also possible to assign with the *equal* sign.
+
+```{r eval=F}
+objectName = value
+```
+
+```{r}
+x <- 5 # Both methods have the same outcome
+y = 5
+x
+y
+```
+
+---
+
+## Assignments
+
+However, the "equal" sign is used for argument passing to functions. Thus if nesting, the equal sign will be interpreted as a argument assignment and might throw an error:
+
+```{r, linewidth=80, error=TRUE}
+## We want to measure the running time of the inner product of a large vector and 
+## assign the outcome of the function to a variable simultaneously
+system.time(a <- t(1:1e6)%*%(1:1e6))
+system.time(a = t(1:1e6)%*%(1:1e6)) ## This would cause an error
+```
+
+Right Alt + - gives a quick shortcut to add **<-** ;)
+
+---
+
+## Vectors
+
+Vectors are 1-dimensional data structures which can contain one or more variables, regardless of their type.
+
+Usually created with `c()` (from *concatenation*):
+```{r}
+c(1, 5, 8, 10)
+str(c(1, 5, 8, 10))
+length(c(1, 5, 8, 10))
+c("a", "B", "cc")
+c(TRUE, FALSE, c(TRUE, TRUE))
+c(1, "B", FALSE)
+```
+
+---
+
+## Vectors
+
+There are multiple ways to create a numeric sequence depending on the desired result.
+
+Usually for an integer sequence *from:to* is enough. For different results we may need to use `seq()` function utilizing its arguments to increase by a *step* of our choice or to split the range depending on the desired length of the output.
+
+```{r}
+1:10 
+seq(from = 1, to = 10, by = .3)
+seq(from = 1, to = 10, length.out = 12)
+```
+
+Keep in mind that sometimes different approaches, give different data types as results so when weird things happen, always check the documentation (devil is in the details)!
+
+---
+
+## Vectors
+
+For non numeric values e.g. logical, character, `rep()` function comes also in handy. 
+
+The *replicate* function `rep()` replicates a vector a certain number of *times* and concatenates them: 
+```{r}
+rep(c(TRUE, FALSE), times = 5)
+```
+
+To replicate *each* entry of the input vector at the time:
+```{r}
+rep(c(TRUE, FALSE), each = 5)
+```
+
+---
+
+## Vectors
+
+Vector elements are accessed via the ```[``` operator:
+```{r}
+## Create an A,B,C,D,E vector
+x <- LETTERS[1:5]
+x
+## access the third entry
+x[3]
+## modify the third entry
+x[3] <- 'Z'
+x
+```
+
+---
+
+## Vectors
+
+Elements in vectors can have names. 
+Using names instead of index to access entries in a vector make code more robust to re-ordering, sub-setting, and changes in data input.  
+Names can be created at initialization or set afterwards with `names()`. 
+
+```{r}
+x <- c(a = 1, b = 2, c = 3)
+x
+names(x) <- c("A", "B", "C")
+x
+```
+
+Names don't have to be unique, but should preferably be, as sub-setting by names will only return the first match
+```{r}
+x <- c(a = 1, a = 2, b = 3)
+x["a"]
+```
+
+Not all elements need to have names.
+```{r}
+c(a = 1, 2, 3)
+```
+
+---
+
+## Vector exercise
 
 ---
 
@@ -450,4 +588,6 @@ head(flights)
 ```
 Here we observe, that the tail numbers are gone from the data.table
 
+---
 
+## Data.table exercise
