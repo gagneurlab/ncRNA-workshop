@@ -1,0 +1,2982 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Make your paper figures professionally: Scientific data analysis and visualization with R</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Make your paper figures professionally: Scientific data analysis and visualization with R">
+  <meta name="author" content="Vangelis Theodorakis, Fatemeh Behjati, Julien Gagneur, Marcel Schultz">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="libraries/widgets/bootstrap/css/bootstrap.css"></link>
+<link rel=stylesheet href="libraries/widgets/quiz/css/demo.css"></link>
+
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  
+  <hgroup class="auto-fadein">
+    <h1>Make your paper figures professionally: Scientific data analysis and visualization with R</h1>
+    <h2>Grammar of graphics and Basic Plotting</h2>
+    <p>Vangelis Theodorakis, Fatemeh Behjati, Julien Gagneur, Marcel Schultz<br/></p>
+  </hgroup>
+  
+  <article></article>  
+  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  
+  <article data-timings="">
+    <style>
+.eighteen > article > p {
+   font-size: 18px !important;
+}
+</style>
+
+<!-- Center image on slide -->
+
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+
+<script type='text/javascript'>
+$(function() {
+    $("p:has(img)").addClass('centered');
+});
+</script>
+
+<p></script></p>
+
+<script type = 'text/javascript'>
+$('p:has(img.build)').addClass('build')
+</script>
+
+<script type='text/javascript'>
+// parameters
+var sections = ["Why we plot",
+"Grammar of graphics and ggplot2",
+"Plots for one single continuous variable",
+"Plots for two variables: one continuous, one discrete",
+"Plots for two continuous variables",
+"Tidy data"];
+
+var title = "Overview";
+var fontsize = "20pt"
+var unselected_color = "#888888"
+// function
+function toc(cur) {
+  // header
+  document.write("<h2>"+title+"</h2>");
+  // find current
+  ind = sections.indexOf(cur);
+  if (ind==-1 && cur.length>0) {
+     document.write("<br/>Error: section not defined '"+cur+"'");
+     return;
+  }
+  // write all out
+  document.write("<br/><ul>");
+  for (i = 0; i < sections.length; i++) { 
+    if (cur=="") 
+      // all the same
+      document.write("<li style='font-size:"+fontsize+"'>"+sections[i]+"</li>");
+    else {
+      if (i==ind)
+        document.write("<li style='font-size:"+fontsize+"'><b>"+sections[i]+"</b></li>");
+      else
+        document.write("<li style='color:"+unselected_color+";font-size:"+fontsize+"'>"+sections[i]+"</li>");
+    }
+  }
+  document.write("</ul>");
+}
+</script>
+
+<!-- START LECTURE -->
+
+<h2>Day 2 - Basic plotting and Tidy data</h2>
+
+<p><img src="assets/img/syllabus-day-2.png" title="plot of chunk syllabus" alt="plot of chunk syllabus" width="800px" height="400px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-2" style="background:;">
+  
+  <article data-timings="">
+    <script type='text/javascript'>toc("")</script>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-3" style="background:;">
+  
+  <article data-timings="">
+    <script type='text/javascript'>toc("Why we plot")</script>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  
+  <hgroup>
+    <h2>Do you see a common pattern in these plots?</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p><img src="assets/img/missleading-data-1.png" title="plot of chunk unnamed-chunk-1" alt="plot of chunk unnamed-chunk-1" width="1200px" height="1200px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-5" style="background:;">
+  
+  <hgroup>
+    <h2>Maybe now?</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <!-- ![Datasaurus tex](../assets/img/missleading-data-2.png){#id .class width=400px height=400px} -->
+
+<p></br></p>
+
+<p><img src="assets/img/missleading-data-2.png" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" width="500px" height="500px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-6" style="background:;">
+  
+  <hgroup>
+    <h2>Same statistics, different visualizations</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p></br>
+<img src="assets/img/missleading-data.png" title="plot of chunk unnamed-chunk-3" alt="plot of chunk unnamed-chunk-3" width="500px" height="500px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-7" style="background:;">
+  
+  <hgroup>
+    <h2>Why plotting?</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>It is nearly impossible for a single person to go through data line-by-line and see distinct patterns and make observations.</p>
+
+<p>Data visualization becomes crucial for gaining <strong>insight</strong> into data that traditional descriptive statistics cannot.</p>
+
+<p><strong>Plotting can give hints about bugs in our code (or even in the data!) and can help us to develop and improve methods and models.</strong></p>
+
+<p><img src="assets/img/scientific-method.png" title="plot of chunk unnamed-chunk-4" alt="plot of chunk unnamed-chunk-4" width="300px" height="300px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-8" style="background:;">
+  
+  <hgroup>
+    <h2>A realistic example to warm up</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>A vector containing 500 (hypothetical) height measurements for adults in Germany:</p>
+
+<pre><code class="r">length(height)
+</code></pre>
+
+<pre><code>## [1] 500
+</code></pre>
+
+<pre><code class="r">head(height, n=10)
+</code></pre>
+
+<pre><code>##  [1] 1.706833 1.635319 1.709841 1.707259 1.668659 1.580702 1.608214 1.636738
+##  [9] 1.649740 1.758209
+</code></pre>
+
+<p>We want to know their average height:</p>
+
+<pre><code class="r">mean(height)
+</code></pre>
+
+<pre><code>## [1] 1.976743
+</code></pre>
+
+<p>Wait... what?</p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-9" style="background:;">
+  
+  <article data-timings="">
+    
+<div class="quiz quiz-single well ">
+  <pre><code class="r">mean(height)
+</code></pre>
+
+<pre><code>## [1] 1.976743
+</code></pre>
+
+<p><br/></p>
+
+<p>What happened?</p>
+
+<ol>
+<li><p>A. <code>mean()</code> is not the right function to assess what we want to know.</p></li>
+<li><p>B. Adults in Germany are exceptionally tall</p></li>
+<li><p>C. <em>A decimal point error in one data point.</em></p></li>
+<li><p>D. It&#39;s a multiple testing problem because we are looking at so many data points (n=500).</p></li>
+</ol>
+
+  <button class="quiz-submit btn btn-primary">Submit</button>
+  <button class="quiz-toggle-hint btn btn-info">Show Hint</button>
+  <button class="quiz-show-answer btn btn-success">Show Answer</button>
+  <button class="quiz-clear btn btn-danger">Clear</button>
+  
+  
+<div class="quiz-explanation">
+  <p>See next slide</p>
+
+</div>
+</div>
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-10" style="background:;">
+  
+  <hgroup>
+    <h2>Solution</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <pre><code class="r">mean(height)
+</code></pre>
+
+<pre><code>## [1] 1.976743
+</code></pre>
+
+<p><strong>What happened?</strong><br/></p>
+
+<ul>
+<li>A. <code>mean()</code> is not the right function to assess what we want to know.
+
+<ul>
+<li><em>No, the mean is exactly what we want.</em></li>
+</ul></li>
+<li>B. Adults in Germany are exceptionally tall.
+
+<ul>
+<li><em>OK, no...</em></li>
+</ul></li>
+<li><strong>C. A decimal point error in one data point.</strong>
+
+<ul>
+<li><em>Yes, see next slide.</em></li>
+</ul></li>
+<li>D. It&#39;s a multiple testing problem because we are looking at so many data points (n=500).
+
+<ul>
+<li><em>This question was intentionally misleading, this does not have anything to do with multiple testing.</em></li>
+</ul></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-11" style="background:;">
+  
+  <hgroup>
+    <h2>The outlier...</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <pre><code class="r">plot(height)
+hist(height)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-10-1.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" width="300px" height="400px" /><img src="assets/fig/unnamed-chunk-10-2.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" width="300px" height="400px" /></p>
+
+<pre><code class="r">mean(height)
+</code></pre>
+
+<pre><code>## [1] 1.976743
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-12" style="background:;">
+  
+  <hgroup>
+    <h2>The outlier...</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>A quick way to fix our dataset is to remove our outlier.</p>
+
+<pre><code class="r">fheight &lt;- height[height &lt; 3]
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-13" style="background:;">
+  
+  <hgroup>
+    <h2>The outlier...</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <pre><code class="r">plot(fheight)
+hist(fheight)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-13-1.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" width="300px" height="400px" /><img src="assets/fig/unnamed-chunk-13-2.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" width="300px" height="400px" /></p>
+
+<pre><code class="r">mean(fheight)
+</code></pre>
+
+<pre><code>## [1] 1.650043
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-14" style="background:;">
+  
+  <hgroup>
+    <h2>The outlier...</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>This is how the broken dataset was generated:</p>
+
+<pre><code class="r">height &lt;- c(rnorm(499, mean=1.65, sd=0.045), 165)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-15" style="background:;">
+  
+  <hgroup>
+    <h2>Our 2 visualization lectures</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>This lecture and the one that follows will cover:</p>
+
+<ul>
+<li>Grammar of graphics: a modular and felxible framework to build plots</li>
+<li>Standard plots based on dimension and nature of the data (discrete / continuous)</li>
+<li>Colors</li>
+<li>Dos and don&#39;ts</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-16" style="background:;">
+  
+  <article data-timings="">
+    <script type='text/javascript'>toc("Grammar of graphics and ggplot2")</script>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-17" style="background:;">
+  
+  <hgroup>
+    <h2>Grammar of Graphics</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>The Grammar of Graphics is a visualization theory developed by 
+Leland Wilkinson in 1999.
+<br> </p>
+
+<ul>
+<li>influenced the development of graphics and visualization libraries alike </li>
+<li>3 key principles
+
+<ul>
+<li>Separation of data from aesthetics (e.g. x and y axis, color-coding)</li>
+<li>Definition of common plot/chart elements (e.g. dot plots, boxplots, etc.)</li>
+<li>Composition of these common elements (one can combine elements as layers)</li>
+</ul></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-18" style="background:;">
+  
+  <hgroup>
+    <h2>ggplot2 and Grammar of Graphics</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>ggplot2 is a powerfull implementation of the grammar of graphics. Plotting with the help of the package ggplot2 has become widely used by R programmers. </p>
+
+<p>Lets see a sophisticated example...</p>
+
+<pre><code class="r"># install.packages(&#39;gapminder&#39;)
+library(gapminder)
+
+gm_dt &lt;- as.data.table(gapminder)[year %in% c(1977, 2007)]
+
+ggplot(data = gm_dt, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point(aes(color = continent,size = pop)) +
+  facet_grid(~year) +
+  scale_x_log10() +
+  labs(y = &quot;Life expectation at birth&quot;, x = &quot;per-capita GDP&quot;, size = &quot;Population&quot;) +
+  mytheme
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-19" style="background:;">
+  
+  <hgroup>
+    <h2>ggplot2 and Grammar of Graphics</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p><img src="assets/fig/unnamed-chunk-17-1.png" title="plot of chunk unnamed-chunk-17" alt="plot of chunk unnamed-chunk-17" width="700px" height="400px" /></p>
+
+<p>But how we create such a plot step by step?</p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="eighteen" id="slide-20" style="background:;">
+  
+  <hgroup>
+    <h2>Grammar Defines Components of Graphics</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p><strong>Data:</strong> data.frame (or data.table) object where columns correspond to variables</p>
+
+<p><strong>Aesthetics:</strong> describes visual characteristics that represent data (<code>aes</code>)</p>
+
+<ul>
+<li>position (x,y), color, size, shape, transparency</li>
+</ul>
+
+<p><strong>Layers:</strong> made up of geometric objects that represent data (<code>geom_</code>)</p>
+
+<ul>
+<li>points, lines, boxplots, ...</li>
+</ul>
+
+<p><strong>Scales:</strong> for each aesthetic, describes how visual characteristic is converted to display values (<code>scale_</code>)</p>
+
+<ul>
+<li>log scales, color scales, size scales, shape scales, ...</li>
+</ul>
+
+<p><strong>Facets:</strong> describes how data is split into subsets and displayed as multiple sub graphs (<code>facet_</code>)</p>
+
+<p><strong>Stats:</strong> statistical transformations that typically summarize data (<code>stat</code>)</p>
+
+<ul>
+<li>counts, means, medians, regression lines, ...</li>
+</ul>
+
+<p><strong>Coordinate system:</strong> describes 2D space that data is projected onto (<code>coord_</code>)</p>
+
+<ul>
+<li>Cartesian coordinates, polar coordinates, map projections, ...</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-21" style="background:;">
+  
+  <article data-timings="">
+    <p></br></p>
+
+<h2>Grammar Defines Components of Graphics</h2>
+
+<p><img src="assets/img/pyramid-of-graphics.png" title="plot of chunk unnamed-chunk-18" alt="plot of chunk unnamed-chunk-18" width="800px" height="800px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-22" style="background:;">
+  
+  <hgroup>
+    <h2>Defining the data and layers</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Lets have a quick look in our data</p>
+
+<pre><code class="r">head(gm_dt[, .(country, continent, gdpPercap, lifeExp, year)])
+</code></pre>
+
+<pre><code>##        country continent gdpPercap lifeExp year
+## 1: Afghanistan      Asia  786.1134  38.438 1977
+## 2: Afghanistan      Asia  974.5803  43.828 2007
+## 3:     Albania    Europe 3533.0039  68.930 1977
+## 4:     Albania    Europe 5937.0295  76.423 2007
+## 5:     Algeria    Africa 4910.4168  58.014 1977
+## 6:     Algeria    Africa 6223.3675  72.301 2007
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-23" style="background:;">
+  
+  <hgroup>
+    <h2>Defining the data and layers</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>For starting with the visualization we initiate a <code>ggplot</code> object which generates a plot with background:</p>
+
+<pre><code class="r">ggplot()
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-20-1.png" title="plot of chunk unnamed-chunk-20" alt="plot of chunk unnamed-chunk-20" width="400px" height="300px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-24" style="background:;">
+  
+  <hgroup>
+    <h2>Defining the data and layers</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>This <code>aes()</code> function defines which columns in the <code>data.table</code> object map to <code>x</code> and <code>y</code> coordinates and if they should be colored or have different shapes and sizes based on the values in a different column. These elements are called “aesthetic” elements, which we observe in the plot. </p>
+
+<pre><code class="r">ggplot(data = gm_dt, aes(x = gdpPercap, y = lifeExp))
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-21-1.png" title="plot of chunk unnamed-chunk-21" alt="plot of chunk unnamed-chunk-21" width="400px" height="300px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-25" style="background:;">
+  
+  <hgroup>
+    <h2>Defining the data and layers</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>In R, a scatter plot can be plotted with ggplot2 using the function <code>geom_point</code>. We want to construct a
+scatter plot containing the gdpPercap on the x-axis and the lifeExp on the y-axis.</p>
+
+<pre><code class="r">ggplot(data = gm_dt, aes(x = gdpPercap, y = lifeExp)) + geom_point()
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-22-1.png" title="plot of chunk unnamed-chunk-22" alt="plot of chunk unnamed-chunk-22" width="400px" height="300px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-26" style="background:;">
+  
+  <hgroup>
+    <h2>Defining the data and layers</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>One of the advantages of plotting with ggplot is that it returns an object which can be stored (e.g. in a variable
+called p). The stored object can be further edited and you can also inspect its elements with the <code>names()</code> function:</p>
+
+<pre><code class="r">p &lt;- ggplot(data = gm_dt, aes(x = gdpPercap, y = lifeExp)) + geom_point()
+names(p)
+</code></pre>
+
+<pre><code>## [1] &quot;data&quot;        &quot;layers&quot;      &quot;scales&quot;      &quot;mapping&quot;     &quot;theme&quot;      
+## [6] &quot;coordinates&quot; &quot;facet&quot;       &quot;plot_env&quot;    &quot;labels&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-27" style="background:;">
+  
+  <hgroup>
+    <h2>Defining the data and layers</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>We can also save the ggplot object with the help of the function saveRDS(). Then, we can read the saved object
+again with the help of the function readRDS() and add a horizontal line at y=50 to the plot:</p>
+
+<pre><code class="r">saveRDS(p, &quot;extdata/my_first_plot.rds&quot;)
+p &lt;- readRDS(&quot;extdata/my_first_plot.rds&quot;)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-28" style="background:;">
+  
+  <hgroup>
+    <h2>Defining the data and layers</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>We can also save the ggplot object with the help of the function saveRDS(). Then, we can read the saved object
+again with the help of the function readRDS() and add a horizontal line at y=50 to the plot:</p>
+
+<pre><code class="r">p + geom_hline(yintercept = 50)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-26-1.png" title="plot of chunk unnamed-chunk-26" alt="plot of chunk unnamed-chunk-26" width="400px" height="300px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-29" style="background:;">
+  
+  <hgroup>
+    <h2>Mapping of aesthetics <code>color</code></h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>We can easily map variables to different colors, sizes or shapes depending on the value of the specified variable using the <code>aes</code> function. </p>
+
+<pre><code class="r">ggplot(data = gm_dt, aes(x = gdpPercap, y = lifeExp, color = continent)) + geom_point()
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-27-1.png" title="plot of chunk unnamed-chunk-27" alt="plot of chunk unnamed-chunk-27" width="800px" height="300px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-30" style="background:;">
+  
+  <hgroup>
+    <h2>Mapping of aesthetics <code>shape</code></h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>To change the shape of our points we can override the <code>shape</code> argument of the <code>aes</code></p>
+
+<pre><code class="r">ggplot(data = gm_dt, aes(x = gdpPercap, y = lifeExp, shape = continent)) + geom_point()
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-28-1.png" title="plot of chunk unnamed-chunk-28" alt="plot of chunk unnamed-chunk-28" width="800px" height="300px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-31" style="background:;">
+  
+  <hgroup>
+    <h2>Mapping of aesthetics <code>size</code></h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Additionally, we distinguish the population of each country by giving a size to the points in the scatter plot:</p>
+
+<pre><code class="r">ggplot(data = gm_dt, aes(x = gdpPercap, y = lifeExp, color = continent, size = pop)) +
+geom_point()
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-29-1.png" title="plot of chunk unnamed-chunk-29" alt="plot of chunk unnamed-chunk-29" width="800px" height="300px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-32" style="background:;">
+  
+  <hgroup>
+    <h2>Global versus individual mapping</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Global mapping is inherited by default to all geom layers (geom_point in the previous example), while mapping at individual layers is only recognized at that layer.</p>
+
+<pre><code class="r">ggplot(data = gm_dt, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point(aes(color = continent,size = pop))
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-30-1.png" title="plot of chunk unnamed-chunk-30" alt="plot of chunk unnamed-chunk-30" width="800px" height="300px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-33" style="background:;">
+  
+  <hgroup>
+    <h2>Global versus individual mapping</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Individual layer mapping cannot be recognized by other layers. For instance, we can add another layer for
+smoothing with <code>stat_smooth()</code>.</p>
+
+<pre><code class="r"># this doesn&#39;t work as stat_smooth didn&#39;t know aes(x , y)
+ggplot(data = gm_dt) + geom_point(aes(x = gdpPercap, y = lifeExp)) + stat_smooth()
+</code></pre>
+
+<pre><code>## Error: stat_smooth requires the following missing aesthetics: x and y
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-31-1.png" title="plot of chunk unnamed-chunk-31" alt="plot of chunk unnamed-chunk-31" width="500px" height="400px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-34" style="background:;">
+  
+  <hgroup>
+    <h2>Global versus individual mapping</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Individual layer mapping cannot be recognized by other layers. For instance, we can add another layer for
+smoothing with <code>stat_smooth()</code>.</p>
+
+<pre><code class="r"># this would work but too redundant
+ggplot(data = gm_dt) + geom_point(aes(x = gdpPercap, y = lifeExp)) + 
+  stat_smooth(aes(x = gdpPercap, y = lifeExp))
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-32-1.png" title="plot of chunk unnamed-chunk-32" alt="plot of chunk unnamed-chunk-32" width="400px" height="300px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-35" style="background:;">
+  
+  <hgroup>
+    <h2>Global versus individual mapping</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Individual layer mapping cannot be recognized by other layers. For instance, we can add another layer for
+smoothing with <code>stat_smooth()</code>.</p>
+
+<pre><code class="r"># the common aes(x, y) shared by all the layers can be put in the ggplot()
+ggplot(data = gm_dt, aes(x = gdpPercap, y = lifeExp, color = continent)) + geom_point(aes(size = pop)) +
+stat_smooth()
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-33-1.png" title="plot of chunk unnamed-chunk-33" alt="plot of chunk unnamed-chunk-33" width="800px" height="300px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-36" style="background:;">
+  
+  <hgroup>
+    <h2>Quiz</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    
+<div class="quiz quiz-single well ">
+  <p>What&#39;s the result of the following command?</p>
+
+<p><code>ggplot(data = mpg)</code></p>
+
+<ol>
+<li><p>A Nothing happens</p></li>
+<li><p>B <em>A blank figure will be produced</em></p></li>
+<li><p>C A blank figure with axes will be produced</p></li>
+<li><p>D All data in <code>mpg</code> will be visualized</p></li>
+</ol>
+
+  <button class="quiz-submit btn btn-primary">Submit</button>
+  <button class="quiz-toggle-hint btn btn-info">Show Hint</button>
+  <button class="quiz-show-answer btn btn-success">Show Answer</button>
+  <button class="quiz-clear btn btn-danger">Clear</button>
+  
+  
+<div class="quiz-hint">
+  <p>ggplot builds plot layer by layer. </p>
+
+</div>
+
+<div class="quiz-explanation">
+  <p>Neither variables were mapped nor geometry specified. </p>
+
+</div>
+</div>
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-37" style="background:;">
+  
+  <hgroup>
+    <h2>Solution</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    
+<div class="quiz quiz-single well ">
+  <p>What&#39;s the result of the following command?</p>
+
+<p><code>ggplot(data = mpg, aes(x = hwy, y = cty))</code></p>
+
+<ol>
+<li><p>A Nothing happens</p></li>
+<li><p>B A blank figure will be produced</p></li>
+<li><p>C <em>A blank figure with axes will be produced</em></p></li>
+<li><p>D A scatter plot will be produced</p></li>
+</ol>
+
+  <button class="quiz-submit btn btn-primary">Submit</button>
+  <button class="quiz-toggle-hint btn btn-info">Show Hint</button>
+  <button class="quiz-show-answer btn btn-success">Show Answer</button>
+  <button class="quiz-clear btn btn-danger">Clear</button>
+  
+  
+<div class="quiz-hint">
+  <p>ggplot builds plot layer by layer. </p>
+
+</div>
+
+<div class="quiz-explanation">
+  <p>Axis x and y are mapped. But no geometry specified.</p>
+
+</div>
+</div>
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-38" style="background:;">
+  
+  <hgroup>
+    <h2>Quiz</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    
+<div class="quiz quiz-single well ">
+  <p>What&#39;s the result of the following command?</p>
+
+<p><code>ggplot(data = mpg, aes(x = hwy, y = cty)) + geom_point()</code></p>
+
+<ol>
+<li><p>A Nothing happens</p></li>
+<li><p>B A blank figure will be produced</p></li>
+<li><p>C A blank figure with axes will be produced</p></li>
+<li><p>D <em>A scatter plot will be produced</em></p></li>
+</ol>
+
+  <button class="quiz-submit btn btn-primary">Submit</button>
+  <button class="quiz-toggle-hint btn btn-info">Show Hint</button>
+  <button class="quiz-show-answer btn btn-success">Show Answer</button>
+  <button class="quiz-clear btn btn-danger">Clear</button>
+  
+  
+<div class="quiz-hint">
+  <p>ggplot builds plot layer by layer. </p>
+
+</div>
+
+<div class="quiz-explanation">
+  <p>Data, axes and geometry specified.</p>
+
+</div>
+</div>
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-39" style="background:;">
+  
+  <hgroup>
+    <h2>Solutions</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p><code>ggplot(data = mpg)</code>: a blank figure will be produced</p>
+
+<p><code>ggplot(data = mpg, aes(x = hwy, y = cty))</code>: A blank figure with axes will be produced</p>
+
+<p><code>ggplot(data = mpg, aes(x = hwy, y = cty)) + geom_point()</code>: A scatter plot will be produced</p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-40" style="background:;">
+  
+  <hgroup>
+    <h2>Exercise Iris</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-41" style="background:;">
+  
+  <article data-timings="">
+    <script type='text/javascript'>toc("Plots for one single continuous variable")</script>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-42" style="background:;">
+  
+  <hgroup>
+    <h2>Low dimensional plots</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>In the previous examples, we had a look at scatter plots which are suitable for plotting the relationship between
+two continuous variables. However, there are many more types of plots (e.g. histograms, boxplots) which can be
+used for plotting in different scenarios. Mainly, we distinguish between plotting one or two variables and whether the
+variables are continuous or discrete.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-43" style="background:;">
+  
+  <hgroup>
+    <h2>Low dimensional plots</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Lets prepare some data for plotting using the Human Development Index (HDI) dataset: </p>
+
+<pre><code class="r">ind &lt;- fread(&#39;extdata/CPI_HDI.csv&#39;)
+</code></pre>
+
+<pre><code class="r">head(ind)
+</code></pre>
+
+<pre><code>##    V1     country wbcode CPI   HDI            region
+## 1:  1 Afghanistan    AFG  12 0.465      Asia Pacific
+## 2:  2     Albania    ALB  33 0.733 East EU Cemt Asia
+## 3:  3     Algeria    DZA  36 0.736              MENA
+## 4:  4      Angola    AGO  19 0.532               SSA
+## 5:  5   Argentina    ARG  34 0.836          Americas
+## 6:  6     Armenia    ARM  37 0.733 East EU Cemt Asia
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-44" style="background:;">
+  
+  <hgroup>
+    <h2>Histograms</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>To plot the values of a vector with continuous values we can use a histogram. A histogram represents the frequencies of values of a variable bucketed into ranges, using the function geom_histogram():</p>
+
+<pre><code class="r">ggplot(ind, aes(HDI)) + geom_histogram() + mytheme
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-36-1.png" title="plot of chunk unnamed-chunk-36" alt="plot of chunk unnamed-chunk-36" width="800px" height="400px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-45" style="background:;">
+  
+  <hgroup>
+    <h2>Histogram: setting the number of bins</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>By default, the number of bins in ggplot2 is 30. We can simply change this by defining the number of desired bins
+in the <code>bins</code> argument of the <code>geom_histogram()</code> function:</p>
+
+<pre><code class="r">ggplot(ind, aes(HDI)) + geom_histogram(bins=10) + mytheme
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-37-1.png" title="plot of chunk unnamed-chunk-37" alt="plot of chunk unnamed-chunk-37" width="800px" height="400px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-46" style="background:;">
+  
+  <hgroup>
+    <h2>Exercise Histograms</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-47" style="background:;">
+  
+  <article data-timings="">
+    <script type='text/javascript'>toc("Plots for two variables: one continuous, one discrete")</script>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-48" style="background:;">
+  
+  <hgroup>
+    <h2>Boxplots by category</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Boxplots are well suited for plotting one continuous variable. However, we can also use boxplots
+to show distributions of continuous variables with respect to some categories. This can be particularly interesting for
+comparing the different distributions of each category.</p>
+
+<pre><code class="r">ggplot(mpg, aes(class, hwy)) + geom_boxplot() + mytheme
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-38-1.png" title="plot of chunk unnamed-chunk-38" alt="plot of chunk unnamed-chunk-38" width="800px" height="400px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-49" style="background:;">
+  
+  <hgroup>
+    <h2>Violin plots</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>A violin plot is an alternative to the boxplot for visualizing either one continuous variable (grouped by categories). An advantage of the violin plot over the boxplot is that it also shows the entire distribution of the data. This can be particularly interesting when dealing with multimodal data. You can make a violin plot using the <code>geom_violin()</code> function.</p>
+
+<pre><code class="r">ggplot(mpg, aes(class, hwy)) + geom_violin() + mytheme
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-39-1.png" title="plot of chunk unnamed-chunk-39" alt="plot of chunk unnamed-chunk-39" width="800px" height="400px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-50" style="background:;">
+  
+  <hgroup>
+    <h2>Boxplots and Violin plots</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>It is possible to not show the outliers. However, we strongly recommend to keep them.
+Outliers can reveal interesting data points (discoveries &quot;out of the box&quot;) or bugs in data preprocessing. </p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-51" style="background:;">
+  
+  <hgroup>
+    <h2>Quiz</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    
+<div class="quiz quiz-single well ">
+  <p>For which type of data will boxplots produce meaningful visualizations? (2 possible answers)</p>
+
+<ol>
+<li><p>A. For discrete data.</p></li>
+<li><p>B. For bi-modal distributions.</p></li>
+<li><p>C. For non-Gaussian, symmetric data.</p></li>
+<li><p>D. For exponentially distributed data.</p></li>
+</ol>
+
+  <button class="quiz-submit btn btn-primary">Submit</button>
+  <button class="quiz-toggle-hint btn btn-info">Show Hint</button>
+  <button class="quiz-show-answer btn btn-success">Show Answer</button>
+  <button class="quiz-clear btn btn-danger">Clear</button>
+  
+  </div>
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-52" style="background:;">
+  
+  <hgroup>
+    <h2>Solution</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>For which type of data will boxplots produce meaningful visualizations? (2 possible answers)</p>
+
+<p><strong>For which type of data will boxplots produce meaningful visualizations?</strong></p>
+
+<ul>
+<li><strong>C. For non-Gaussian, symmetric data.</strong></li>
+<li><strong>D. For exponentially distributed data.</strong></li>
+</ul>
+
+<p>Boxplots are bad for bimodal data since they only show one mode (the median), but are ok for both symmetric and non-symmetric data, since the quartiles are not symmetric.</p>
+
+<pre><code class="r">dt &lt;- data.table(x=c(1,1,1,2,2,2,8,8,8), # Discrete data, bad for boxplot
+                 y=rbeta(n=1000,shape1=2,shape2=2),
+                 z=rexp(n=1000, rate=1),
+                 group=&#39;x&#39;) %&gt;% melt(id.var=&quot;group&quot;)
+ggplot(dt, aes(group, value)) + geom_boxplot() + facet_wrap(~variable) + mytheme
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-53" style="background:;">
+  
+  <hgroup>
+    <h2>Solution</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p><strong>For which type of data will boxplots produce meaningful visualizations?</strong></p>
+
+<ul>
+<li><strong>C. For non-Gaussian, symmetric data.</strong></li>
+<li><strong>D. For exponentially distributed data.</strong></li>
+</ul>
+
+<p>Boxplots are bad for bimodal data since they only show one mode (the median), but are ok for both symmetric and non-symmetric data, since the quartiles are not symmetric.</p>
+
+<p><img src="assets/fig/unnamed-chunk-41-1.png" title="plot of chunk unnamed-chunk-41" alt="plot of chunk unnamed-chunk-41" width="500px" height="400px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-54" style="background:;">
+  
+  <hgroup>
+    <h2>Boxplots/Violin plots exercise</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-55" style="background:;">
+  
+  <article data-timings="">
+    <script type='text/javascript'>toc("Plots for two continuous variables")</script>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-56" style="background:;">
+  
+  <hgroup>
+    <h2>Scatter plots</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Scatter plots are a useful plot type for easily visualizing the relationship between two continuous variables. To make a scatter plot we use the <code>geom_point()</code> function.</p>
+
+<pre><code class="r">ggplot(mpg, aes(displ, hwy)) + geom_point() + mytheme
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-42-1.png" title="plot of chunk unnamed-chunk-42" alt="plot of chunk unnamed-chunk-42" width="600px" height="400px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-57" style="background:;">
+  
+  <hgroup>
+    <h2>Scatter plots grouped by discrete variable</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>We can modify the previous plot by coloring the points depending on the vehicle class:</p>
+
+<pre><code class="r">ggplot(mpg, aes(displ, hwy, color = class)) + geom_point() + mytheme
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-43-1.png" title="plot of chunk unnamed-chunk-43" alt="plot of chunk unnamed-chunk-43" width="600px" height="400px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-58" style="background:;">
+  
+  <hgroup>
+    <h2>Scatter plots grouped by discrete variable</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Sometimes, too many colors can be hard to distinguish. In such cases, we can use facet to separate them into different plots:</p>
+
+<pre><code class="r">ggplot(mpg, aes(displ, hwy)) + geom_point() + facet_wrap(~class) + mytheme
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-44-1.png" title="plot of chunk unnamed-chunk-44" alt="plot of chunk unnamed-chunk-44" width="600px" height="400px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-59" style="background:;">
+  
+  <hgroup>
+    <h2>Line plots</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>A line plot can be considered for connecting a series of individual data points or to display the trend of a series of
+data points. This can be particularly useful to show the shape of data as it flows and changes from point to point.
+We can also show the strength of the movement of values up and down through time.</p>
+
+<pre><code class="r">ggplot(economics, aes(date, unemploy/pop)) + geom_line() + mytheme
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-45-1.png" title="plot of chunk unnamed-chunk-45" alt="plot of chunk unnamed-chunk-45" width="600px" height="400px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-60" style="background:;">
+  
+  <hgroup>
+    <h2>Quiz</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    
+<div class="quiz quiz-single well ">
+  <p>When to use a line plot?</p>
+
+<ol>
+<li>A <em>To show a connection between a series of individual data points</em></li>
+<li>B To show a correlation between two quantitative variables</li>
+<li>C To highlight individual quantitative values per category</li>
+<li>D To compare distributions of quantitative values across categories</li>
+</ol>
+
+  <button class="quiz-submit btn btn-primary">Submit</button>
+  <button class="quiz-toggle-hint btn btn-info">Show Hint</button>
+  <button class="quiz-show-answer btn btn-success">Show Answer</button>
+  <button class="quiz-clear btn btn-danger">Clear</button>
+  
+  </div>
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-61" style="background:;">
+  
+  <hgroup>
+    <h2>Solution</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>When to use a line plot?</p>
+
+<p>A <strong>To show a connection between a series of individual data points</strong></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-62" style="background:;">
+  
+  <hgroup>
+    <h2>Scatterplot exercise</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-63" style="background:;">
+  
+  <article data-timings="">
+    <script type='text/javascript'>toc("Tidy data")</script>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-64" style="background:;">
+  
+  <hgroup>
+    <h2>Tidy data definition</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p><img src="assets/img/tidy-1.png" alt="**Tidy data table layout.** Each variable has a column, each observation a row and each value a cell."></p>
+
+<p>One can briefly summarize the tidy definition in the three following statements:</p>
+
+<ol>
+<li>Each <strong>variable</strong> must have its own <strong>column</strong>.</li>
+<li>Each <strong>observation</strong> must have its own <strong>row</strong>.</li>
+<li>Each <strong>value</strong> must have its own <strong>cell</strong>.</li>
+</ol>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-65" style="background:;">
+  
+  <hgroup>
+    <h2>Let&#39;s load some data</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <pre><code class="r">library(data.table) # melt, dcast, ...
+library(magrittr)  # To get the pipe operator %&gt;% 
+library(tidyr) # To get table1, table2, ...
+library(dslabs) # To get te murder dataset
+
+# Data used throughout the lecture
+table1 &lt;- tidyr::table1 %&gt;% as.data.table # use data.table instead of tibble
+table2 &lt;- tidyr::table2 %&gt;% as.data.table
+table3 &lt;- tidyr::table3 %&gt;% as.data.table
+table4a &lt;- tidyr::table4a %&gt;% as.data.table
+table4b &lt;- tidyr::table4b %&gt;% as.data.table
+table5 &lt;- tidyr::table5 %&gt;% as.data.table
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-66" style="background:;">
+  
+  <hgroup>
+    <h2>Example of a good dataset</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>The <code>murders</code> dataset is an example of a tidy dataset.</p>
+
+<pre><code>##        state abb region population total
+## 1    Alabama  AL  South    4779736   135
+## 2     Alaska  AK   West     710231    19
+## 3    Arizona  AZ   West    6392017   232
+## 4   Arkansas  AR  South    2915918    93
+## 5 California  CA   West   37253956  1257
+## 6   Colorado  CO   West    5029196    65
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-67" style="background:;">
+  
+  <hgroup>
+    <h2>Common signs of untidy datasets</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>On the other hand one can often quickly identify untidy datasets by one or more of the following statements:</p>
+
+<ul>
+<li>Column headers are values, not variable names.</li>
+<li>Multiple variables are stored in one column.</li>
+<li>Variables are stored in both rows and columns.</li>
+<li>Multiple types of observational units are stored in the same table.</li>
+<li>A single observational unit is stored in multiple tables.</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-68" style="background:;">
+  
+  <hgroup>
+    <h2>Advantages of tidy data</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <ul>
+<li>Easier manipulation using data.table commands</li>
+<li>sub-setting by rows</li>
+<li>sub-setting by columns</li>
+<li><code>by</code> operations</li>
+<li>Many other tools work better with tidy data - consistent way of storing data</li>
+<li>example: ggplot2</li>
+<li>Vectorized operations become easier to use</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-69" style="background:;">
+  
+  <hgroup>
+    <h2>Tidy data can be easily manipulated</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <pre><code class="r">head(dt)
+</code></pre>
+
+<pre><code>##        country year  cases population
+## 1: Afghanistan 1999    745   19987071
+## 2: Afghanistan 2000   2666   20595360
+## 3:      Brazil 1999  37737  172006362
+## 4:      Brazil 2000  80488  174504898
+## 5:       China 1999 212258 1272915272
+## 6:       China 2000 213766 1280428583
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-70" style="background:;">
+  
+  <hgroup>
+    <h2>Tidy data can be easily manipulated</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>For example in the table above we can easily compute the rate of cases within the population or the number of cases per year using the following commands:</p>
+
+<pre><code class="r"># Compute rate per 10,000
+dt[, rate := cases / population * 10000] # vectorized operations; dt is modified
+head(dt)
+</code></pre>
+
+<pre><code>##        country year  cases population     rate
+## 1: Afghanistan 1999    745   19987071 0.372741
+## 2: Afghanistan 2000   2666   20595360 1.294466
+## 3:      Brazil 1999  37737  172006362 2.193930
+## 4:      Brazil 2000  80488  174504898 4.612363
+## 5:       China 1999 212258 1272915272 1.667495
+## 6:       China 2000 213766 1280428583 1.669488
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-71" style="background:;">
+  
+  <hgroup>
+    <h2>Tidy data can be easily manipulated</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>For example in the table above we can easily compute the rate of cases within the population or the number of cases per year using the following commands:</p>
+
+<pre><code class="r"># Compute cases per year
+dt[, .(cases = sum(cases)), by = year] # note that this does not modify dt
+</code></pre>
+
+<pre><code>##    year  cases
+## 1: 1999 250740
+## 2: 2000 296920
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-72" style="background:;">
+  
+  <hgroup>
+    <h2>Tidy data can be easily manipulated</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Additionally, tidy data works better with many packages like ggplot2 which we are going to use in this course.</p>
+
+<pre><code class="r">ggplot(dt, aes(year, cases, color = country))+
+  ggtitle( &quot;Change over time&quot;) +
+  geom_line()
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-52-1.png" title="plot of chunk unnamed-chunk-52" alt="plot of chunk unnamed-chunk-52" width="500px" height="400px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-73" style="background:;">
+  
+  <hgroup>
+    <h2>Cleaning untidy data</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>In the remaining part of this chapter we will learn how to transform untidy datasets into tidy ones using data.table functions.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-74" style="background:;">
+  
+  <hgroup>
+    <h2>Cleaning untidy data</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>Column headers are values, not variable names</code></h3>
+
+<p>Untidy: 1999 and 2000 are values of the variable <em>year</em>.</p>
+
+<pre><code class="r">table4a
+</code></pre>
+
+<pre><code>##        country   1999   2000
+## 1: Afghanistan    745   2666
+## 2:      Brazil  37737  80488
+## 3:       China 212258 213766
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-75" style="background:;">
+  
+  <hgroup>
+    <h2>Cleaning untidy data</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>Column headers are values, not variable names</code></h3>
+
+<p><img src="assets/img/tidy-gather.png" alt="Melting the country dataset"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-76" style="background:;">
+  
+  <hgroup>
+    <h2>Cleaning untidy data</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>Column headers are values, not variable names</code></h3>
+
+<p>This can be solved by using the <strong>data.table</strong> function <code>melt()</code>. When melting all values in all columns specified in the <code>measure.vars</code> argument are gathered into one column whose name can be specified using the <code>value.name</code> argument. Additionally a new column named using the argument <code>variable.name</code> is created containing all the values which where previously stored in the column names.</p>
+
+<pre><code class="r">melt(table4a, id.vars = &quot;country&quot;,  measure.vars = c(&quot;1999&quot;, &quot;2000&quot;), variable.name = &quot;year&quot;, value.name = &quot;cases&quot;)
+</code></pre>
+
+<pre><code>##        country year  cases
+## 1: Afghanistan 1999    745
+## 2:      Brazil 1999  37737
+## 3:       China 1999 212258
+## 4: Afghanistan 2000   2666
+## 5:      Brazil 2000  80488
+## 6:       China 2000 213766
+</code></pre>
+
+<pre><code class="r"># would work also without specifying *either* measure.vars OR id.vars
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-77" style="background:;">
+  
+  <hgroup>
+    <h2>Cleaning untidy data</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>Multiple variables are stored in one column</code></h3>
+
+<p>Untidy: multiple variables are stored in the <em>count</em> column.</p>
+
+<pre><code class="r">table2
+</code></pre>
+
+<pre><code>##         country year       type      count
+##  1: Afghanistan 1999      cases        745
+##  2: Afghanistan 1999 population   19987071
+##  3: Afghanistan 2000      cases       2666
+##  4: Afghanistan 2000 population   20595360
+##  5:      Brazil 1999      cases      37737
+##  6:      Brazil 1999 population  172006362
+##  7:      Brazil 2000      cases      80488
+##  8:      Brazil 2000 population  174504898
+##  9:       China 1999      cases     212258
+## 10:       China 1999 population 1272915272
+## 11:       China 2000      cases     213766
+## 12:       China 2000 population 1280428583
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-78" style="background:;">
+  
+  <hgroup>
+    <h2>Cleaning untidy data</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>Multiple variables are stored in one column</code></h3>
+
+<p><img src="assets/img/tidy-spread.png" alt="Decasting the country dataset"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-79" style="background:;">
+  
+  <hgroup>
+    <h2>Cleaning untidy data</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>Multiple variables are stored in one column</code></h3>
+
+<p>This problem can be solved using the dcast function. Here is the help of that function:</p>
+
+<pre><code class="r">  ## Help
+  dcast(data, formula, fun.aggregate = NULL, sep = &quot;_&quot;, ..., margins = NULL, subset = NULL, fill = NULL,
+      drop = TRUE, value.var = guess(data), verbose = getOption(&quot;datatable.verbose&quot;))
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-80" style="background:;">
+  
+  <hgroup>
+    <h2>Cleaning untidy data</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>Multiple variables are stored in one column</code></h3>
+
+<p>To use it for our case we only need to specify which column is the key in the &quot;formula&quot; and which value should be spread.</p>
+
+<pre><code class="r">dcast(table2, ... ~ type,  value.var = &quot;count&quot;)
+</code></pre>
+
+<pre><code>##        country year  cases population
+## 1: Afghanistan 1999    745   19987071
+## 2: Afghanistan 2000   2666   20595360
+## 3:      Brazil 1999  37737  172006362
+## 4:      Brazil 2000  80488  174504898
+## 5:       China 1999 212258 1272915272
+## 6:       China 2000 213766 1280428583
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-81" style="background:;">
+  
+  <hgroup>
+    <h2>Separating and Uniting column content</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>One variable &lt;-&gt; multiple variables</code></h3>
+
+<p><strong>Typical problem:</strong></p>
+
+<ol>
+<li>One column contains multiple variables</li>
+<li>Multiple columns contain one variable</li>
+</ol>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-82" style="background:;">
+  
+  <hgroup>
+    <h2>Separating and Uniting column content</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>One variable &lt;-&gt; multiple variables</code></h3>
+
+<p><strong>Untidy datasets</strong></p>
+
+<pre><code class="r">## One column contains multiple variables
+print(table3)
+</code></pre>
+
+<pre><code>##        country year              rate
+## 1: Afghanistan 1999      745/19987071
+## 2: Afghanistan 2000     2666/20595360
+## 3:      Brazil 1999   37737/172006362
+## 4:      Brazil 2000   80488/174504898
+## 5:       China 1999 212258/1272915272
+## 6:       China 2000 213766/1280428583
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-83" style="background:;">
+  
+  <hgroup>
+    <h2>Separating and Uniting column content</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>One variable &lt;-&gt; multiple variables</code></h3>
+
+<pre><code class="r">## Multiple columns contain one variable
+print(table5)
+</code></pre>
+
+<pre><code>##        country century year              rate
+## 1: Afghanistan      19   99      745/19987071
+## 2: Afghanistan      20   00     2666/20595360
+## 3:      Brazil      19   99   37737/172006362
+## 4:      Brazil      20   00   80488/174504898
+## 5:       China      19   99 212258/1272915272
+## 6:       China      20   00 213766/1280428583
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-84" style="background:;">
+  
+  <hgroup>
+    <h2>Separating and Uniting column content</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>One variable &lt;-&gt; multiple variables</code></h3>
+
+<p><strong>Solution in R:</strong></p>
+
+<p>1) one variable -&gt; multiple variables</p>
+
+<ul>
+<li><code>tidyr::separate()</code></li>
+</ul>
+
+<p>2) multiple variables -&gt; one variables</p>
+
+<ul>
+<li><code>tidyr::unite()</code></li>
+</ul>
+
+<p>other useful functions:</p>
+
+<ul>
+<li><code>data.table::tstrsplit</code>, <code>strsplit</code>, <code>paste</code>, <code>substr</code></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-85" style="background:;">
+  
+  <hgroup>
+    <h2>Separating column content</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>One to multiple variables</code></h3>
+
+<p>To separate one variable to multiple variables we use <code>tidyr::separate()</code>.</p>
+
+<pre><code class="r">separate(data, col, into, sep = &quot;[^[:alnum:]]+&quot;, remove = TRUE,
+         convert = FALSE, extra = &quot;warn&quot;, fill = &quot;warn&quot;, ...)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-86" style="background:;">
+  
+  <hgroup>
+    <h2>Separating column content</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>One to multiple variables</code></h3>
+
+<pre><code class="r">table3
+</code></pre>
+
+<pre><code>##        country year              rate
+## 1: Afghanistan 1999      745/19987071
+## 2: Afghanistan 2000     2666/20595360
+## 3:      Brazil 1999   37737/172006362
+## 4:      Brazil 2000   80488/174504898
+## 5:       China 1999 212258/1272915272
+## 6:       China 2000 213766/1280428583
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-87" style="background:;">
+  
+  <hgroup>
+    <h2>Separating column content</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>One to multiple variables</code></h3>
+
+<pre><code class="r">separate(table3, col = rate,
+         into = c(&quot;cases&quot;, &quot;population&quot;))
+</code></pre>
+
+<pre><code>##        country year  cases population
+## 1: Afghanistan 1999    745   19987071
+## 2: Afghanistan 2000   2666   20595360
+## 3:      Brazil 1999  37737  172006362
+## 4:      Brazil 2000  80488  174504898
+## 5:       China 1999 212258 1272915272
+## 6:       China 2000 213766 1280428583
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-88" style="background:;">
+  
+  <hgroup>
+    <h2>Separating column content</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>One to multiple variables</code></h3>
+
+<pre><code class="r">separate(table3, col = rate, into = c(&quot;cases&quot;, &quot;population&quot;)) %&gt;% class
+</code></pre>
+
+<pre><code>## [1] &quot;data.table&quot; &quot;data.frame&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-89" style="background:;">
+  
+  <hgroup>
+    <h2>Separating column content</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>One to multiple variables</code></h3>
+
+<p><img src="assets/img/tidy-separate.png" alt="Seperated country dataset"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-90" style="background:;">
+  
+  <hgroup>
+    <h2>Uniting column content</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>Multiple variables to one</code></h3>
+
+<p>To unite multiple variables to one variable we use <code>tidyr::unite()</code>.</p>
+
+<pre><code class="r">unite(data, col, ..., sep = &quot;_&quot;, remove = TRUE)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-91" style="background:;">
+  
+  <hgroup>
+    <h2>Uniting column content</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>Multiple variables to one</code></h3>
+
+<pre><code class="r">table5
+</code></pre>
+
+<pre><code>##        country century year              rate
+## 1: Afghanistan      19   99      745/19987071
+## 2: Afghanistan      20   00     2666/20595360
+## 3:      Brazil      19   99   37737/172006362
+## 4:      Brazil      20   00   80488/174504898
+## 5:       China      19   99 212258/1272915272
+## 6:       China      20   00 213766/1280428583
+</code></pre>
+
+<pre><code class="r">unite(table5, col = new, century, year, sep = &quot;&quot;)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-92" style="background:;">
+  
+  <hgroup>
+    <h2>Uniting column content</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>Multiple variables to one</code></h3>
+
+<pre><code class="r">unite(table5, col = new, century, year, sep = &quot;&quot;)
+</code></pre>
+
+<pre><code>##        country  new              rate
+## 1: Afghanistan 1999      745/19987071
+## 2: Afghanistan 2000     2666/20595360
+## 3:      Brazil 1999   37737/172006362
+## 4:      Brazil 2000   80488/174504898
+## 5:       China 1999 212258/1272915272
+## 6:       China 2000 213766/1280428583
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-93" style="background:;">
+  
+  <hgroup>
+    <h2>Uniting column content</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>Multiple variables to one</code></h3>
+
+<p><img src="assets/img/tidy-unite.png" alt="United country dataset"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-94" style="background:;">
+  
+  <hgroup>
+    <h2>Words to live by</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p><strong>Happy families are all alike; every unhappy family is unhappy in its own way.</strong></p>
+
+<p><em>- Leo Tolstoy</em></p>
+
+<p><strong>Tidy datasets are all alike, but every messy dataset is messy in its own way.</strong></p>
+
+<p><em>- Hadley Wickham</em></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-95" style="background:;">
+  
+  <hgroup>
+    <h2>Take-home</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <ul>
+<li>Visualization is as important as statistics. Both are needed.</li>
+<li>Visualization can help finding &quot;bugs&quot; in the data</li>
+<li>Grammar of graphics separates data, aesthetics, and geometries</li>
+<li>Show as much as the raw data as you can:
+
+<ul>
+<li>Extend boxplot and barplots with beeswarm plots</li>
+<li>Combine density and individual data points in 1D or 2D.</li>
+</ul></li>
+<li>In a tidy dataset, each variable must have its own column</li>
+<li>Each row corresponds to one unique observation</li>
+<li>Each cell contains a single value</li>
+<li>Tidy datasets are easier to work with</li>
+<li>Data.table library has functions to transform untidy datasets to tidy</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-96" style="background:;">
+  
+  <hgroup>
+    <h2>References</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <ul>
+<li>Main reference: <a href="https://www.udacity.com/courses/all">Udacity&#39;s Data Visualization and D3.js</a></li>
+<li>perceptual edge:
+
+<ul>
+<li><a href="http://www.perceptualedge.com/articles/ie/the_right_graph.pdf">the right graph</a></li>
+<li><a href="http://www.perceptualedge.com/articles/ie/visual_perception.pdf">visual perception</a></li>
+<li><a href="http://www.perceptualedge.com/articles/visual_business_intelligence/rules_for_using_color.pdf">rules for color</a></li>
+<li><a href="http://www.perceptualedge.com/articles/b-eye/choosing_colors.pdf">choosing color</a></li>
+</ul></li>
+<li>flowingdata.com: <a href="http://flowingdata.com/2010/03/20/graphical-perception-learn-the-fundamentals-first/">graphical perception</a></li>
+<li><a href="http://colorbrewer2.org/">Color Brewer</a></li>
+<li>Graphics principles
+
+<ul>
+<li><a href="https://onlinelibrary.wiley.com/doi/full/10.1002/pst.1912">paper</a></li>
+<li><a href="https://graphicsprinciples.github.io/">cheatsheet</a></li>
+</ul></li>
+</ul>
+
+<p>Interesting blog post:</p>
+
+<ul>
+<li><a href="http://simplystatistics.org/2016/02/17/non-tidy-data/">http://simplystatistics.org/2016/02/17/non-tidy-data/</a></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-97" style="background:;">
+  
+  <hgroup>
+    <h2>Plotting libraries</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <ul>
+<li><a href="http://www.r-graph-gallery.com/portfolio/ggplot2-package/">http://www.r-graph-gallery.com/portfolio/ggplot2-package/</a></li>
+<li><a href="http://ggplot2.tidyverse.org/reference/">http://ggplot2.tidyverse.org/reference/</a></li>
+<li><a href="https://plot.ly/r/">https://plot.ly/r/</a></li>
+<li><a href="https://plot.ly/ggplot2/">https://plot.ly/ggplot2/</a></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='NA'>
+         1
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='NA'>
+         2
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='NA'>
+         3
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='Do you see a common pattern in these plots?'>
+         4
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=5 title='Maybe now?'>
+         5
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=6 title='Same statistics, different visualizations'>
+         6
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=7 title='Why plotting?'>
+         7
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=8 title='A realistic example to warm up'>
+         8
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=9 title='NA'>
+         9
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=10 title='Solution'>
+         10
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=11 title='The outlier...'>
+         11
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=12 title='The outlier...'>
+         12
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=13 title='The outlier...'>
+         13
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=14 title='The outlier...'>
+         14
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=15 title='Our 2 visualization lectures'>
+         15
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=16 title='NA'>
+         16
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=17 title='Grammar of Graphics'>
+         17
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=18 title='ggplot2 and Grammar of Graphics'>
+         18
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=19 title='ggplot2 and Grammar of Graphics'>
+         19
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=20 title='Grammar Defines Components of Graphics'>
+         20
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=21 title='NA'>
+         21
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=22 title='Defining the data and layers'>
+         22
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=23 title='Defining the data and layers'>
+         23
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=24 title='Defining the data and layers'>
+         24
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=25 title='Defining the data and layers'>
+         25
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=26 title='Defining the data and layers'>
+         26
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=27 title='Defining the data and layers'>
+         27
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=28 title='Defining the data and layers'>
+         28
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=29 title='Mapping of aesthetics <code>color</code>'>
+         29
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=30 title='Mapping of aesthetics <code>shape</code>'>
+         30
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=31 title='Mapping of aesthetics <code>size</code>'>
+         31
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=32 title='Global versus individual mapping'>
+         32
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=33 title='Global versus individual mapping'>
+         33
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=34 title='Global versus individual mapping'>
+         34
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=35 title='Global versus individual mapping'>
+         35
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=36 title='Quiz'>
+         36
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=37 title='Solution'>
+         37
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=38 title='Quiz'>
+         38
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=39 title='Solutions'>
+         39
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=40 title='Exercise Iris'>
+         40
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=41 title='NA'>
+         41
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=42 title='Low dimensional plots'>
+         42
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=43 title='Low dimensional plots'>
+         43
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=44 title='Histograms'>
+         44
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=45 title='Histogram: setting the number of bins'>
+         45
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=46 title='Exercise Histograms'>
+         46
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=47 title='NA'>
+         47
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=48 title='Boxplots by category'>
+         48
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=49 title='Violin plots'>
+         49
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=50 title='Boxplots and Violin plots'>
+         50
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=51 title='Quiz'>
+         51
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=52 title='Solution'>
+         52
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=53 title='Solution'>
+         53
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=54 title='Boxplots/Violin plots exercise'>
+         54
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=55 title='NA'>
+         55
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=56 title='Scatter plots'>
+         56
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=57 title='Scatter plots grouped by discrete variable'>
+         57
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=58 title='Scatter plots grouped by discrete variable'>
+         58
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=59 title='Line plots'>
+         59
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=60 title='Quiz'>
+         60
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=61 title='Solution'>
+         61
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=62 title='Scatterplot exercise'>
+         62
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=63 title='NA'>
+         63
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=64 title='Tidy data definition'>
+         64
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=65 title='Let&#39;s load some data'>
+         65
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=66 title='Example of a good dataset'>
+         66
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=67 title='Common signs of untidy datasets'>
+         67
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=68 title='Advantages of tidy data'>
+         68
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=69 title='Tidy data can be easily manipulated'>
+         69
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=70 title='Tidy data can be easily manipulated'>
+         70
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=71 title='Tidy data can be easily manipulated'>
+         71
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=72 title='Tidy data can be easily manipulated'>
+         72
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=73 title='Cleaning untidy data'>
+         73
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=74 title='Cleaning untidy data'>
+         74
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=75 title='Cleaning untidy data'>
+         75
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=76 title='Cleaning untidy data'>
+         76
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=77 title='Cleaning untidy data'>
+         77
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=78 title='Cleaning untidy data'>
+         78
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=79 title='Cleaning untidy data'>
+         79
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=80 title='Cleaning untidy data'>
+         80
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=81 title='Separating and Uniting column content'>
+         81
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=82 title='Separating and Uniting column content'>
+         82
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=83 title='Separating and Uniting column content'>
+         83
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=84 title='Separating and Uniting column content'>
+         84
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=85 title='Separating column content'>
+         85
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=86 title='Separating column content'>
+         86
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=87 title='Separating column content'>
+         87
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=88 title='Separating column content'>
+         88
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=89 title='Separating column content'>
+         89
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=90 title='Uniting column content'>
+         90
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=91 title='Uniting column content'>
+         91
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=92 title='Uniting column content'>
+         92
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=93 title='Uniting column content'>
+         93
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=94 title='Words to live by'>
+         94
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=95 title='Take-home'>
+         95
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=96 title='References'>
+         96
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=97 title='Plotting libraries'>
+         97
+      </a>
+    </li>
+    
+    </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  <script src="libraries/widgets/bootstrap/js/bootstrap.min.js"></script>
+<script src="libraries/widgets/bootstrap/js/bootbox.min.js"></script>
+<script src="libraries/widgets/quiz/js/jquery.quiz.js"></script>
+<script src="libraries/widgets/quiz/js/mustache.min.js"></script>
+<script src="libraries/widgets/quiz/js/quiz-app.js"></script>
+
+  <!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true
+      }
+    });
+  </script>
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script> -->
+  
+<script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+
+  <script>  
+  $(function (){ 
+    $("#example").popover(); 
+    $("[rel='tooltip']").tooltip(); 
+  });  
+  </script>  
+  
+  <!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>
