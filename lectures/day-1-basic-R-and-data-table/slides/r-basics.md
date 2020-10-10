@@ -71,7 +71,9 @@ function toc(cur) {
 
 <!-- START LECTURE -->
 
-<img src="assets/img/lec05_syllabus.png" title="plot of chunk syllabus" alt="plot of chunk syllabus" width="800px" height="400px" />
+## Day 1 - RStudio and R basics
+
+<img src="assets/img/syllabus-day-one.png" title="plot of chunk syllabus" alt="plot of chunk syllabus" width="800px" height="400px" />
 
 ---
 
@@ -137,7 +139,7 @@ system.time(a <- t(1:1e6)%*%(1:1e6))
 
 ```
 ##    user  system elapsed 
-##   0.050   0.020   0.071
+##    0.05    0.02    0.07
 ```
 
 ```r

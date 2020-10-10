@@ -95,8 +95,10 @@ DATADIR <- file.path('../../../extdata')
 
 <!-- START LECTURE -->
 
+## Day 1 - RStudio and R basics
+
 ```{r syllabus, out.width = "800px", echo=FALSE}
-knitr::include_graphics("assets/img/lec05_syllabus.png")
+knitr::include_graphics("assets/img/syllabus-day-one.png")
 ```
 
 ---
