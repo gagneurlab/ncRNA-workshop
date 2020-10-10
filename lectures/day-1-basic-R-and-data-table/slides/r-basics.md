@@ -30,10 +30,10 @@ $('p:has(img.build)').addClass('build')
 
 <script type='text/javascript'>
 // parameters
-var sections = ["R basics",
+var sections = ["RStudio and R basics",
 "Data Wrangling using Data.table",
 "Analysis execution flow",
-"Reproducible science with Rmardown reports"];
+"Reproducible science with Rmarkdown reports"];
 
 var title = "Overview";
 var fontsize = "20pt"
@@ -79,7 +79,7 @@ function toc(cur) {
 
 ---
 
-<script type='text/javascript'>toc("R basics")</script>
+<script type='text/javascript'>toc("RStudio and R basics")</script>
 
 ---
 
@@ -98,6 +98,10 @@ It is also possible to assign with the *equal* sign.
 ```r
 objectName = value
 ```
+
+---
+
+## Assignments
 
 
 ```r
@@ -133,7 +137,7 @@ system.time(a <- t(1:1e6)%*%(1:1e6))
 
 ```
 ##    user  system elapsed 
-##   0.048   0.006   0.053
+##   0.050   0.020   0.071
 ```
 
 ```r
@@ -177,6 +181,14 @@ length(c(1, 5, 8, 10))
 ```
 ## [1] 4
 ```
+
+---
+
+## Vectors
+
+Vectors are 1-dimensional data structures which can contain one or more variables, regardless of their type.
+
+Usually created with `c()` (from *concatenation*):
 
 ```r
 c("a", "B", "cc")
@@ -228,6 +240,11 @@ seq(from = 1, to = 10, by = .3)
 ## [16]  5.5  5.8  6.1  6.4  6.7  7.0  7.3  7.6  7.9  8.2  8.5  8.8  9.1  9.4  9.7
 ## [31] 10.0
 ```
+
+---
+
+## Vectors
+
 
 ```r
 seq(from = 1, to = 10, length.out = 12)
@@ -291,6 +308,13 @@ x[3]
 ## [1] "C"
 ```
 
+---
+
+## Vectors
+
+Vector elements are accessed via the ```[``` operator:
+
+
 ```r
 ## modify the third entry
 x[3] <- 'Z'
@@ -330,6 +354,10 @@ x
 ## 1 2 3
 ```
 
+---
+
+## Vectors
+
 Names don't have to be unique, but should preferably be, as sub-setting by names will only return the first match
 
 ```r
@@ -341,6 +369,10 @@ x["a"]
 ## a 
 ## 1
 ```
+
+---
+
+## Vectors
 
 Not all elements need to have names.
 
@@ -355,7 +387,296 @@ c(a = 1, 2, 3)
 
 ---
 
-## Vector exercise
+## Combining vectors vectors
+
+To combine 2 vectors we just need to wrap them inside a 3rd vector.
+
+```r
+x <- c(1:5)
+y <- c(6:10)
+z <- c(x, y)
+z
+```
+
+```
+##  [1]  1  2  3  4  5  6  7  8  9 10
+```
+
+---
+
+## Subsetting vectors
+
+
+```r
+x <- LETTERS[1:5]
+x
+```
+
+```
+## [1] "A" "B" "C" "D" "E"
+```
+
+```r
+## By positive integers
+x[c(1,3)]
+```
+
+```
+## [1] "A" "C"
+```
+
+```r
+## By negative integers
+x[-c(1,3)]
+```
+
+```
+## [1] "B" "D" "E"
+```
+
+---
+
+## Subsetting vectors
+
+
+```r
+## By logical vectors
+x[c(TRUE, TRUE, TRUE, FALSE, FALSE)]
+```
+
+```
+## [1] "A" "B" "C"
+```
+
+```r
+## By logical vectors
+x[x <= "C"]
+```
+
+```
+## [1] "A" "B" "C"
+```
+
+---
+
+## Subsetting vectors
+
+`NAs` in the input vector will always produce an `NA` in the output:
+
+```r
+x[c(1,2,NA)]
+```
+
+```
+## [1] "A" "B" NA
+```
+
+---
+
+## Subsetting vectors
+
+We can also sub-setting by character vectors, if names are present:
+
+```r
+names(x) <- letters[1:5]
+x[c("a", "b")]
+```
+
+```
+##   a   b 
+## "A" "B"
+```
+
+
+---
+
+## Exercise 1
+
+---
+
+## Factors
+
+* A factor is a is used to store categorical data. The distinct categories are called 'levels'.
+
+* They belong to a special `class()`, *factor*, which makes them behave differently from regular integer vectors.
+
+* Factors cannot be altered in the same way as vectors. Only their levels can be altered.
+
+* Factors are built on top of integer vectors: the values are integer indexes in the dictionary of levels.
+
+* They occupy less space in memory than characters, since they are stored as integers.
+
+---
+
+## Factors
+
+
+
+```r
+x <- factor(c("red", "yellow", "red","green", "green"))
+x
+```
+
+```
+## [1] red    yellow red    green  green 
+## Levels: green red yellow
+```
+
+Level | Integer 
+------|--------
+green  | 1 
+red | 2 
+yellow | 3 
+
+---
+
+## Factors
+
+* Factors are typically constructed with `factor()`. By default the levels are the unique values, sorted by alphanumerical order. 
+
+```r
+x <- factor(c("red", "yellow", "red","green", "green"))
+x
+```
+
+```
+## [1] red    yellow red    green  green 
+## Levels: green red yellow
+```
+
+---
+
+## Factors
+
+`levels()` gives the levels in ascending order of the underlying encoding integers.
+
+```r
+levels(x)
+```
+
+```
+## [1] "green"  "red"    "yellow"
+```
+
+---
+
+## Factors
+
+The order of the levels can be forced:
+
+```r
+x <- factor(c("red", "yellow", "red","green", "green"), levels=c("green", "yellow", "red"))
+x
+```
+
+```
+## [1] red    yellow red    green  green 
+## Levels: green yellow red
+```
+
+```r
+levels(x)
+```
+
+```
+## [1] "green"  "yellow" "red"
+```
+
+---
+
+## Factors
+
+The order of the levels is then used for all function requiring comparisons, e.g. sorting 
+
+```r
+sort(x)
+```
+
+```
+## [1] green  green  yellow red    red   
+## Levels: green yellow red
+```
+
+---
+
+## Factors
+
+Only level values can be used:
+
+```r
+x <- factor(c("red", "yellow", "red","green", "green"))
+x[2] <- "blue"
+x
+```
+
+```
+## [1] red   <NA>  red   green green
+## Levels: green red yellow
+```
+
+**Be aware** that R does not prevent you from combining factors:
+
+Do not try to combine factors, especially if levels are not the same!
+
+
+```r
+c(x, factor("blue"))
+```
+
+```
+## [1]  2 NA  2  1  1  1
+```
+
+---
+
+## Exercise 2
+
+---
+
+## Math
+
+R supports various mathematical and logical operations between scalars, vectors etc.
+
+* Basic mathematical operations: `+`, `*`, `-`, `/`
+* Boolean operations:
+  * **&** element-wise AND
+  * **|** element-wise OR
+  * **!** NOT
+
+---
+
+## Binary comparison
+
+- Element-wise Binary comparison return a vector of same length as the input
+  - **==** element-wise equality
+  - **!=** element-wise inequality
+  - **<**, **<=** element-wise smaller (or equal)
+  - **>**, **>=** element-wise greater (or equal)
+
+
+```r
+1:5 == 1:5
+```
+
+```
+## [1] TRUE TRUE TRUE TRUE TRUE
+```
+
+---
+
+## Binary comparison
+
+* Binary comparison with a single Boolean statement as output
+  * `identical(x, y)` exact equality
+  * `all(x)` are all TRUE?
+
+```r
+identical(1:5, 1:5)
+```
+
+```
+## [1] TRUE
+```
 
 ---
 
@@ -1021,4 +1342,202 @@ Here we observe, that the tail numbers are gone from the data.table
 
 ---
 
-## Data.table exercise
+## Exercise 3
+
+---
+
+<script type='text/javascript'>toc("Analysis execution flow")</script>
+
+---
+
+## Conditional Statements
+
+A typical way to control the flow of the execution of your code is to have conditional statements.
+
+The typical setup is:
+
+
+```r
+if(statement_to_test) {
+  print("Statement is true")
+} else {
+  print("Statement is false")
+}
+```
+
+---
+
+## Conditional Statements
+
+Long version:
+
+```r
+if(1 < 2) {
+  print("TRUE")
+} else {
+  print("FALSE")
+}
+```
+
+```
+## [1] "TRUE"
+```
+
+---
+
+## Conditional Statements
+
+Short version if the To-Do step fits into one line:
+
+```r
+{
+if(1 > 2) print("TRUE")
+else print("FALSE")
+}
+```
+
+```
+## [1] "FALSE"
+```
+
+The curly brackets around the if-else statement are only needed in a script to tell R to which *if* the *else* belongs to.
+
+---
+
+## Conditional Statements
+
+You can also have multiple statement tests. If more than one statements can be satisfied the first that got evaluated will be executed:
+
+```r
+x <- 1
+if(x > 0) {
+  print("X is 0, or maybe not?")
+} else if(x == 1) {
+  print("X is 1")
+} else {
+  print("X is something else")
+}
+```
+
+```
+## [1] "X is 0, or maybe not?"
+```
+
+---
+
+## Conditional Statements
+
+You can also chain *if-else* statements:
+
+```r
+x <- 5
+if(x > 0) {
+  if(x > 3) {
+    if(x == 5) {
+      cat("X is 5")
+    } else {
+      cat("X is greater than 3")
+    }  
+  } else {
+    cat("X positive and less than 3")
+  }
+} else {
+  cat("X less than 0")
+}
+```
+
+R also supports switch statements in order to avoid multiple `else if` statements, but this is for more advanced users.
+
+---
+
+## For loops
+
+R supports looping through the traditional *for* and *while* statements and with the use of the *apply family* functions.
+
+Syntax:
+```
+for(index in sequence) {
+  do something
+}
+```
+
+---
+
+## For loops
+
+Again, if the To-Do step is a one-liner, curly brackets can be dropped
+
+```r
+a <- NULL
+for(i in 1:10) a <- c(a, sum(1:i))
+a
+```
+
+```
+##  [1]  1  3  6 10 15 21 28 36 45 55
+```
+
+---
+
+## For loops
+
+A sequence can be any vector, including lists
+
+```r
+myList <- list(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+a <- integer(10)
+for(i in myList) a[i] <- sum(1:i)
+a
+```
+
+```
+##  [1]  1  3  6 10 15 21 28 36 45 55
+```
+
+However, usually looping using *for/while* statements is more time consuming compared to the the functions of the *apply family*, but this is for more advanced users. 
+
+--- 
+
+## Exercise 4
+
+---
+
+<script type='text/javascript'>toc("Reproducible science with Rmarkdown reports")</script>
+
+---
+
+## R Markdown
+
+* This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>. 
+
+* Simply go to File --> New File --> R Markdown
+
+* Select PDF and you get a template.
+
+* You most likely won't need more commands than in on the first page of [this cheat sheet](https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf).
+
+* When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.  
+
+---
+
+## Exercise 5
+
+---
+
+## Useful references
+
+* These slides are mostly based on Hadley Wickham's book [Advanced R](http://adv-r.had.co.nz/)
+
+* [**Everything else** from Hadley Wickham](http://hadley.nz/)
+
+* In-depth documentations:
+
+  * [Introduction to R](https://cran.r-project.org/doc/manuals/r-release/R-intro.pdf)
+
+  * [R language definition](https://cran.r-project.org/doc/manuals/r-release/R-lang.pdf)
+
+  * [R Internals](https://cran.r-project.org/doc/manuals/r-release/R-ints.pdf)
+
+* Last but not least:
+
+  * [Stackoverflow](http://stackoverflow.com/questions/tagged/r)
