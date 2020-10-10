@@ -889,17 +889,554 @@ A **To show a connection between a series of individual data points**
 
 ## Scatterplot exercise
 
+
 ---
+
+<script type='text/javascript'>toc("Tidy data")</script>
+
+---
+
+## Tidy data definition
+
+![**Tidy data table layout.** Each variable has a column, each observation a row and each value a cell.](assets/img/tidy-1.png)
+
+One can briefly summarize the tidy definition in the three following statements:
+  
+1. Each **variable** must have its own **column**.
+2. Each **observation** must have its own **row**.
+3. Each **value** must have its own **cell**.
+
+
+---
+
+## Let's load some data
+
+```r
+library(data.table) # melt, dcast, ...
+library(magrittr)  # To get the pipe operator %>% 
+library(tidyr) # To get table1, table2, ...
+library(dslabs) # To get te murder dataset
+
+# Data used throughout the lecture
+table1 <- tidyr::table1 %>% as.data.table # use data.table instead of tibble
+table2 <- tidyr::table2 %>% as.data.table
+table3 <- tidyr::table3 %>% as.data.table
+table4a <- tidyr::table4a %>% as.data.table
+table4b <- tidyr::table4b %>% as.data.table
+table5 <- tidyr::table5 %>% as.data.table
+```
+
+---
+
+
+## Example of a good dataset
+
+The `murders` dataset is an example of a tidy dataset.
+
+
+```
+##        state abb region population total
+## 1    Alabama  AL  South    4779736   135
+## 2     Alaska  AK   West     710231    19
+## 3    Arizona  AZ   West    6392017   232
+## 4   Arkansas  AR  South    2915918    93
+## 5 California  CA   West   37253956  1257
+## 6   Colorado  CO   West    5029196    65
+```
+
+---
+
+## Common signs of untidy datasets
+
+On the other hand one can often quickly identify untidy datasets by one or more of the following statements:
+  
+* Column headers are values, not variable names.
+* Multiple variables are stored in one column.
+* Variables are stored in both rows and columns.
+* Multiple types of observational units are stored in the same table.
+* A single observational unit is stored in multiple tables.
+
+---
+
+## Advantages of tidy data
+
+* Easier manipulation using data.table commands
+* sub-setting by rows
+* sub-setting by columns
+* `by` operations
+* Many other tools work better with tidy data - consistent way of storing data
+* example: ggplot2
+* Vectorized operations become easier to use
+
+---
+
+## Tidy data can be easily manipulated
+
+
+
+```r
+head(dt)
+```
+
+```
+##        country year  cases population
+## 1: Afghanistan 1999    745   19987071
+## 2: Afghanistan 2000   2666   20595360
+## 3:      Brazil 1999  37737  172006362
+## 4:      Brazil 2000  80488  174504898
+## 5:       China 1999 212258 1272915272
+## 6:       China 2000 213766 1280428583
+```
+
+---
+
+## Tidy data can be easily manipulated
+
+For example in the table above we can easily compute the rate of cases within the population or the number of cases per year using the following commands:
+  
+
+```r
+# Compute rate per 10,000
+dt[, rate := cases / population * 10000] # vectorized operations; dt is modified
+head(dt)
+```
+
+```
+##        country year  cases population     rate
+## 1: Afghanistan 1999    745   19987071 0.372741
+## 2: Afghanistan 2000   2666   20595360 1.294466
+## 3:      Brazil 1999  37737  172006362 2.193930
+## 4:      Brazil 2000  80488  174504898 4.612363
+## 5:       China 1999 212258 1272915272 1.667495
+## 6:       China 2000 213766 1280428583 1.669488
+```
+
+---
+
+## Tidy data can be easily manipulated
+
+For example in the table above we can easily compute the rate of cases within the population or the number of cases per year using the following commands:
+
+
+```r
+# Compute cases per year
+dt[, .(cases = sum(cases)), by = year] # note that this does not modify dt
+```
+
+```
+##    year  cases
+## 1: 1999 250740
+## 2: 2000 296920
+```
+
+---
+
+## Tidy data can be easily manipulated
+
+Additionally, tidy data works better with many packages like ggplot2 which we are going to use in this course.
+
+
+```r
+ggplot(dt, aes(year, cases, color = country))+
+  ggtitle( "Change over time") +
+  geom_line()
+```
+
+<img src="assets/fig/unnamed-chunk-52-1.png" title="plot of chunk unnamed-chunk-52" alt="plot of chunk unnamed-chunk-52" width="500px" height="400px" />
+
+---
+
+## Cleaning untidy data
+
+In the remaining part of this chapter we will learn how to transform untidy datasets into tidy ones using data.table functions.
+
+---
+
+## Cleaning untidy data 
+
+### `Column headers are values, not variable names`
+
+Untidy: 1999 and 2000 are values of the variable *year*.
+
+
+```r
+table4a
+```
+
+```
+##        country   1999   2000
+## 1: Afghanistan    745   2666
+## 2:      Brazil  37737  80488
+## 3:       China 212258 213766
+```
+
+---
+
+## Cleaning untidy data 
+
+### `Column headers are values, not variable names`
+
+![Melting the country dataset](assets/img/tidy-gather.png)
+
+---
+
+## Cleaning untidy data 
+
+### `Column headers are values, not variable names`
+  
+This can be solved by using the __data.table__ function `melt()`. When melting all values in all columns specified in the `measure.vars` argument are gathered into one column whose name can be specified using the `value.name` argument. Additionally a new column named using the argument `variable.name` is created containing all the values which where previously stored in the column names.
+
+
+```r
+melt(table4a, id.vars = "country",  measure.vars = c("1999", "2000"), variable.name = "year", value.name = "cases")
+```
+
+```
+##        country year  cases
+## 1: Afghanistan 1999    745
+## 2:      Brazil 1999  37737
+## 3:       China 1999 212258
+## 4: Afghanistan 2000   2666
+## 5:      Brazil 2000  80488
+## 6:       China 2000 213766
+```
+
+```r
+# would work also without specifying *either* measure.vars OR id.vars
+```
+
+---
+
+## Cleaning untidy data 
+
+### `Multiple variables are stored in one column`
+
+Untidy: multiple variables are stored in the *count* column.
+
+
+```r
+table2
+```
+
+```
+##         country year       type      count
+##  1: Afghanistan 1999      cases        745
+##  2: Afghanistan 1999 population   19987071
+##  3: Afghanistan 2000      cases       2666
+##  4: Afghanistan 2000 population   20595360
+##  5:      Brazil 1999      cases      37737
+##  6:      Brazil 1999 population  172006362
+##  7:      Brazil 2000      cases      80488
+##  8:      Brazil 2000 population  174504898
+##  9:       China 1999      cases     212258
+## 10:       China 1999 population 1272915272
+## 11:       China 2000      cases     213766
+## 12:       China 2000 population 1280428583
+```
+
+---
+
+## Cleaning untidy data 
+
+### `Multiple variables are stored in one column`
+
+![Decasting the country dataset](assets/img/tidy-spread.png)
+
+---
+
+## Cleaning untidy data 
+
+### `Multiple variables are stored in one column`
+
+This problem can be solved using the dcast function. Here is the help of that function:
+  
+  ```r
+  ## Help
+  dcast(data, formula, fun.aggregate = NULL, sep = "_", ..., margins = NULL, subset = NULL, fill = NULL,
+      drop = TRUE, value.var = guess(data), verbose = getOption("datatable.verbose"))
+  ```
+
+
+---
+
+## Cleaning untidy data 
+
+### `Multiple variables are stored in one column`
+
+To use it for our case we only need to specify which column is the key in the "formula" and which value should be spread.
+
+
+```r
+dcast(table2, ... ~ type,  value.var = "count")
+```
+
+```
+##        country year  cases population
+## 1: Afghanistan 1999    745   19987071
+## 2: Afghanistan 2000   2666   20595360
+## 3:      Brazil 1999  37737  172006362
+## 4:      Brazil 2000  80488  174504898
+## 5:       China 1999 212258 1272915272
+## 6:       China 2000 213766 1280428583
+```
+
+---
+
+## Separating and Uniting column content
+
+### `One variable <-> multiple variables`
+
+**Typical problem:**
+  
+1. One column contains multiple variables
+2. Multiple columns contain one variable
+
+---
+
+## Separating and Uniting column content
+
+### `One variable <-> multiple variables`
+
+**Untidy datasets**
+  
+
+```r
+## One column contains multiple variables
+print(table3)
+```
+
+```
+##        country year              rate
+## 1: Afghanistan 1999      745/19987071
+## 2: Afghanistan 2000     2666/20595360
+## 3:      Brazil 1999   37737/172006362
+## 4:      Brazil 2000   80488/174504898
+## 5:       China 1999 212258/1272915272
+## 6:       China 2000 213766/1280428583
+```
+
+---
+
+## Separating and Uniting column content 
+
+### `One variable <-> multiple variables`
+
+
+```r
+## Multiple columns contain one variable
+print(table5)
+```
+
+```
+##        country century year              rate
+## 1: Afghanistan      19   99      745/19987071
+## 2: Afghanistan      20   00     2666/20595360
+## 3:      Brazil      19   99   37737/172006362
+## 4:      Brazil      20   00   80488/174504898
+## 5:       China      19   99 212258/1272915272
+## 6:       China      20   00 213766/1280428583
+```
+
+---
+
+## Separating and Uniting column content
+
+### `One variable <-> multiple variables`
+
+**Solution in R:**
+  
+1) one variable -> multiple variables
+  - `tidyr::separate()`
+
+2) multiple variables -> one variables
+  - `tidyr::unite()`
+
+other useful functions:
+  
+  - `data.table::tstrsplit`, `strsplit`, `paste`, `substr`
+
+---
+
+## Separating column content
+
+### `One to multiple variables`
+
+To separate one variable to multiple variables we use `tidyr::separate()`.
+
+
+```r
+separate(data, col, into, sep = "[^[:alnum:]]+", remove = TRUE,
+         convert = FALSE, extra = "warn", fill = "warn", ...)
+```
+
+---
+
+## Separating column content
+
+### `One to multiple variables`
+
+
+```r
+table3
+```
+
+```
+##        country year              rate
+## 1: Afghanistan 1999      745/19987071
+## 2: Afghanistan 2000     2666/20595360
+## 3:      Brazil 1999   37737/172006362
+## 4:      Brazil 2000   80488/174504898
+## 5:       China 1999 212258/1272915272
+## 6:       China 2000 213766/1280428583
+```
+
+---
+
+## Separating column content
+
+### `One to multiple variables`
+
+
+```r
+separate(table3, col = rate,
+         into = c("cases", "population"))
+```
+
+```
+##        country year  cases population
+## 1: Afghanistan 1999    745   19987071
+## 2: Afghanistan 2000   2666   20595360
+## 3:      Brazil 1999  37737  172006362
+## 4:      Brazil 2000  80488  174504898
+## 5:       China 1999 212258 1272915272
+## 6:       China 2000 213766 1280428583
+```
+
+---
+
+## Separating column content
+
+### `One to multiple variables`
+
+
+```r
+separate(table3, col = rate, into = c("cases", "population")) %>% class
+```
+
+```
+## [1] "data.table" "data.frame"
+```
+
+---
+
+## Separating column content
+
+### `One to multiple variables`
+
+![Seperated country dataset](assets/img/tidy-separate.png)
+
+---
+
+## Uniting column content 
+
+### `Multiple variables to one`
+
+To unite multiple variables to one variable we use `tidyr::unite()`.
+
+
+```r
+unite(data, col, ..., sep = "_", remove = TRUE)
+```
+
+---
+
+
+## Uniting column content 
+
+### `Multiple variables to one`
+
+
+```r
+table5
+```
+
+```
+##        country century year              rate
+## 1: Afghanistan      19   99      745/19987071
+## 2: Afghanistan      20   00     2666/20595360
+## 3:      Brazil      19   99   37737/172006362
+## 4:      Brazil      20   00   80488/174504898
+## 5:       China      19   99 212258/1272915272
+## 6:       China      20   00 213766/1280428583
+```
+
+
+```r
+unite(table5, col = new, century, year, sep = "")
+```
+
+---
+
+## Uniting column content 
+
+### `Multiple variables to one`
+
+
+```r
+unite(table5, col = new, century, year, sep = "")
+```
+
+```
+##        country  new              rate
+## 1: Afghanistan 1999      745/19987071
+## 2: Afghanistan 2000     2666/20595360
+## 3:      Brazil 1999   37737/172006362
+## 4:      Brazil 2000   80488/174504898
+## 5:       China 1999 212258/1272915272
+## 6:       China 2000 213766/1280428583
+```
+
+---
+
+
+## Uniting column content 
+
+### `Multiple variables to one`
+
+![United country dataset](assets/img/tidy-unite.png)
+
+---
+
+## Words to live by
+
+**Happy families are all alike; every unhappy family is unhappy in its own way.**
+
+*- Leo Tolstoy*
+
+**Tidy datasets are all alike, but every messy dataset is messy in its own way.**
+
+*- Hadley Wickham*
+
+
+---
+
 ## Take-home
+
 * Visualization is as important as statistics. Both are needed.
 * Visualization can help finding "bugs" in the data
 * Grammar of graphics separates data, aesthetics, and geometries
 * Show as much as the raw data as you can:
   * Extend boxplot and barplots with beeswarm plots
   * Combine density and individual data points in 1D or 2D.
-  
+* In a tidy dataset, each variable must have its own column
+* Each row corresponds to one unique observation
+* Each cell contains a single value
+* Tidy datasets are easier to work with
+* Data.table library has functions to transform untidy datasets to tidy
+
 
 ---
+
 ## References
 
 * Main reference: [Udacity's Data Visualization and D3.js](https://www.udacity.com/courses/all)
@@ -914,6 +1451,8 @@ A **To show a connection between a series of individual data points**
   * [paper] (https://onlinelibrary.wiley.com/doi/full/10.1002/pst.1912)
   * [cheatsheet](https://graphicsprinciples.github.io/)
 
+Interesting blog post:
+  * <http://simplystatistics.org/2016/02/17/non-tidy-data/>
 
 ---
 ## Plotting libraries

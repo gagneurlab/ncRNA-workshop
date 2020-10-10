@@ -1432,6 +1432,742 @@ We can also show the strength of the movement of values up and down through time
 
 <slide class="" id="slide-63" style="background:;">
   
+  <article data-timings="">
+    <script type='text/javascript'>toc("Tidy data")</script>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-64" style="background:;">
+  
+  <hgroup>
+    <h2>Tidy data definition</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p><img src="assets/img/tidy-1.png" alt="**Tidy data table layout.** Each variable has a column, each observation a row and each value a cell."></p>
+
+<p>One can briefly summarize the tidy definition in the three following statements:</p>
+
+<ol>
+<li>Each <strong>variable</strong> must have its own <strong>column</strong>.</li>
+<li>Each <strong>observation</strong> must have its own <strong>row</strong>.</li>
+<li>Each <strong>value</strong> must have its own <strong>cell</strong>.</li>
+</ol>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-65" style="background:;">
+  
+  <hgroup>
+    <h2>Let&#39;s load some data</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <pre><code class="r">library(data.table) # melt, dcast, ...
+library(magrittr)  # To get the pipe operator %&gt;% 
+library(tidyr) # To get table1, table2, ...
+library(dslabs) # To get te murder dataset
+
+# Data used throughout the lecture
+table1 &lt;- tidyr::table1 %&gt;% as.data.table # use data.table instead of tibble
+table2 &lt;- tidyr::table2 %&gt;% as.data.table
+table3 &lt;- tidyr::table3 %&gt;% as.data.table
+table4a &lt;- tidyr::table4a %&gt;% as.data.table
+table4b &lt;- tidyr::table4b %&gt;% as.data.table
+table5 &lt;- tidyr::table5 %&gt;% as.data.table
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-66" style="background:;">
+  
+  <hgroup>
+    <h2>Example of a good dataset</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>The <code>murders</code> dataset is an example of a tidy dataset.</p>
+
+<pre><code>##        state abb region population total
+## 1    Alabama  AL  South    4779736   135
+## 2     Alaska  AK   West     710231    19
+## 3    Arizona  AZ   West    6392017   232
+## 4   Arkansas  AR  South    2915918    93
+## 5 California  CA   West   37253956  1257
+## 6   Colorado  CO   West    5029196    65
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-67" style="background:;">
+  
+  <hgroup>
+    <h2>Common signs of untidy datasets</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>On the other hand one can often quickly identify untidy datasets by one or more of the following statements:</p>
+
+<ul>
+<li>Column headers are values, not variable names.</li>
+<li>Multiple variables are stored in one column.</li>
+<li>Variables are stored in both rows and columns.</li>
+<li>Multiple types of observational units are stored in the same table.</li>
+<li>A single observational unit is stored in multiple tables.</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-68" style="background:;">
+  
+  <hgroup>
+    <h2>Advantages of tidy data</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <ul>
+<li>Easier manipulation using data.table commands</li>
+<li>sub-setting by rows</li>
+<li>sub-setting by columns</li>
+<li><code>by</code> operations</li>
+<li>Many other tools work better with tidy data - consistent way of storing data</li>
+<li>example: ggplot2</li>
+<li>Vectorized operations become easier to use</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-69" style="background:;">
+  
+  <hgroup>
+    <h2>Tidy data can be easily manipulated</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <pre><code class="r">head(dt)
+</code></pre>
+
+<pre><code>##        country year  cases population
+## 1: Afghanistan 1999    745   19987071
+## 2: Afghanistan 2000   2666   20595360
+## 3:      Brazil 1999  37737  172006362
+## 4:      Brazil 2000  80488  174504898
+## 5:       China 1999 212258 1272915272
+## 6:       China 2000 213766 1280428583
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-70" style="background:;">
+  
+  <hgroup>
+    <h2>Tidy data can be easily manipulated</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>For example in the table above we can easily compute the rate of cases within the population or the number of cases per year using the following commands:</p>
+
+<pre><code class="r"># Compute rate per 10,000
+dt[, rate := cases / population * 10000] # vectorized operations; dt is modified
+head(dt)
+</code></pre>
+
+<pre><code>##        country year  cases population     rate
+## 1: Afghanistan 1999    745   19987071 0.372741
+## 2: Afghanistan 2000   2666   20595360 1.294466
+## 3:      Brazil 1999  37737  172006362 2.193930
+## 4:      Brazil 2000  80488  174504898 4.612363
+## 5:       China 1999 212258 1272915272 1.667495
+## 6:       China 2000 213766 1280428583 1.669488
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-71" style="background:;">
+  
+  <hgroup>
+    <h2>Tidy data can be easily manipulated</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>For example in the table above we can easily compute the rate of cases within the population or the number of cases per year using the following commands:</p>
+
+<pre><code class="r"># Compute cases per year
+dt[, .(cases = sum(cases)), by = year] # note that this does not modify dt
+</code></pre>
+
+<pre><code>##    year  cases
+## 1: 1999 250740
+## 2: 2000 296920
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-72" style="background:;">
+  
+  <hgroup>
+    <h2>Tidy data can be easily manipulated</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Additionally, tidy data works better with many packages like ggplot2 which we are going to use in this course.</p>
+
+<pre><code class="r">ggplot(dt, aes(year, cases, color = country))+
+  ggtitle( &quot;Change over time&quot;) +
+  geom_line()
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-52-1.png" title="plot of chunk unnamed-chunk-52" alt="plot of chunk unnamed-chunk-52" width="500px" height="400px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-73" style="background:;">
+  
+  <hgroup>
+    <h2>Cleaning untidy data</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>In the remaining part of this chapter we will learn how to transform untidy datasets into tidy ones using data.table functions.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-74" style="background:;">
+  
+  <hgroup>
+    <h2>Cleaning untidy data</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>Column headers are values, not variable names</code></h3>
+
+<p>Untidy: 1999 and 2000 are values of the variable <em>year</em>.</p>
+
+<pre><code class="r">table4a
+</code></pre>
+
+<pre><code>##        country   1999   2000
+## 1: Afghanistan    745   2666
+## 2:      Brazil  37737  80488
+## 3:       China 212258 213766
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-75" style="background:;">
+  
+  <hgroup>
+    <h2>Cleaning untidy data</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>Column headers are values, not variable names</code></h3>
+
+<p><img src="assets/img/tidy-gather.png" alt="Melting the country dataset"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-76" style="background:;">
+  
+  <hgroup>
+    <h2>Cleaning untidy data</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>Column headers are values, not variable names</code></h3>
+
+<p>This can be solved by using the <strong>data.table</strong> function <code>melt()</code>. When melting all values in all columns specified in the <code>measure.vars</code> argument are gathered into one column whose name can be specified using the <code>value.name</code> argument. Additionally a new column named using the argument <code>variable.name</code> is created containing all the values which where previously stored in the column names.</p>
+
+<pre><code class="r">melt(table4a, id.vars = &quot;country&quot;,  measure.vars = c(&quot;1999&quot;, &quot;2000&quot;), variable.name = &quot;year&quot;, value.name = &quot;cases&quot;)
+</code></pre>
+
+<pre><code>##        country year  cases
+## 1: Afghanistan 1999    745
+## 2:      Brazil 1999  37737
+## 3:       China 1999 212258
+## 4: Afghanistan 2000   2666
+## 5:      Brazil 2000  80488
+## 6:       China 2000 213766
+</code></pre>
+
+<pre><code class="r"># would work also without specifying *either* measure.vars OR id.vars
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-77" style="background:;">
+  
+  <hgroup>
+    <h2>Cleaning untidy data</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>Multiple variables are stored in one column</code></h3>
+
+<p>Untidy: multiple variables are stored in the <em>count</em> column.</p>
+
+<pre><code class="r">table2
+</code></pre>
+
+<pre><code>##         country year       type      count
+##  1: Afghanistan 1999      cases        745
+##  2: Afghanistan 1999 population   19987071
+##  3: Afghanistan 2000      cases       2666
+##  4: Afghanistan 2000 population   20595360
+##  5:      Brazil 1999      cases      37737
+##  6:      Brazil 1999 population  172006362
+##  7:      Brazil 2000      cases      80488
+##  8:      Brazil 2000 population  174504898
+##  9:       China 1999      cases     212258
+## 10:       China 1999 population 1272915272
+## 11:       China 2000      cases     213766
+## 12:       China 2000 population 1280428583
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-78" style="background:;">
+  
+  <hgroup>
+    <h2>Cleaning untidy data</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>Multiple variables are stored in one column</code></h3>
+
+<p><img src="assets/img/tidy-spread.png" alt="Decasting the country dataset"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-79" style="background:;">
+  
+  <hgroup>
+    <h2>Cleaning untidy data</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>Multiple variables are stored in one column</code></h3>
+
+<p>This problem can be solved using the dcast function. Here is the help of that function:</p>
+
+<pre><code class="r">  ## Help
+  dcast(data, formula, fun.aggregate = NULL, sep = &quot;_&quot;, ..., margins = NULL, subset = NULL, fill = NULL,
+      drop = TRUE, value.var = guess(data), verbose = getOption(&quot;datatable.verbose&quot;))
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-80" style="background:;">
+  
+  <hgroup>
+    <h2>Cleaning untidy data</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>Multiple variables are stored in one column</code></h3>
+
+<p>To use it for our case we only need to specify which column is the key in the &quot;formula&quot; and which value should be spread.</p>
+
+<pre><code class="r">dcast(table2, ... ~ type,  value.var = &quot;count&quot;)
+</code></pre>
+
+<pre><code>##        country year  cases population
+## 1: Afghanistan 1999    745   19987071
+## 2: Afghanistan 2000   2666   20595360
+## 3:      Brazil 1999  37737  172006362
+## 4:      Brazil 2000  80488  174504898
+## 5:       China 1999 212258 1272915272
+## 6:       China 2000 213766 1280428583
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-81" style="background:;">
+  
+  <hgroup>
+    <h2>Separating and Uniting column content</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>One variable &lt;-&gt; multiple variables</code></h3>
+
+<p><strong>Typical problem:</strong></p>
+
+<ol>
+<li>One column contains multiple variables</li>
+<li>Multiple columns contain one variable</li>
+</ol>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-82" style="background:;">
+  
+  <hgroup>
+    <h2>Separating and Uniting column content</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>One variable &lt;-&gt; multiple variables</code></h3>
+
+<p><strong>Untidy datasets</strong></p>
+
+<pre><code class="r">## One column contains multiple variables
+print(table3)
+</code></pre>
+
+<pre><code>##        country year              rate
+## 1: Afghanistan 1999      745/19987071
+## 2: Afghanistan 2000     2666/20595360
+## 3:      Brazil 1999   37737/172006362
+## 4:      Brazil 2000   80488/174504898
+## 5:       China 1999 212258/1272915272
+## 6:       China 2000 213766/1280428583
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-83" style="background:;">
+  
+  <hgroup>
+    <h2>Separating and Uniting column content</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>One variable &lt;-&gt; multiple variables</code></h3>
+
+<pre><code class="r">## Multiple columns contain one variable
+print(table5)
+</code></pre>
+
+<pre><code>##        country century year              rate
+## 1: Afghanistan      19   99      745/19987071
+## 2: Afghanistan      20   00     2666/20595360
+## 3:      Brazil      19   99   37737/172006362
+## 4:      Brazil      20   00   80488/174504898
+## 5:       China      19   99 212258/1272915272
+## 6:       China      20   00 213766/1280428583
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-84" style="background:;">
+  
+  <hgroup>
+    <h2>Separating and Uniting column content</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>One variable &lt;-&gt; multiple variables</code></h3>
+
+<p><strong>Solution in R:</strong></p>
+
+<p>1) one variable -&gt; multiple variables</p>
+
+<ul>
+<li><code>tidyr::separate()</code></li>
+</ul>
+
+<p>2) multiple variables -&gt; one variables</p>
+
+<ul>
+<li><code>tidyr::unite()</code></li>
+</ul>
+
+<p>other useful functions:</p>
+
+<ul>
+<li><code>data.table::tstrsplit</code>, <code>strsplit</code>, <code>paste</code>, <code>substr</code></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-85" style="background:;">
+  
+  <hgroup>
+    <h2>Separating column content</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>One to multiple variables</code></h3>
+
+<p>To separate one variable to multiple variables we use <code>tidyr::separate()</code>.</p>
+
+<pre><code class="r">separate(data, col, into, sep = &quot;[^[:alnum:]]+&quot;, remove = TRUE,
+         convert = FALSE, extra = &quot;warn&quot;, fill = &quot;warn&quot;, ...)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-86" style="background:;">
+  
+  <hgroup>
+    <h2>Separating column content</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>One to multiple variables</code></h3>
+
+<pre><code class="r">table3
+</code></pre>
+
+<pre><code>##        country year              rate
+## 1: Afghanistan 1999      745/19987071
+## 2: Afghanistan 2000     2666/20595360
+## 3:      Brazil 1999   37737/172006362
+## 4:      Brazil 2000   80488/174504898
+## 5:       China 1999 212258/1272915272
+## 6:       China 2000 213766/1280428583
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-87" style="background:;">
+  
+  <hgroup>
+    <h2>Separating column content</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>One to multiple variables</code></h3>
+
+<pre><code class="r">separate(table3, col = rate,
+         into = c(&quot;cases&quot;, &quot;population&quot;))
+</code></pre>
+
+<pre><code>##        country year  cases population
+## 1: Afghanistan 1999    745   19987071
+## 2: Afghanistan 2000   2666   20595360
+## 3:      Brazil 1999  37737  172006362
+## 4:      Brazil 2000  80488  174504898
+## 5:       China 1999 212258 1272915272
+## 6:       China 2000 213766 1280428583
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-88" style="background:;">
+  
+  <hgroup>
+    <h2>Separating column content</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>One to multiple variables</code></h3>
+
+<pre><code class="r">separate(table3, col = rate, into = c(&quot;cases&quot;, &quot;population&quot;)) %&gt;% class
+</code></pre>
+
+<pre><code>## [1] &quot;data.table&quot; &quot;data.frame&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-89" style="background:;">
+  
+  <hgroup>
+    <h2>Separating column content</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>One to multiple variables</code></h3>
+
+<p><img src="assets/img/tidy-separate.png" alt="Seperated country dataset"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-90" style="background:;">
+  
+  <hgroup>
+    <h2>Uniting column content</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>Multiple variables to one</code></h3>
+
+<p>To unite multiple variables to one variable we use <code>tidyr::unite()</code>.</p>
+
+<pre><code class="r">unite(data, col, ..., sep = &quot;_&quot;, remove = TRUE)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-91" style="background:;">
+  
+  <hgroup>
+    <h2>Uniting column content</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>Multiple variables to one</code></h3>
+
+<pre><code class="r">table5
+</code></pre>
+
+<pre><code>##        country century year              rate
+## 1: Afghanistan      19   99      745/19987071
+## 2: Afghanistan      20   00     2666/20595360
+## 3:      Brazil      19   99   37737/172006362
+## 4:      Brazil      20   00   80488/174504898
+## 5:       China      19   99 212258/1272915272
+## 6:       China      20   00 213766/1280428583
+</code></pre>
+
+<pre><code class="r">unite(table5, col = new, century, year, sep = &quot;&quot;)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-92" style="background:;">
+  
+  <hgroup>
+    <h2>Uniting column content</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>Multiple variables to one</code></h3>
+
+<pre><code class="r">unite(table5, col = new, century, year, sep = &quot;&quot;)
+</code></pre>
+
+<pre><code>##        country  new              rate
+## 1: Afghanistan 1999      745/19987071
+## 2: Afghanistan 2000     2666/20595360
+## 3:      Brazil 1999   37737/172006362
+## 4:      Brazil 2000   80488/174504898
+## 5:       China 1999 212258/1272915272
+## 6:       China 2000 213766/1280428583
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-93" style="background:;">
+  
+  <hgroup>
+    <h2>Uniting column content</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <h3><code>Multiple variables to one</code></h3>
+
+<p><img src="assets/img/tidy-unite.png" alt="United country dataset"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-94" style="background:;">
+  
+  <hgroup>
+    <h2>Words to live by</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p><strong>Happy families are all alike; every unhappy family is unhappy in its own way.</strong></p>
+
+<p><em>- Leo Tolstoy</em></p>
+
+<p><strong>Tidy datasets are all alike, but every messy dataset is messy in its own way.</strong></p>
+
+<p><em>- Hadley Wickham</em></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-95" style="background:;">
+  
   <hgroup>
     <h2>Take-home</h2>
   </hgroup>
@@ -1447,6 +2183,11 @@ We can also show the strength of the movement of values up and down through time
 <li>Extend boxplot and barplots with beeswarm plots</li>
 <li>Combine density and individual data points in 1D or 2D.</li>
 </ul></li>
+<li>In a tidy dataset, each variable must have its own column</li>
+<li>Each row corresponds to one unique observation</li>
+<li>Each cell contains a single value</li>
+<li>Tidy datasets are easier to work with</li>
+<li>Data.table library has functions to transform untidy datasets to tidy</li>
 </ul>
 
   </article>
@@ -1454,7 +2195,7 @@ We can also show the strength of the movement of values up and down through time
   
 </slide>
 
-<slide class="" id="slide-64" style="background:;">
+<slide class="" id="slide-96" style="background:;">
   
   <hgroup>
     <h2>References</h2>
@@ -1481,12 +2222,18 @@ We can also show the strength of the movement of values up and down through time
 </ul></li>
 </ul>
 
+<p>Interesting blog post:</p>
+
+<ul>
+<li><a href="http://simplystatistics.org/2016/02/17/non-tidy-data/">http://simplystatistics.org/2016/02/17/non-tidy-data/</a></li>
+</ul>
+
   </article>
   <!-- Presenter Notes -->
   
 </slide>
 
-<slide class="" id="slide-65" style="background:;">
+<slide class="" id="slide-97" style="background:;">
   
   <hgroup>
     <h2>Plotting libraries</h2>
@@ -1946,22 +2693,246 @@ We can also show the strength of the movement of values up and down through time
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=63 title='Take-home'>
+        data-slide=63 title='NA'>
          63
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=64 title='References'>
+        data-slide=64 title='Tidy data definition'>
          64
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=65 title='Plotting libraries'>
+        data-slide=65 title='Let&#39;s load some data'>
          65
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=66 title='Example of a good dataset'>
+         66
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=67 title='Common signs of untidy datasets'>
+         67
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=68 title='Advantages of tidy data'>
+         68
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=69 title='Tidy data can be easily manipulated'>
+         69
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=70 title='Tidy data can be easily manipulated'>
+         70
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=71 title='Tidy data can be easily manipulated'>
+         71
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=72 title='Tidy data can be easily manipulated'>
+         72
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=73 title='Cleaning untidy data'>
+         73
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=74 title='Cleaning untidy data'>
+         74
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=75 title='Cleaning untidy data'>
+         75
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=76 title='Cleaning untidy data'>
+         76
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=77 title='Cleaning untidy data'>
+         77
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=78 title='Cleaning untidy data'>
+         78
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=79 title='Cleaning untidy data'>
+         79
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=80 title='Cleaning untidy data'>
+         80
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=81 title='Separating and Uniting column content'>
+         81
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=82 title='Separating and Uniting column content'>
+         82
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=83 title='Separating and Uniting column content'>
+         83
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=84 title='Separating and Uniting column content'>
+         84
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=85 title='Separating column content'>
+         85
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=86 title='Separating column content'>
+         86
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=87 title='Separating column content'>
+         87
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=88 title='Separating column content'>
+         88
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=89 title='Separating column content'>
+         89
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=90 title='Uniting column content'>
+         90
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=91 title='Uniting column content'>
+         91
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=92 title='Uniting column content'>
+         92
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=93 title='Uniting column content'>
+         93
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=94 title='Words to live by'>
+         94
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=95 title='Take-home'>
+         95
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=96 title='References'>
+         96
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=97 title='Plotting libraries'>
+         97
       </a>
     </li>
     
