@@ -1,0 +1,2627 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Make your paper figures professionally: Scientific data analysis and visualization with R</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Make your paper figures professionally: Scientific data analysis and visualization with R">
+  <meta name="author" content="Vangelis Theodorakis, Fatemeh Behjati, Julien Gagneur, Marcel Schultz">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="libraries/widgets/bootstrap/css/bootstrap.css"></link>
+<link rel=stylesheet href="libraries/widgets/quiz/css/demo.css"></link>
+
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  
+  <hgroup class="auto-fadein">
+    <h1>Make your paper figures professionally: Scientific data analysis and visualization with R</h1>
+    <h2>Grammar of graphics and Basic Plotting</h2>
+    <p>Vangelis Theodorakis, Fatemeh Behjati, Julien Gagneur, Marcel Schultz<br/></p>
+  </hgroup>
+  
+  <article></article>  
+  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  
+  <article data-timings="">
+    <style>
+.eighteen > article > p {
+   font-size: 18px !important;
+}
+</style>
+
+<!-- Center image on slide -->
+
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+
+<script type='text/javascript'>
+$(function() {
+    $("p:has(img)").addClass('centered');
+});
+</script>
+
+<p></script></p>
+
+<script type = 'text/javascript'>
+$('p:has(img.build)').addClass('build')
+</script>
+
+<script type='text/javascript'>
+// parameters
+var sections = ["RStudio and R basics",
+"Data Wrangling using Data.table",
+"Analysis execution flow",
+"Reproducible science with Rmarkdown reports"];
+
+var title = "Overview";
+var fontsize = "20pt"
+var unselected_color = "#888888"
+// function
+function toc(cur) {
+  // header
+  document.write("<h2>"+title+"</h2>");
+  // find current
+  ind = sections.indexOf(cur);
+  if (ind==-1 && cur.length>0) {
+     document.write("<br/>Error: section not defined '"+cur+"'");
+     return;
+  }
+  // write all out
+  document.write("<br/><ul>");
+  for (i = 0; i < sections.length; i++) { 
+    if (cur=="") 
+      // all the same
+      document.write("<li style='font-size:"+fontsize+"'>"+sections[i]+"</li>");
+    else {
+      if (i==ind)
+        document.write("<li style='font-size:"+fontsize+"'><b>"+sections[i]+"</b></li>");
+      else
+        document.write("<li style='color:"+unselected_color+";font-size:"+fontsize+"'>"+sections[i]+"</li>");
+    }
+  }
+  document.write("</ul>");
+}
+</script>
+
+<!-- START LECTURE -->
+
+<h2>Day 1 - RStudio and R basics</h2>
+
+<p><img src="assets/img/syllabus-day-one.png" title="plot of chunk syllabus" alt="plot of chunk syllabus" width="800px" height="400px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-2" style="background:;">
+  
+  <article data-timings="">
+    <script type='text/javascript'>toc("")</script>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-3" style="background:;">
+  
+  <article data-timings="">
+    <script type='text/javascript'>toc("RStudio and R basics")</script>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  
+  <hgroup>
+    <h2>Assignments</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>All big (programming) journeys start with a small step (or assignment). In R assignments are done using the <code>&lt;-</code> operator :</p>
+
+<pre><code class="r">objectName &lt;- value
+</code></pre>
+
+<p>It is also possible to assign with the <em>equal</em> sign.</p>
+
+<pre><code class="r">objectName = value
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-5" style="background:;">
+  
+  <hgroup>
+    <h2>Assignments</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <pre><code class="r">x &lt;- 5 # Both methods have the same outcome
+y = 5
+x
+</code></pre>
+
+<pre><code>## [1] 5
+</code></pre>
+
+<pre><code class="r">y
+</code></pre>
+
+<pre><code>## [1] 5
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-6" style="background:;">
+  
+  <hgroup>
+    <h2>Assignments</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>However, the &quot;equal&quot; sign is used for argument passing to functions. Thus if nesting, the equal sign will be interpreted as a argument assignment and might throw an error:</p>
+
+<pre><code class="r">## We want to measure the running time of the inner product of a large vector and 
+## assign the outcome of the function to a variable simultaneously
+system.time(a &lt;- t(1:1e6)%*%(1:1e6))
+</code></pre>
+
+<pre><code>##    user  system elapsed 
+##    0.05    0.02    0.07
+</code></pre>
+
+<pre><code class="r">system.time(a = t(1:1e6)%*%(1:1e6)) ## This would cause an error
+</code></pre>
+
+<pre><code>## Error in system.time(a = t(1:1e+06) %*% (1:1e+06)): unused argument (a = t(1:1e+06) %*% (1:1e+06))
+</code></pre>
+
+<p>Right Alt + - gives a quick shortcut to add <strong>&lt;-</strong> ;)</p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-7" style="background:;">
+  
+  <hgroup>
+    <h2>Vectors</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Vectors are 1-dimensional data structures which can contain one or more variables, regardless of their type.</p>
+
+<p>Usually created with <code>c()</code> (from <em>concatenation</em>):</p>
+
+<pre><code class="r">c(1, 5, 8, 10)
+</code></pre>
+
+<pre><code>## [1]  1  5  8 10
+</code></pre>
+
+<pre><code class="r">str(c(1, 5, 8, 10))
+</code></pre>
+
+<pre><code>##  num [1:4] 1 5 8 10
+</code></pre>
+
+<pre><code class="r">length(c(1, 5, 8, 10))
+</code></pre>
+
+<pre><code>## [1] 4
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-8" style="background:;">
+  
+  <hgroup>
+    <h2>Vectors</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Vectors are 1-dimensional data structures which can contain one or more variables, regardless of their type.</p>
+
+<p>Usually created with <code>c()</code> (from <em>concatenation</em>):</p>
+
+<pre><code class="r">c(&quot;a&quot;, &quot;B&quot;, &quot;cc&quot;)
+</code></pre>
+
+<pre><code>## [1] &quot;a&quot;  &quot;B&quot;  &quot;cc&quot;
+</code></pre>
+
+<pre><code class="r">c(TRUE, FALSE, c(TRUE, TRUE))
+</code></pre>
+
+<pre><code>## [1]  TRUE FALSE  TRUE  TRUE
+</code></pre>
+
+<pre><code class="r">c(1, &quot;B&quot;, FALSE)
+</code></pre>
+
+<pre><code>## [1] &quot;1&quot;     &quot;B&quot;     &quot;FALSE&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-9" style="background:;">
+  
+  <hgroup>
+    <h2>Vectors</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>There are multiple ways to create a numeric sequence depending on the desired result.</p>
+
+<p>Usually for an integer sequence <em>from:to</em> is enough. For different results we may need to use <code>seq()</code> function utilizing its arguments to increase by a <em>step</em> of our choice or to split the range depending on the desired length of the output.</p>
+
+<pre><code class="r">1:10 
+</code></pre>
+
+<pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10
+</code></pre>
+
+<pre><code class="r">seq(from = 1, to = 10, by = .3)
+</code></pre>
+
+<pre><code>##  [1]  1.0  1.3  1.6  1.9  2.2  2.5  2.8  3.1  3.4  3.7  4.0  4.3  4.6  4.9  5.2
+## [16]  5.5  5.8  6.1  6.4  6.7  7.0  7.3  7.6  7.9  8.2  8.5  8.8  9.1  9.4  9.7
+## [31] 10.0
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-10" style="background:;">
+  
+  <hgroup>
+    <h2>Vectors</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <pre><code class="r">seq(from = 1, to = 10, length.out = 12)
+</code></pre>
+
+<pre><code>##  [1]  1.000000  1.818182  2.636364  3.454545  4.272727  5.090909  5.909091
+##  [8]  6.727273  7.545455  8.363636  9.181818 10.000000
+</code></pre>
+
+<p>Keep in mind that sometimes different approaches, give different data types as results so when weird things happen, always check the documentation (devil is in the details)!</p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-11" style="background:;">
+  
+  <hgroup>
+    <h2>Vectors</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>For non numeric values e.g. logical, character, <code>rep()</code> function comes also in handy. </p>
+
+<p>The <em>replicate</em> function <code>rep()</code> replicates a vector a certain number of <em>times</em> and concatenates them: </p>
+
+<pre><code class="r">rep(c(TRUE, FALSE), times = 5)
+</code></pre>
+
+<pre><code>##  [1]  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE FALSE
+</code></pre>
+
+<p>To replicate <em>each</em> entry of the input vector at the time:</p>
+
+<pre><code class="r">rep(c(TRUE, FALSE), each = 5)
+</code></pre>
+
+<pre><code>##  [1]  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-12" style="background:;">
+  
+  <hgroup>
+    <h2>Vectors</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Vector elements are accessed via the <code>[</code> operator:</p>
+
+<pre><code class="r">## Create an A,B,C,D,E vector
+x &lt;- LETTERS[1:5]
+x
+</code></pre>
+
+<pre><code>## [1] &quot;A&quot; &quot;B&quot; &quot;C&quot; &quot;D&quot; &quot;E&quot;
+</code></pre>
+
+<pre><code class="r">## access the third entry
+x[3]
+</code></pre>
+
+<pre><code>## [1] &quot;C&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-13" style="background:;">
+  
+  <hgroup>
+    <h2>Vectors</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Vector elements are accessed via the <code>[</code> operator:</p>
+
+<pre><code class="r">## modify the third entry
+x[3] &lt;- &#39;Z&#39;
+x
+</code></pre>
+
+<pre><code>## [1] &quot;A&quot; &quot;B&quot; &quot;Z&quot; &quot;D&quot; &quot;E&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-14" style="background:;">
+  
+  <hgroup>
+    <h2>Vectors</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Elements in vectors can have names. 
+Using names instead of index to access entries in a vector make code more robust to re-ordering, sub-setting, and changes in data input.<br>
+Names can be created at initialization or set afterwards with <code>names()</code>. </p>
+
+<pre><code class="r">x &lt;- c(a = 1, b = 2, c = 3)
+x
+</code></pre>
+
+<pre><code>## a b c 
+## 1 2 3
+</code></pre>
+
+<pre><code class="r">names(x) &lt;- c(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;)
+x
+</code></pre>
+
+<pre><code>## A B C 
+## 1 2 3
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-15" style="background:;">
+  
+  <hgroup>
+    <h2>Vectors</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Names don&#39;t have to be unique, but should preferably be, as sub-setting by names will only return the first match</p>
+
+<pre><code class="r">x &lt;- c(a = 1, a = 2, b = 3)
+x[&quot;a&quot;]
+</code></pre>
+
+<pre><code>## a 
+## 1
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-16" style="background:;">
+  
+  <hgroup>
+    <h2>Vectors</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Not all elements need to have names.</p>
+
+<pre><code class="r">c(a = 1, 2, 3)
+</code></pre>
+
+<pre><code>## a     
+## 1 2 3
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-17" style="background:;">
+  
+  <hgroup>
+    <h2>Combining vectors vectors</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>To combine 2 vectors we just need to wrap them inside a 3rd vector.</p>
+
+<pre><code class="r">x &lt;- c(1:5)
+y &lt;- c(6:10)
+z &lt;- c(x, y)
+z
+</code></pre>
+
+<pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-18" style="background:;">
+  
+  <hgroup>
+    <h2>Subsetting vectors</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <pre><code class="r">x &lt;- LETTERS[1:5]
+x
+</code></pre>
+
+<pre><code>## [1] &quot;A&quot; &quot;B&quot; &quot;C&quot; &quot;D&quot; &quot;E&quot;
+</code></pre>
+
+<pre><code class="r">## By positive integers
+x[c(1,3)]
+</code></pre>
+
+<pre><code>## [1] &quot;A&quot; &quot;C&quot;
+</code></pre>
+
+<pre><code class="r">## By negative integers
+x[-c(1,3)]
+</code></pre>
+
+<pre><code>## [1] &quot;B&quot; &quot;D&quot; &quot;E&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-19" style="background:;">
+  
+  <hgroup>
+    <h2>Subsetting vectors</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <pre><code class="r">## By logical vectors
+x[c(TRUE, TRUE, TRUE, FALSE, FALSE)]
+</code></pre>
+
+<pre><code>## [1] &quot;A&quot; &quot;B&quot; &quot;C&quot;
+</code></pre>
+
+<pre><code class="r">## By logical vectors
+x[x &lt;= &quot;C&quot;]
+</code></pre>
+
+<pre><code>## [1] &quot;A&quot; &quot;B&quot; &quot;C&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-20" style="background:;">
+  
+  <hgroup>
+    <h2>Subsetting vectors</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p><code>NAs</code> in the input vector will always produce an <code>NA</code> in the output:</p>
+
+<pre><code class="r">x[c(1,2,NA)]
+</code></pre>
+
+<pre><code>## [1] &quot;A&quot; &quot;B&quot; NA
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-21" style="background:;">
+  
+  <hgroup>
+    <h2>Subsetting vectors</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>We can also sub-setting by character vectors, if names are present:</p>
+
+<pre><code class="r">names(x) &lt;- letters[1:5]
+x[c(&quot;a&quot;, &quot;b&quot;)]
+</code></pre>
+
+<pre><code>##   a   b 
+## &quot;A&quot; &quot;B&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-22" style="background:;">
+  
+  <hgroup>
+    <h2>Exercise 1</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-23" style="background:;">
+  
+  <hgroup>
+    <h2>Factors</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <ul>
+<li><p>A factor is a is used to store categorical data. The distinct categories are called &#39;levels&#39;.</p></li>
+<li><p>They belong to a special <code>class()</code>, <em>factor</em>, which makes them behave differently from regular integer vectors.</p></li>
+<li><p>Factors cannot be altered in the same way as vectors. Only their levels can be altered.</p></li>
+<li><p>Factors are built on top of integer vectors: the values are integer indexes in the dictionary of levels.</p></li>
+<li><p>They occupy less space in memory than characters, since they are stored as integers.</p></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-24" style="background:;">
+  
+  <hgroup>
+    <h2>Factors</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <pre><code class="r">x &lt;- factor(c(&quot;red&quot;, &quot;yellow&quot;, &quot;red&quot;,&quot;green&quot;, &quot;green&quot;))
+x
+</code></pre>
+
+<pre><code>## [1] red    yellow red    green  green 
+## Levels: green red yellow
+</code></pre>
+
+<table><thead>
+<tr>
+<th>Level</th>
+<th>Integer</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>green</td>
+<td>1</td>
+</tr>
+<tr>
+<td>red</td>
+<td>2</td>
+</tr>
+<tr>
+<td>yellow</td>
+<td>3</td>
+</tr>
+</tbody></table>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-25" style="background:;">
+  
+  <hgroup>
+    <h2>Factors</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <ul>
+<li>Factors are typically constructed with <code>factor()</code>. By default the levels are the unique values, sorted by alphanumerical order. </li>
+</ul>
+
+<pre><code class="r">x &lt;- factor(c(&quot;red&quot;, &quot;yellow&quot;, &quot;red&quot;,&quot;green&quot;, &quot;green&quot;))
+x
+</code></pre>
+
+<pre><code>## [1] red    yellow red    green  green 
+## Levels: green red yellow
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-26" style="background:;">
+  
+  <hgroup>
+    <h2>Factors</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p><code>levels()</code> gives the levels in ascending order of the underlying encoding integers.</p>
+
+<pre><code class="r">levels(x)
+</code></pre>
+
+<pre><code>## [1] &quot;green&quot;  &quot;red&quot;    &quot;yellow&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-27" style="background:;">
+  
+  <hgroup>
+    <h2>Factors</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>The order of the levels can be forced:</p>
+
+<pre><code class="r">x &lt;- factor(c(&quot;red&quot;, &quot;yellow&quot;, &quot;red&quot;,&quot;green&quot;, &quot;green&quot;), levels=c(&quot;green&quot;, &quot;yellow&quot;, &quot;red&quot;))
+x
+</code></pre>
+
+<pre><code>## [1] red    yellow red    green  green 
+## Levels: green yellow red
+</code></pre>
+
+<pre><code class="r">levels(x)
+</code></pre>
+
+<pre><code>## [1] &quot;green&quot;  &quot;yellow&quot; &quot;red&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-28" style="background:;">
+  
+  <hgroup>
+    <h2>Factors</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>The order of the levels is then used for all function requiring comparisons, e.g. sorting </p>
+
+<pre><code class="r">sort(x)
+</code></pre>
+
+<pre><code>## [1] green  green  yellow red    red   
+## Levels: green yellow red
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-29" style="background:;">
+  
+  <hgroup>
+    <h2>Factors</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Only level values can be used:</p>
+
+<pre><code class="r">x &lt;- factor(c(&quot;red&quot;, &quot;yellow&quot;, &quot;red&quot;,&quot;green&quot;, &quot;green&quot;))
+x[2] &lt;- &quot;blue&quot;
+x
+</code></pre>
+
+<pre><code>## [1] red   &lt;NA&gt;  red   green green
+## Levels: green red yellow
+</code></pre>
+
+<p><strong>Be aware</strong> that R does not prevent you from combining factors:</p>
+
+<p>Do not try to combine factors, especially if levels are not the same!</p>
+
+<pre><code class="r">c(x, factor(&quot;blue&quot;))
+</code></pre>
+
+<pre><code>## [1]  2 NA  2  1  1  1
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-30" style="background:;">
+  
+  <hgroup>
+    <h2>Exercise 2</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-31" style="background:;">
+  
+  <hgroup>
+    <h2>Math</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>R supports various mathematical and logical operations between scalars, vectors etc.</p>
+
+<ul>
+<li>Basic mathematical operations: <code>+</code>, <code>*</code>, <code>-</code>, <code>/</code></li>
+<li>Boolean operations:
+
+<ul>
+<li><strong>&amp;</strong> element-wise AND</li>
+<li><strong>|</strong> element-wise OR</li>
+<li><strong>!</strong> NOT</li>
+</ul></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-32" style="background:;">
+  
+  <hgroup>
+    <h2>Binary comparison</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <ul>
+<li>Element-wise Binary comparison return a vector of same length as the input
+
+<ul>
+<li><strong>==</strong> element-wise equality</li>
+<li><strong>!=</strong> element-wise inequality</li>
+<li><strong>&lt;</strong>, <strong>&lt;=</strong> element-wise smaller (or equal)</li>
+<li><strong>&gt;</strong>, <strong>&gt;=</strong> element-wise greater (or equal)</li>
+</ul></li>
+</ul>
+
+<pre><code class="r">1:5 == 1:5
+</code></pre>
+
+<pre><code>## [1] TRUE TRUE TRUE TRUE TRUE
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-33" style="background:;">
+  
+  <hgroup>
+    <h2>Binary comparison</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <ul>
+<li>Binary comparison with a single Boolean statement as output
+
+<ul>
+<li><code>identical(x, y)</code> exact equality</li>
+<li><code>all(x)</code> are all TRUE?</li>
+</ul></li>
+</ul>
+
+<pre><code class="r">identical(1:5, 1:5)
+</code></pre>
+
+<pre><code>## [1] TRUE
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-34" style="background:;">
+  
+  <article data-timings="">
+    <script type='text/javascript'>toc("Data Wrangling using Data.table")</script>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-35" style="background:;">
+  
+  <hgroup>
+    <h2>Data Wrangling using Data.table</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Data Wrangling includes tasks of processing raw data into interesting formats....</p>
+
+<p>Data.tables are a modern implementation of tables in R and we will exclusively used data.tables in this course.They are a memory efficient and faster implementation of data.frame (basic R table type) offering:</p>
+
+<ul>
+<li>sub-setting</li>
+<li>ordering</li>
+<li>merging</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-36" style="background:;">
+  
+  <hgroup>
+    <h2>Data Wrangling using Data.table</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>It accepts all data.frame functions, it has a shorter and more flexible syntax (not so straightforward in the beginning but pays off) and saves time on two fronts:</p>
+
+<ul>
+<li>programming (easier to code, read, debug and maintain)</li>
+<li>computing (fast and memory efficient)</li>
+</ul>
+
+<p>The general form of data.table syntax is:</p>
+
+<pre><code>DT[ i,  j,  by ] # + extra arguments
+    |   |   |
+    |   |    -------&gt; grouped by what?
+    |    -------&gt; what to do?
+     ---&gt; on which rows?
+</code></pre>
+
+<p>The way to read this out loud is: &quot;Take DT, subset rows by i, then compute j grouped by by. Here are some basic usage examples expanding on this definition.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-37" style="background:;">
+  
+  <hgroup>
+    <h2>Loading data as a data.table</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>We can read files from disk and process them using data.table. 
+The easiest way to do so is to use the function <code>fread()</code>.</p>
+
+<pre><code class="r">flights &lt;- fread(&#39;path_to_file/flightsLAX.csv&#39;)
+</code></pre>
+
+<p>Calling <code>head()</code> on the table showes us the first few lines of the table and we observe that reading the file was succesfull.</p>
+
+<pre><code class="r">head(flights)
+</code></pre>
+
+<pre><code>##    YEAR MONTH DAY DAY_OF_WEEK AIRLINE FLIGHT_NUMBER TAIL_NUMBER ORIGIN_AIRPORT
+## 1: 2015     1   1           4      AA          2336      N3KUAA            LAX
+## 2: 2015     1   1           4      AA           258      N3HYAA            LAX
+## 3: 2015     1   1           4      US          2013      N584UW            LAX
+## 4: 2015     1   1           4      DL          1434      N547US            LAX
+## 5: 2015     1   1           4      AA           115      N3CTAA            LAX
+## 6: 2015     1   1           4      UA          1545      N76517            LAX
+##    DESTINATION_AIRPORT DEPARTURE_TIME AIR_TIME DISTANCE ARRIVAL_TIME
+## 1:                 PBI              2      263     2330          741
+## 2:                 MIA             15      258     2342          756
+## 3:                 CLT             44      228     2125          753
+## 4:                 MSP             35      188     1535          605
+## 5:                 MIA            103      255     2342          839
+## 6:                 IAH            112      156     1379          607
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-38" style="background:;">
+  
+  <hgroup>
+    <h2>Creating a data.table</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>To create a data.table, give a name to the columns and we populate them.</p>
+
+<pre><code class="r">library(data.table)
+DT &lt;- data.table(x = rep(c(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;), each = 3),
+                 y = c(1, 3, 6), 
+                 v = 1:9)
+DT # note how column y was recycled
+</code></pre>
+
+<pre><code>##    x y v
+## 1: a 1 1
+## 2: a 3 2
+## 3: a 6 3
+## 4: b 1 4
+## 5: b 3 5
+## 6: b 6 6
+## 7: c 1 7
+## 8: c 3 8
+## 9: c 6 9
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-39" style="background:;">
+  
+  <hgroup>
+    <h2>Creating a data.table</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Any matrix-like object can be transformed to a <code>data.table</code> using the <code>as.data.table()</code> function</p>
+
+<pre><code class="r">class(iris)
+</code></pre>
+
+<pre><code>## [1] &quot;data.frame&quot;
+</code></pre>
+
+<pre><code class="r">iris.dt &lt;- as.data.table(iris)
+class(iris.dt)
+</code></pre>
+
+<pre><code>## [1] &quot;data.table&quot; &quot;data.frame&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-40" style="background:;">
+  
+  <hgroup>
+    <h2>Inspecting tables</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>A first step in any analysis should involve inspecting the data we just read in. 
+This often starts by looking the head of the table as we did above.</p>
+
+<p>The next information we are often interested in is the size of our data set.
+We can use the following commands to obtain it.</p>
+
+<pre><code class="r">nrow(flights)   # ncol(flights)
+</code></pre>
+
+<pre><code>## [1] 389369
+</code></pre>
+
+<pre><code class="r">dim(flights)
+</code></pre>
+
+<pre><code>## [1] 389369     13
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-41" style="background:;">
+  
+  <hgroup>
+    <h2>Accessing a data.table by <code>rows</code></h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Data.tables can be subsetted by indices, if we for example care about the second element of the table.
+We can do the following.</p>
+
+<pre><code class="r">flights[2, ]   # Access the 2nd row (also flights[2] or flights[i = 2])
+</code></pre>
+
+<pre><code>##    YEAR MONTH DAY DAY_OF_WEEK AIRLINE FLIGHT_NUMBER TAIL_NUMBER ORIGIN_AIRPORT
+## 1: 2015     1   1           4      AA           258      N3HYAA            LAX
+##    DESTINATION_AIRPORT DEPARTURE_TIME AIR_TIME DISTANCE ARRIVAL_TIME
+## 1:                 MIA             15      258     2342          756
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-42" style="background:;">
+  
+  <hgroup>
+    <h2>Accessing a data.table by <code>rows</code></h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Data.tables can be subsetted by indices, if we for example care about the second element of the table.
+We can do the following.</p>
+
+<pre><code class="r">flights[1:2]   # Access multiple consecutive rows.
+</code></pre>
+
+<pre><code>##    YEAR MONTH DAY DAY_OF_WEEK AIRLINE FLIGHT_NUMBER TAIL_NUMBER ORIGIN_AIRPORT
+## 1: 2015     1   1           4      AA          2336      N3KUAA            LAX
+## 2: 2015     1   1           4      AA           258      N3HYAA            LAX
+##    DESTINATION_AIRPORT DEPARTURE_TIME AIR_TIME DISTANCE ARRIVAL_TIME
+## 1:                 PBI              2      263     2330          741
+## 2:                 MIA             15      258     2342          756
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-43" style="background:;">
+  
+  <hgroup>
+    <h2>Accessing a data.table by <code>rows</code></h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Data.tables can be subsetted by indices, if we for example care about the second element of the table.
+We can do the following.</p>
+
+<pre><code class="r">flights[c(3, 5)]  # Access multiple rows.
+</code></pre>
+
+<pre><code>##    YEAR MONTH DAY DAY_OF_WEEK AIRLINE FLIGHT_NUMBER TAIL_NUMBER ORIGIN_AIRPORT
+## 1: 2015     1   1           4      US          2013      N584UW            LAX
+## 2: 2015     1   1           4      AA           115      N3CTAA            LAX
+##    DESTINATION_AIRPORT DEPARTURE_TIME AIR_TIME DISTANCE ARRIVAL_TIME
+## 1:                 CLT             44      228     2125          753
+## 2:                 MIA            103      255     2342          839
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-44" style="background:;">
+  
+  <hgroup>
+    <h2>Accessing a data.table by <code>columns</code></h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Additionally we can do the same for columns:</p>
+
+<pre><code class="r">head(flights[, 2 ])
+</code></pre>
+
+<pre><code>##    MONTH
+## 1:     1
+## 2:     1
+## 3:     1
+## 4:     1
+## 5:     1
+## 6:     1
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-45" style="background:;">
+  
+  <hgroup>
+    <h2>Accessing a data.table by <code>columns</code></h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Additionally we can do the same for columns:</p>
+
+<pre><code class="r">head(flights[, c(3, 5)])
+</code></pre>
+
+<pre><code>##    DAY AIRLINE
+## 1:   1      AA
+## 2:   1      AA
+## 3:   1      US
+## 4:   1      DL
+## 5:   1      AA
+## 6:   1      UA
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-46" style="background:;">
+  
+  <hgroup>
+    <h2>Accessing a data.table by <code>columns</code></h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Alternatively to subsetting by indices we can subset columns by their names.</p>
+
+<pre><code class="r">head(flights[, .(MONTH)])
+</code></pre>
+
+<pre><code>##    MONTH
+## 1:     1
+## 2:     1
+## 3:     1
+## 4:     1
+## 5:     1
+## 6:     1
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-47" style="background:;">
+  
+  <hgroup>
+    <h2>Accessing a data.table by <code>columns</code></h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Alternatively to subsetting by indices we can subset columns by their names.</p>
+
+<pre><code class="r">head(flights[, .(DAY, AIRLINE)])
+</code></pre>
+
+<pre><code>##    DAY AIRLINE
+## 1:   1      AA
+## 2:   1      AA
+## 3:   1      US
+## 4:   1      DL
+## 5:   1      AA
+## 6:   1      UA
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-48" style="background:;">
+  
+  <hgroup>
+    <h2>Accessing a data.table by <code>rows and columns</code></h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Based on the <code>dt[i, j, by]</code> syntax you can target specific rows and columns. However it is not advisable to access a column by its number. <strong>Use the column name instead</strong>.</p>
+
+<pre><code class="r">flights[1:5, TAIL_NUMBER]    # Access column x (also DT$x or DT[j=x]).
+</code></pre>
+
+<pre><code>## [1] &quot;N3KUAA&quot; &quot;N3HYAA&quot; &quot;N584UW&quot; &quot;N547US&quot; &quot;N3CTAA&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-49" style="background:;">
+  
+  <hgroup>
+    <h2>Accessing a data.table by <code>rows and columns</code></h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>When accessing many columns, we probably want to return a data.table instead of a vector. For that, we need to provide R with a list, so we use <code>list(colA, colB)</code>, or its simplified version <code>.(colA, colB)</code>.</p>
+
+<pre><code class="r"># Note that 1 and 3 were coerced into strings because a vector can have only 1 type
+flights[1:2, c(FLIGHT_NUMBER, ORIGIN_AIRPORT)]   
+</code></pre>
+
+<pre><code>## [1] &quot;2336&quot; &quot;258&quot;  &quot;LAX&quot;  &quot;LAX&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-50" style="background:;">
+  
+  <hgroup>
+    <h2>Accessing a data.table by <code>rows and columns</code></h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>When accessing many columns, we probably want to return a data.table instead of a vector. For that, we need to provide R with a list, so we use <code>list(colA, colB)</code>, or its simplified version <code>.(colA, colB)</code>.</p>
+
+<pre><code class="r"># Access a specific subset. Data.frame: DF[1:2, c(&quot;x&quot;,&quot;y&quot;)] 
+flights[1:2, list(TAIL_NUMBER, ORIGIN_AIRPORT)]
+</code></pre>
+
+<pre><code>##    TAIL_NUMBER ORIGIN_AIRPORT
+## 1:      N3KUAA            LAX
+## 2:      N3HYAA            LAX
+</code></pre>
+
+<pre><code class="r"># Same as before.
+flights[1:2, .(TAIL_NUMBER, ORIGIN_AIRPORT)]
+</code></pre>
+
+<pre><code>##    TAIL_NUMBER ORIGIN_AIRPORT
+## 1:      N3KUAA            LAX
+## 2:      N3HYAA            LAX
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-51" style="background:;">
+  
+  <hgroup>
+    <h2>Sub-setting rows according to some condition</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>A often more usefull way is to subset rows using conditions!
+We can subset a data table using the following operators:</p>
+
+<ul>
+<li><code>==</code></li>
+<li><code>&lt;</code> </li>
+<li><code>&gt;</code></li>
+<li><code>!=</code></li>
+<li><code>%in%</code></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-52" style="background:;">
+  
+  <hgroup>
+    <h2>Sub-setting rows according to some condition</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>For example if we are interested in analysing all the flights operated by &quot;AA&quot; (American Airlines) we can do that using the following command:</p>
+
+<pre><code class="r">head(flights[AIRLINE == &quot;AA&quot;])
+</code></pre>
+
+<pre><code>##    YEAR MONTH DAY DAY_OF_WEEK AIRLINE FLIGHT_NUMBER TAIL_NUMBER ORIGIN_AIRPORT
+## 1: 2015     1   1           4      AA          2336      N3KUAA            LAX
+## 2: 2015     1   1           4      AA           258      N3HYAA            LAX
+## 3: 2015     1   1           4      AA           115      N3CTAA            LAX
+## 4: 2015     1   1           4      AA          2410      N3BAAA            LAX
+## 5: 2015     1   1           4      AA          1515      N3HMAA            LAX
+## 6: 2015     1   1           4      AA          1686      N4XXAA            LAX
+##    DESTINATION_AIRPORT DEPARTURE_TIME AIR_TIME DISTANCE ARRIVAL_TIME
+## 1:                 PBI              2      263     2330          741
+## 2:                 MIA             15      258     2342          756
+## 3:                 MIA            103      255     2342          839
+## 4:                 DFW            600      150     1235         1052
+## 5:                 ORD            557      202     1744         1139
+## 6:                 STL            609      183     1592         1134
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-53" style="background:;">
+  
+  <hgroup>
+    <h2>Sub-setting rows according to some condition</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Alternatively if we are interested in all flights from any destination to the airports in NYC (JFK and LGA), we can subset the rows using the following command:</p>
+
+<pre><code class="r">head(flights[DESTINATION_AIRPORT %in% c(&quot;LGA&quot;, &quot;JFK&quot;)])
+</code></pre>
+
+<pre><code>##    YEAR MONTH DAY DAY_OF_WEEK AIRLINE FLIGHT_NUMBER TAIL_NUMBER ORIGIN_AIRPORT
+## 1: 2015     1   1           4      B6            24      N923JB            LAX
+## 2: 2015     1   1           4      DL           476      N196DN            LAX
+## 3: 2015     1   1           4      AA           118      N788AA            LAX
+## 4: 2015     1   1           4      VX           404      N621VA            LAX
+## 5: 2015     1   1           4      UA           275      N598UA            LAX
+## 6: 2015     1   1           4      B6           124      N943JB            LAX
+##    DESTINATION_AIRPORT DEPARTURE_TIME AIR_TIME DISTANCE ARRIVAL_TIME
+## 1:                 JFK            620      279     2475         1413
+## 2:                 JFK            650      274     2475         1458
+## 3:                 JFK            650      268     2475         1436
+## 4:                 JFK            728      268     2475         1512
+## 5:                 JFK            806      277     2475         1606
+## 6:                 JFK            814      279     2475         1612
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-54" style="background:;">
+  
+  <hgroup>
+    <h2>Sub-setting rows according to some condition</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Additionally we can concatenate multiple condition using the logical OR <code>|</code> or AND <code>&amp;</code> operator.
+If we for example want to inspect all flights departing between 6am and 7am operated by American Airlines we can use the following statement:</p>
+
+<pre><code class="r">head(flights[AIRLINE == &quot;AA&quot; &amp; DEPARTURE_TIME &gt; 600 &amp; DEPARTURE_TIME &lt; 700])
+</code></pre>
+
+<pre><code>##    YEAR MONTH DAY DAY_OF_WEEK AIRLINE FLIGHT_NUMBER TAIL_NUMBER ORIGIN_AIRPORT
+## 1: 2015     1   1           4      AA          1686      N4XXAA            LAX
+## 2: 2015     1   1           4      AA          1361      N3KYAA            BNA
+## 3: 2015     1   1           4      AA          2420      N3ERAA            LAX
+## 4: 2015     1   1           4      AA           338      N3DJAA            LAX
+## 5: 2015     1   1           4      AA          2424      N3DLAA            LAX
+## 6: 2015     1   1           4      AA           222      N3JSAA            LAX
+##    DESTINATION_AIRPORT DEPARTURE_TIME AIR_TIME DISTANCE ARRIVAL_TIME
+## 1:                 STL            609      183     1592         1134
+## 2:                 LAX            607      255     1797          847
+## 3:                 DFW            619      149     1235         1119
+## 4:                 SFO            644       55      337          803
+## 5:                 DFW            641      146     1235         1149
+## 6:                 BOS            650      271     2611         1442
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-55" style="background:;">
+  
+  <hgroup>
+    <h2>Grouping by rows (DT[i, j, <code>by</code>])</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>The <code>by =</code> option allows us to apply a function to groups wtihin a data.table. For example, we can use the <code>by =</code> to compute the mean flight time per airline:</p>
+
+<pre><code class="r"># Compute the mean air time of every airline
+flights.with.mean &lt;- flights[, .(mean_AIRTIME = mean(AIR_TIME, na.rm=TRUE)), by = AIRLINE]
+head(flights.with.mean)
+</code></pre>
+
+<pre><code>##    AIRLINE mean_AIRTIME
+## 1:      AA    219.48133
+## 2:      US    210.39488
+## 3:      DL    207.07201
+## 4:      UA    211.62008
+## 5:      OO     68.02261
+## 6:      AS    141.01870
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-56" style="background:;">
+  
+  <hgroup>
+    <h2>Grouping by rows (DT[i, j, <code>by</code>])</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>This way we can easily spot that one airline conducts on average shorter flights.</p>
+
+<pre><code class="r"># Compute the mean and standard deviation of the air time of every airline
+flights.with.mean.sd &lt;- flights[, .(mean_AIRTIME = mean(AIR_TIME, na.rm=TRUE),
+                                    sd_AIR_TIME = sd(AIR_TIME, na.rm=TRUE)), by = AIRLINE]
+head(flights.with.mean.sd)
+</code></pre>
+
+<pre><code>##    AIRLINE mean_AIRTIME sd_AIR_TIME
+## 1:      AA    219.48133    92.88972
+## 2:      US    210.39488   105.22483
+## 3:      DL    207.07201    88.90857
+## 4:      UA    211.62008    94.83246
+## 5:      OO     68.02261    41.06504
+## 6:      AS    141.01870    51.80642
+</code></pre>
+
+<p>Although we could write <code>flights[i = 5, j = AIRLINE]</code>, we usually ommit the <code>i =</code> and <code>j =</code> from the syntax, and write <code>flights[5, ARILINE]</code> instead. However, for clarity we usually include the <code>by =</code> in the syntax.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-57" style="background:;">
+  
+  <hgroup>
+    <h2>Counting occurences (the <code>.N</code> command)</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>The <code>.N</code> is a special in-built variable that counts the number observations within a table.</p>
+
+<p>Evaluating <code>.N</code> alone is equal to <code>nrow()</code> of a table.</p>
+
+<pre><code class="r">flights[, .N]
+</code></pre>
+
+<pre><code>## [1] 389369
+</code></pre>
+
+<pre><code class="r">nrow(flights)
+</code></pre>
+
+<pre><code>## [1] 389369
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-58" style="background:;">
+  
+  <hgroup>
+    <h2>Counting occurences (the <code>.N</code> command)</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>But the <code>.N</code> command becomes a lot more powerful when used with grouping or conditioning.
+We already saw earlier how we can use it to count the number of occurrences of elements in categorical columns.</p>
+
+<pre><code class="r"># Get the number of flights for each AIRLINE
+flights.by.company &lt;- flights[, .N, by = &#39;AIRLINE&#39;]
+head(flights.by.company)
+</code></pre>
+
+<pre><code>##    AIRLINE     N
+## 1:      AA 65483
+## 2:      US  7374
+## 3:      DL 50343
+## 4:      UA 54862
+## 5:      OO 73389
+## 6:      AS 16144
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-59" style="background:;">
+  
+  <hgroup>
+    <h2>Counting occurences (the <code>.N</code> command)</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Remembering the data.table definition: &quot;Take <strong>DT</strong>, subset rows using <strong>i</strong>, then select or calculate <strong>j</strong>, grouped by <strong>by</strong>&quot;,
+we can build even more powerful statements using all three elements.</p>
+
+<pre><code class="r"># For each airline, get the number of observations to NYC (JFK)
+flights.by.company.filtered &lt;- flights[DESTINATION_AIRPORT == &quot;JFK&quot;, .N, by = &#39;AIRLINE&#39;]
+head(flights.by.company.filtered)
+</code></pre>
+
+<pre><code>##    AIRLINE    N
+## 1:      B6 2488
+## 2:      DL 2546
+## 3:      AA 3804
+## 4:      VX 1652
+## 5:      UA 1525
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-60" style="background:;">
+  
+  <hgroup>
+    <h2>Creating new columns (the <code>:=</code> command)</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>The <code>:=</code> operator updates the data.table you are working on, so writing DT &lt;- DT[,... := ...] is redundant. This operator, plus all <code>set</code> functions (TODO clarify), change their input by <em>reference</em>. No copy of the object is made, that is why it is faster and uses less memory.</p>
+
+<pre><code class="r"># Add a new column called SPEED whose value is the DISTANCE divided by AIR_TIME
+flights[, SPEED := DISTANCE / AIR_TIME * 60]
+head(flights)
+</code></pre>
+
+<pre><code>##    YEAR MONTH DAY DAY_OF_WEEK AIRLINE FLIGHT_NUMBER TAIL_NUMBER ORIGIN_AIRPORT
+## 1: 2015     1   1           4      AA          2336      N3KUAA            LAX
+## 2: 2015     1   1           4      AA           258      N3HYAA            LAX
+## 3: 2015     1   1           4      US          2013      N584UW            LAX
+## 4: 2015     1   1           4      DL          1434      N547US            LAX
+## 5: 2015     1   1           4      AA           115      N3CTAA            LAX
+## 6: 2015     1   1           4      UA          1545      N76517            LAX
+##    DESTINATION_AIRPORT DEPARTURE_TIME AIR_TIME DISTANCE ARRIVAL_TIME    SPEED
+## 1:                 PBI              2      263     2330          741 531.5589
+## 2:                 MIA             15      258     2342          756 544.6512
+## 3:                 CLT             44      228     2125          753 559.2105
+## 4:                 MSP             35      188     1535          605 489.8936
+## 5:                 MIA            103      255     2342          839 551.0588
+## 6:                 IAH            112      156     1379          607 530.3846
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-61" style="background:;">
+  
+  <hgroup>
+    <h2>Creating new columns (the <code>:=</code> command)</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Having computed a new column using the <code>:=</code> operator we can use it for further analyses.</p>
+
+<pre><code class="r">flights[, .(mean_AIR_TIME = mean(AIR_TIME, na.rm=TRUE), 
+            mean_SPEED = mean(SPEED, na.rm=TRUE),
+            mean_DISTANCE = mean(DISTANCE, na.rm=TRUE)
+            ), by=AIRLINE] 
+</code></pre>
+
+<pre><code>##     AIRLINE mean_AIR_TIME mean_SPEED mean_DISTANCE
+##  1:      AA     219.48133   461.2839     1739.2331
+##  2:      US     210.39488   452.1641     1658.2581
+##  3:      DL     207.07201   466.0330     1656.2165
+##  4:      UA     211.62008   464.2928     1693.5504
+##  5:      OO      68.02261   349.5549      437.2337
+##  6:      AS     141.01870   439.0120     1040.0340
+##  7:      B6     309.79568   484.8242     2486.1489
+##  8:      NK     179.55828   450.0221     1402.1591
+##  9:      VX     185.36374   433.0870     1432.5384
+## 10:      WN     105.19976   409.3803      760.2593
+## 11:      HA     307.95961   497.3118     2537.8107
+## 12:      F9     159.94041   461.0684     1235.6664
+## 13:      MQ     102.15210   435.5580      737.0000
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-62" style="background:;">
+  
+  <hgroup>
+    <h2>Creating new columns (the <code>:=</code> command)</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Now we can see that the flights by the carrier &quot;OO&quot; are not just shorter, but also slow. 
+This could for example lead us to the hypothesis, that &quot;OO&quot; is a small regional carrier, which operates slower planes.</p>
+
+<p>Additionally we can use the <code>:=</code> operator to remove columns. If we for example observe that tail numbers are not important for our analysis we can remove them with the following statement:</p>
+
+<pre><code class="r">flights[, FLIGHT_NUMBER := NULL]
+head(flights)
+</code></pre>
+
+<pre><code>##    YEAR MONTH DAY DAY_OF_WEEK AIRLINE TAIL_NUMBER ORIGIN_AIRPORT
+## 1: 2015     1   1           4      AA      N3KUAA            LAX
+## 2: 2015     1   1           4      AA      N3HYAA            LAX
+## 3: 2015     1   1           4      US      N584UW            LAX
+## 4: 2015     1   1           4      DL      N547US            LAX
+## 5: 2015     1   1           4      AA      N3CTAA            LAX
+## 6: 2015     1   1           4      UA      N76517            LAX
+##    DESTINATION_AIRPORT DEPARTURE_TIME AIR_TIME DISTANCE ARRIVAL_TIME    SPEED
+## 1:                 PBI              2      263     2330          741 531.5589
+## 2:                 MIA             15      258     2342          756 544.6512
+## 3:                 CLT             44      228     2125          753 559.2105
+## 4:                 MSP             35      188     1535          605 489.8936
+## 5:                 MIA            103      255     2342          839 551.0588
+## 6:                 IAH            112      156     1379          607 530.3846
+</code></pre>
+
+<p>Here we observe, that the tail numbers are gone from the data.table</p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-63" style="background:;">
+  
+  <hgroup>
+    <h2>Exercise 3</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-64" style="background:;">
+  
+  <article data-timings="">
+    <script type='text/javascript'>toc("Analysis execution flow")</script>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-65" style="background:;">
+  
+  <hgroup>
+    <h2>Conditional Statements</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>A typical way to control the flow of the execution of your code is to have conditional statements.</p>
+
+<p>The typical setup is:</p>
+
+<pre><code class="r">if(statement_to_test) {
+  print(&quot;Statement is true&quot;)
+} else {
+  print(&quot;Statement is false&quot;)
+}
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-66" style="background:;">
+  
+  <hgroup>
+    <h2>Conditional Statements</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Long version:</p>
+
+<pre><code class="r">if(1 &lt; 2) {
+  print(&quot;TRUE&quot;)
+} else {
+  print(&quot;FALSE&quot;)
+}
+</code></pre>
+
+<pre><code>## [1] &quot;TRUE&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-67" style="background:;">
+  
+  <hgroup>
+    <h2>Conditional Statements</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Short version if the To-Do step fits into one line:</p>
+
+<pre><code class="r">{
+if(1 &gt; 2) print(&quot;TRUE&quot;)
+else print(&quot;FALSE&quot;)
+}
+</code></pre>
+
+<pre><code>## [1] &quot;FALSE&quot;
+</code></pre>
+
+<p>The curly brackets around the if-else statement are only needed in a script to tell R to which <em>if</em> the <em>else</em> belongs to.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-68" style="background:;">
+  
+  <hgroup>
+    <h2>Conditional Statements</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>You can also have multiple statement tests. If more than one statements can be satisfied the first that got evaluated will be executed:</p>
+
+<pre><code class="r">x &lt;- 1
+if(x &gt; 0) {
+  print(&quot;X is 0, or maybe not?&quot;)
+} else if(x == 1) {
+  print(&quot;X is 1&quot;)
+} else {
+  print(&quot;X is something else&quot;)
+}
+</code></pre>
+
+<pre><code>## [1] &quot;X is 0, or maybe not?&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-69" style="background:;">
+  
+  <hgroup>
+    <h2>Conditional Statements</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>You can also chain <em>if-else</em> statements:</p>
+
+<pre><code class="r">x &lt;- 5
+if(x &gt; 0) {
+  if(x &gt; 3) {
+    if(x == 5) {
+      cat(&quot;X is 5&quot;)
+    } else {
+      cat(&quot;X is greater than 3&quot;)
+    }  
+  } else {
+    cat(&quot;X positive and less than 3&quot;)
+  }
+} else {
+  cat(&quot;X less than 0&quot;)
+}
+</code></pre>
+
+<p>R also supports switch statements in order to avoid multiple <code>else if</code> statements, but this is for more advanced users.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-70" style="background:;">
+  
+  <hgroup>
+    <h2>For loops</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>R supports looping through the traditional <em>for</em> and <em>while</em> statements and with the use of the <em>apply family</em> functions.</p>
+
+<p>Syntax:</p>
+
+<pre><code>for(index in sequence) {
+  do something
+}
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-71" style="background:;">
+  
+  <hgroup>
+    <h2>For loops</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Again, if the To-Do step is a one-liner, curly brackets can be dropped</p>
+
+<pre><code class="r">a &lt;- NULL
+for(i in 1:10) a &lt;- c(a, sum(1:i))
+a
+</code></pre>
+
+<pre><code>##  [1]  1  3  6 10 15 21 28 36 45 55
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-72" style="background:;">
+  
+  <hgroup>
+    <h2>For loops</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>A sequence can be any vector, including lists</p>
+
+<pre><code class="r">myList &lt;- list(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+a &lt;- integer(10)
+for(i in myList) a[i] &lt;- sum(1:i)
+a
+</code></pre>
+
+<pre><code>##  [1]  1  3  6 10 15 21 28 36 45 55
+</code></pre>
+
+<p>However, usually looping using <em>for/while</em> statements is more time consuming compared to the the functions of the <em>apply family</em>, but this is for more advanced users. </p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-73" style="background:;">
+  
+  <hgroup>
+    <h2>Exercise 4</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-74" style="background:;">
+  
+  <article data-timings="">
+    <script type='text/javascript'>toc("Reproducible science with Rmarkdown reports")</script>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-75" style="background:;">
+  
+  <hgroup>
+    <h2>R Markdown</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <ul>
+<li><p>This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <a href="http://rmarkdown.rstudio.com">http://rmarkdown.rstudio.com</a>. </p></li>
+<li><p>Simply go to File --&gt; New File --&gt; R Markdown</p></li>
+<li><p>Select PDF and you get a template.</p></li>
+<li><p>You most likely won&#39;t need more commands than in on the first page of <a href="https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf">this cheat sheet</a>.</p></li>
+<li><p>When you click the <strong>Knit</strong> button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.  </p></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-76" style="background:;">
+  
+  <hgroup>
+    <h2>Exercise 5</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-77" style="background:;">
+  
+  <hgroup>
+    <h2>Useful references</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <ul>
+<li><p>These slides are mostly based on Hadley Wickham&#39;s book <a href="http://adv-r.had.co.nz/">Advanced R</a></p></li>
+<li><p><a href="http://hadley.nz/"><strong>Everything else</strong> from Hadley Wickham</a></p></li>
+<li><p>In-depth documentations:</p>
+
+<ul>
+<li><a href="https://cran.r-project.org/doc/manuals/r-release/R-intro.pdf">Introduction to R</a></li>
+<li><a href="https://cran.r-project.org/doc/manuals/r-release/R-lang.pdf">R language definition</a></li>
+<li><a href="https://cran.r-project.org/doc/manuals/r-release/R-ints.pdf">R Internals</a></li>
+</ul></li>
+<li><p>Last but not least:</p>
+
+<ul>
+<li><a href="http://stackoverflow.com/questions/tagged/r">Stackoverflow</a></li>
+</ul></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='NA'>
+         1
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='NA'>
+         2
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='NA'>
+         3
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='Assignments'>
+         4
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=5 title='Assignments'>
+         5
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=6 title='Assignments'>
+         6
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=7 title='Vectors'>
+         7
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=8 title='Vectors'>
+         8
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=9 title='Vectors'>
+         9
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=10 title='Vectors'>
+         10
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=11 title='Vectors'>
+         11
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=12 title='Vectors'>
+         12
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=13 title='Vectors'>
+         13
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=14 title='Vectors'>
+         14
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=15 title='Vectors'>
+         15
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=16 title='Vectors'>
+         16
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=17 title='Combining vectors vectors'>
+         17
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=18 title='Subsetting vectors'>
+         18
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=19 title='Subsetting vectors'>
+         19
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=20 title='Subsetting vectors'>
+         20
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=21 title='Subsetting vectors'>
+         21
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=22 title='Exercise 1'>
+         22
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=23 title='Factors'>
+         23
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=24 title='Factors'>
+         24
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=25 title='Factors'>
+         25
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=26 title='Factors'>
+         26
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=27 title='Factors'>
+         27
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=28 title='Factors'>
+         28
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=29 title='Factors'>
+         29
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=30 title='Exercise 2'>
+         30
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=31 title='Math'>
+         31
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=32 title='Binary comparison'>
+         32
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=33 title='Binary comparison'>
+         33
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=34 title='NA'>
+         34
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=35 title='Data Wrangling using Data.table'>
+         35
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=36 title='Data Wrangling using Data.table'>
+         36
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=37 title='Loading data as a data.table'>
+         37
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=38 title='Creating a data.table'>
+         38
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=39 title='Creating a data.table'>
+         39
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=40 title='Inspecting tables'>
+         40
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=41 title='Accessing a data.table by <code>rows</code>'>
+         41
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=42 title='Accessing a data.table by <code>rows</code>'>
+         42
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=43 title='Accessing a data.table by <code>rows</code>'>
+         43
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=44 title='Accessing a data.table by <code>columns</code>'>
+         44
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=45 title='Accessing a data.table by <code>columns</code>'>
+         45
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=46 title='Accessing a data.table by <code>columns</code>'>
+         46
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=47 title='Accessing a data.table by <code>columns</code>'>
+         47
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=48 title='Accessing a data.table by <code>rows and columns</code>'>
+         48
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=49 title='Accessing a data.table by <code>rows and columns</code>'>
+         49
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=50 title='Accessing a data.table by <code>rows and columns</code>'>
+         50
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=51 title='Sub-setting rows according to some condition'>
+         51
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=52 title='Sub-setting rows according to some condition'>
+         52
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=53 title='Sub-setting rows according to some condition'>
+         53
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=54 title='Sub-setting rows according to some condition'>
+         54
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=55 title='Grouping by rows (DT[i, j, <code>by</code>])'>
+         55
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=56 title='Grouping by rows (DT[i, j, <code>by</code>])'>
+         56
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=57 title='Counting occurences (the <code>.N</code> command)'>
+         57
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=58 title='Counting occurences (the <code>.N</code> command)'>
+         58
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=59 title='Counting occurences (the <code>.N</code> command)'>
+         59
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=60 title='Creating new columns (the <code>:=</code> command)'>
+         60
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=61 title='Creating new columns (the <code>:=</code> command)'>
+         61
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=62 title='Creating new columns (the <code>:=</code> command)'>
+         62
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=63 title='Exercise 3'>
+         63
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=64 title='NA'>
+         64
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=65 title='Conditional Statements'>
+         65
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=66 title='Conditional Statements'>
+         66
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=67 title='Conditional Statements'>
+         67
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=68 title='Conditional Statements'>
+         68
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=69 title='Conditional Statements'>
+         69
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=70 title='For loops'>
+         70
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=71 title='For loops'>
+         71
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=72 title='For loops'>
+         72
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=73 title='Exercise 4'>
+         73
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=74 title='NA'>
+         74
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=75 title='R Markdown'>
+         75
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=76 title='Exercise 5'>
+         76
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=77 title='Useful references'>
+         77
+      </a>
+    </li>
+    
+    </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  <script src="libraries/widgets/bootstrap/js/bootstrap.min.js"></script>
+<script src="libraries/widgets/bootstrap/js/bootbox.min.js"></script>
+<script src="libraries/widgets/quiz/js/jquery.quiz.js"></script>
+<script src="libraries/widgets/quiz/js/mustache.min.js"></script>
+<script src="libraries/widgets/quiz/js/quiz-app.js"></script>
+
+  <!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true
+      }
+    });
+  </script>
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script> -->
+  
+<script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+
+  <script>  
+  $(function (){ 
+    $("#example").popover(); 
+    $("[rel='tooltip']").tooltip(); 
+  });  
+  </script>  
+  
+  <!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>
