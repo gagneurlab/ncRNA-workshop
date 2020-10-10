@@ -34,7 +34,8 @@ var sections = ["Why we plot",
 "Grammar of graphics and ggplot2",
 "Plots for one single continuous variable",
 "Plots for two variables: one continuous, one discrete",
-"Plots for two continuous variables"];
+"Plots for two continuous variables",
+"Tidy data"];
 
 var title = "Overview";
 var fontsize = "20pt"
@@ -76,9 +77,6 @@ opts_chunk$set(
     out.width="500px", out.height="400px", fig.height = 3, fig.width = 4, 
     dpi=200
 )
-# options(width=100)
-imgprefix <- 'assets/img/lec05/'
-figprefix <- 'assets/fig/lec05_'
 
 # data
 ind <- fread('../../../extdata/CPI_HDI.csv')
@@ -97,8 +95,11 @@ options(knitr.package.unnamed.chunk.label="lecture-02")
 
 <!-- START LECTURE -->
 
+
+## Day 2 - Basic plotting and Tidy data
+
 ```{r syllabus, out.width = "800px", echo=FALSE}
-knitr::include_graphics("assets/img/lec05_syllabus.png")
+knitr::include_graphics("assets/img/syllabus-day-2.png")
 ```
 
 ---
@@ -148,9 +149,8 @@ Data visualization becomes crucial for gaining **insight** into data that tradit
 
 **Plotting can give hints about bugs in our code (or even in the data!) and can help us to develop and improve methods and models.**
 
-
 ```{r, out.width = "300px", out.height= "300px", echo=FALSE}
-knitr::include_graphics("assets/img/lec05_scientific-method.png")
+knitr::include_graphics("assets/img/scientific-method.png")
 ```
 
 ---

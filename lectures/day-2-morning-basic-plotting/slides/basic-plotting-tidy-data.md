@@ -34,7 +34,8 @@ var sections = ["Why we plot",
 "Grammar of graphics and ggplot2",
 "Plots for one single continuous variable",
 "Plots for two variables: one continuous, one discrete",
-"Plots for two continuous variables"];
+"Plots for two continuous variables",
+"Tidy data"];
 
 var title = "Overview";
 var fontsize = "20pt"
@@ -70,7 +71,10 @@ function toc(cur) {
 
 <!-- START LECTURE -->
 
-<img src="assets/img/lec05_syllabus.png" title="plot of chunk syllabus" alt="plot of chunk syllabus" width="800px" height="400px" />
+
+## Day 2 - Basic plotting and Tidy data
+
+<img src="assets/img/syllabus-day-2.png" title="plot of chunk syllabus" alt="plot of chunk syllabus" width="800px" height="400px" />
 
 ---
 
@@ -113,8 +117,7 @@ Data visualization becomes crucial for gaining **insight** into data that tradit
 
 **Plotting can give hints about bugs in our code (or even in the data!) and can help us to develop and improve methods and models.**
 
-
-<img src="assets/img/lec05_scientific-method.png" title="plot of chunk unnamed-chunk-4" alt="plot of chunk unnamed-chunk-4" width="300px" height="300px" />
+<img src="assets/img/scientific-method.png" title="plot of chunk unnamed-chunk-4" alt="plot of chunk unnamed-chunk-4" width="300px" height="300px" />
 
 ---
 
