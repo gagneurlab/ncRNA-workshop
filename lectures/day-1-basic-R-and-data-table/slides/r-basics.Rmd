@@ -942,6 +942,43 @@ a
 
 However, usually looping using *for/while* statements is more time consuming compared to the the functions of the *apply family*, but this is for more advanced users. 
 
+---
+
+## Functions
+
+Function are a nice way to break down a big problem (bake a pizza) to smaller, manageable sub-problems (make the dough, make the sauce, add toppings, bake the pizza). They offer code re-usage (save time for important things, like wine drinking), easier testing of functionality and cleaner code!
+
+---
+
+## Functions
+
+The syntax to write your own functions is the following:
+
+```{r, eval=FALSE}
+myFunction <- function(args1, args2 = default, ...) {
+  body
+  return(result)
+}
+```
+
+* If the `return` statement is missing, the result of the last line will be returned
+* The parameters can be assigned default values
+* If the default value is a vector, the first value will be used by default
+
+---
+
+## Functions
+
+* The *three dots* (`...`) in the function arguments are called **ellipsis** and are used as a placeholder for any arguments passed to a function call inside. This is useful when you don't want to push all parameters from embodied function to your functions or allow for generic functions without pre-specifying argument names.
+
+```{r, eval=FALSE}
+myFunction <- function(args1, args2 = c("option1", "option2"), ...) {
+  result <- doSomething(args1, ...)
+  return(result)
+}
+myFunction(args1, args2, param1)
+```
+
 --- 
 
 ## Exercise 4
