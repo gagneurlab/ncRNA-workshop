@@ -1,6 +1,6 @@
 ---
 title       : 'Make your paper figures professionally: Scientific data analysis and visualization with R'
-author      : Vangelis Theodorakis, Fatemeh Behjati, Julien Gagneur, Marcel Schultz
+author      : Vangelis Theodorakis, Fatemeh Behjati, Julien Gagneur, Marcel Schulz
 subtitle    : Grammar of graphics and Basic Plotting
 framework   : io2012
 highlighter : highlight.js
@@ -139,7 +139,7 @@ system.time(a <- t(1:1e6)%*%(1:1e6))
 
 ```
 ##    user  system elapsed 
-##   0.062   0.016   0.078
+##   0.019   0.007   0.026
 ```
 
 ```r
@@ -1412,7 +1412,7 @@ You can also have multiple statement tests. If more than one statements can be s
 
 ```r
 x <- 1
-if(x > 0) {
+if(x >= 0) {
   print("X is 0, or maybe not?")
 } else if(x == 1) {
   print("X is 1")
@@ -1441,10 +1441,10 @@ if(x > 0) {
       cat("X is greater than 3")
     }  
   } else {
-    cat("X positive and less than 3")
+    cat("X positive and less than or equal to 3")
   }
 } else {
-  cat("X less than 0")
+  cat("X less than or equal to 0")
 }
 ```
 
