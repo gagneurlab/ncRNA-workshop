@@ -201,7 +201,7 @@ system.time(a &lt;- t(1:1e6)%*%(1:1e6))
 </code></pre>
 
 <pre><code>##    user  system elapsed 
-##    0.05    0.02    0.07
+##   0.062   0.016   0.078
 </code></pre>
 
 <pre><code class="r">system.time(a = t(1:1e6)%*%(1:1e6)) ## This would cause an error
@@ -1955,6 +1955,69 @@ a
 <slide class="" id="slide-73" style="background:;">
   
   <hgroup>
+    <h2>Functions</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Function are a nice way to break down a big problem (bake a pizza) to smaller, manageable sub-problems (make the dough, make the sauce, add toppings, bake the pizza). They offer code re-usage (save time for important things, like wine drinking), easier testing of functionality and cleaner code!</p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-74" style="background:;">
+  
+  <hgroup>
+    <h2>Functions</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>The syntax to write your own functions is the following:</p>
+
+<pre><code class="r">myFunction &lt;- function(args1, args2 = default, ...) {
+  body
+  return(result)
+}
+</code></pre>
+
+<ul>
+<li>If the <code>return</code> statement is missing, the result of the last line will be returned</li>
+<li>The parameters can be assigned default values</li>
+<li>If the default value is a vector, the first value will be used by default</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-75" style="background:;">
+  
+  <hgroup>
+    <h2>Functions</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <ul>
+<li>The <em>three dots</em> (<code>...</code>) in the function arguments are called <strong>ellipsis</strong> and are used as a placeholder for any arguments passed to a function call inside. This is useful when you don&#39;t want to push all parameters from embodied function to your functions or allow for generic functions without pre-specifying argument names.</li>
+</ul>
+
+<pre><code class="r">myFunction &lt;- function(args1, args2 = c(&quot;option1&quot;, &quot;option2&quot;), ...) {
+  result &lt;- doSomething(args1, ...)
+  return(result)
+}
+myFunction(args1, args2, param1)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-76" style="background:;">
+  
+  <hgroup>
     <h2>Exercise 4</h2>
   </hgroup>
   
@@ -1965,7 +2028,7 @@ a
   
 </slide>
 
-<slide class="" id="slide-74" style="background:;">
+<slide class="" id="slide-77" style="background:;">
   
   <article data-timings="">
     <script type='text/javascript'>toc("Reproducible science with Rmarkdown reports")</script>
@@ -1975,7 +2038,7 @@ a
   
 </slide>
 
-<slide class="" id="slide-75" style="background:;">
+<slide class="" id="slide-78" style="background:;">
   
   <hgroup>
     <h2>R Markdown</h2>
@@ -1995,7 +2058,7 @@ a
   
 </slide>
 
-<slide class="" id="slide-76" style="background:;">
+<slide class="" id="slide-79" style="background:;">
   
   <hgroup>
     <h2>Exercise 5</h2>
@@ -2008,7 +2071,7 @@ a
   
 </slide>
 
-<slide class="" id="slide-77" style="background:;">
+<slide class="" id="slide-80" style="background:;">
   
   <hgroup>
     <h2>Useful references</h2>
@@ -2548,36 +2611,57 @@ a
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=73 title='Exercise 4'>
+        data-slide=73 title='Functions'>
          73
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=74 title='NA'>
+        data-slide=74 title='Functions'>
          74
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=75 title='R Markdown'>
+        data-slide=75 title='Functions'>
          75
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=76 title='Exercise 5'>
+        data-slide=76 title='Exercise 4'>
          76
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=77 title='Useful references'>
+        data-slide=77 title='NA'>
          77
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=78 title='R Markdown'>
+         78
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=79 title='Exercise 5'>
+         79
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=80 title='Useful references'>
+         80
       </a>
     </li>
     
