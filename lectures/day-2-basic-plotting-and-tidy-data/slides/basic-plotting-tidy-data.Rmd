@@ -605,7 +605,7 @@ Data, axes and geometry specified.
 
 ---
 
-## Exercise Iris
+## Exercise 1
 
 ---
 
@@ -654,7 +654,7 @@ ggplot(ind, aes(HDI)) + geom_histogram(bins=10) + mytheme
 
 ---
 
-## Exercise Histograms
+## Exercise 2
 
 ---
 
@@ -744,7 +744,7 @@ ggplot(dt, aes(group, value)) + geom_boxplot() + facet_wrap(~variable) + mytheme
 
 ---
 
-## Boxplots/Violin plots exercise
+## Exercise 3
 
 ---
 
@@ -812,8 +812,7 @@ A **To show a connection between a series of individual data points**
 
 ---
 
-## Scatterplot exercise
-
+## Exercise 4
 
 ---
 
@@ -932,6 +931,10 @@ ggplot(dt, aes(year, cases, color = country))+
   ggtitle( "Change over time") +
   geom_line()
 ```
+
+---
+
+## Exercise 5
 
 ---
 
@@ -1185,6 +1188,57 @@ unite(table5, col = new, century, year, sep = "")
 
 ---
 
+## Exercise 6
+
+---
+
+## Merging
+
+Sometimes we may have multiple tables giving parts of information that we want to have in one table. In such cases, `merge()` functions allows us to combine tables based on common columns using the `by` argument.
+
+There are different types of merging but this is more advanced.
+
+---
+
+## Merging
+
+If we for example want to know how the airports are called behind the IATA_CODE codes, we can load another table containing additional information about the airports.
+```{r, eval=FALSE}
+airports <- fread('extdata/airports.csv')
+```
+
+```{r, echo=FALSE}
+airports <-  fread('../../../extdata/airports.csv')
+flights <- fread('../../../extdata/flightsLAX.csv')
+```
+```{r}
+head(airports)
+```
+
+---
+
+## Merging
+
+If we for example want to know how the airports are called behind the IATA_CODE codes, we can load another table containing additional information about the airports.
+```{r, eval=FALSE}
+flights <- fread('extdata/flightsLAX.csv')
+```
+
+```{r}
+head(flights)
+```
+
+---
+
+## Merging
+
+```{r}
+head(merge(flights, airports,
+           by.x = "DESTINATION_AIRPORT", by.y = 'IATA_CODE'))
+```
+
+---
+
 ## Take-home
 
 * Visualization is as important as statistics. Both are needed.
@@ -1220,6 +1274,7 @@ Interesting blog post:
   * <http://simplystatistics.org/2016/02/17/non-tidy-data/>
 
 ---
+
 ## Plotting libraries
 
 - http://www.r-graph-gallery.com/portfolio/ggplot2-package/

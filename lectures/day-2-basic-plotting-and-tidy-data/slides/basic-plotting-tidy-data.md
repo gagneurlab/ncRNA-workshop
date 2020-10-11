@@ -216,7 +216,7 @@ plot(height)
 hist(height)
 ```
 
-<img src="assets/fig/unnamed-chunk-10-1.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" width="300px" height="400px" /><img src="assets/fig/unnamed-chunk-10-2.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" width="300px" height="400px" />
+<img src="figure/unnamed-chunk-10-1.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" width="300px" height="400px" /><img src="figure/unnamed-chunk-10-2.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" width="300px" height="400px" />
 
 
 ```r
@@ -246,7 +246,7 @@ plot(fheight)
 hist(fheight)
 ```
 
-<img src="assets/fig/unnamed-chunk-13-1.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" width="300px" height="400px" /><img src="assets/fig/unnamed-chunk-13-2.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" width="300px" height="400px" />
+<img src="figure/unnamed-chunk-13-1.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" width="300px" height="400px" /><img src="figure/unnamed-chunk-13-2.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" width="300px" height="400px" />
 
 
 ```r
@@ -321,7 +321,7 @@ ggplot(data = gm_dt, aes(x = gdpPercap, y = lifeExp)) +
 
 ## ggplot2 and Grammar of Graphics
 
-<img src="assets/fig/unnamed-chunk-17-1.png" title="plot of chunk unnamed-chunk-17" alt="plot of chunk unnamed-chunk-17" width="700px" height="400px" />
+<img src="figure/unnamed-chunk-17-1.png" title="plot of chunk unnamed-chunk-17" alt="plot of chunk unnamed-chunk-17" width="700px" height="400px" />
 
 But how we create such a plot step by step?
 
@@ -388,7 +388,7 @@ For starting with the visualization we initiate a `ggplot` object which generate
 ggplot()
 ```
 
-<img src="assets/fig/unnamed-chunk-20-1.png" title="plot of chunk unnamed-chunk-20" alt="plot of chunk unnamed-chunk-20" width="400px" height="300px" />
+<img src="figure/unnamed-chunk-20-1.png" title="plot of chunk unnamed-chunk-20" alt="plot of chunk unnamed-chunk-20" width="400px" height="300px" />
 
 ---
 
@@ -401,7 +401,7 @@ This `aes()` function defines which columns in the `data.table` object map to `x
 ggplot(data = gm_dt, aes(x = gdpPercap, y = lifeExp))
 ```
 
-<img src="assets/fig/unnamed-chunk-21-1.png" title="plot of chunk unnamed-chunk-21" alt="plot of chunk unnamed-chunk-21" width="400px" height="300px" />
+<img src="figure/unnamed-chunk-21-1.png" title="plot of chunk unnamed-chunk-21" alt="plot of chunk unnamed-chunk-21" width="400px" height="300px" />
 
 
 ---
@@ -415,7 +415,7 @@ scatter plot containing the gdpPercap on the x-axis and the lifeExp on the y-axi
 ggplot(data = gm_dt, aes(x = gdpPercap, y = lifeExp)) + geom_point()
 ```
 
-<img src="assets/fig/unnamed-chunk-22-1.png" title="plot of chunk unnamed-chunk-22" alt="plot of chunk unnamed-chunk-22" width="400px" height="300px" />
+<img src="figure/unnamed-chunk-22-1.png" title="plot of chunk unnamed-chunk-22" alt="plot of chunk unnamed-chunk-22" width="400px" height="300px" />
 
 ---
 
@@ -464,7 +464,7 @@ again with the help of the function readRDS() and add a horizontal line at y=50 
 p + geom_hline(yintercept = 50)
 ```
 
-<img src="assets/fig/unnamed-chunk-26-1.png" title="plot of chunk unnamed-chunk-26" alt="plot of chunk unnamed-chunk-26" width="400px" height="300px" />
+<img src="figure/unnamed-chunk-26-1.png" title="plot of chunk unnamed-chunk-26" alt="plot of chunk unnamed-chunk-26" width="400px" height="300px" />
 
 ---
 
@@ -476,7 +476,7 @@ We can easily map variables to different colors, sizes or shapes depending on th
 ggplot(data = gm_dt, aes(x = gdpPercap, y = lifeExp, color = continent)) + geom_point()
 ```
 
-<img src="assets/fig/unnamed-chunk-27-1.png" title="plot of chunk unnamed-chunk-27" alt="plot of chunk unnamed-chunk-27" width="800px" height="300px" />
+<img src="figure/unnamed-chunk-27-1.png" title="plot of chunk unnamed-chunk-27" alt="plot of chunk unnamed-chunk-27" width="800px" height="300px" />
 
 ---
 
@@ -489,7 +489,7 @@ To change the shape of our points we can override the `shape` argument of the `a
 ggplot(data = gm_dt, aes(x = gdpPercap, y = lifeExp, shape = continent)) + geom_point()
 ```
 
-<img src="assets/fig/unnamed-chunk-28-1.png" title="plot of chunk unnamed-chunk-28" alt="plot of chunk unnamed-chunk-28" width="800px" height="300px" />
+<img src="figure/unnamed-chunk-28-1.png" title="plot of chunk unnamed-chunk-28" alt="plot of chunk unnamed-chunk-28" width="800px" height="300px" />
 
 ---
 
@@ -503,7 +503,7 @@ ggplot(data = gm_dt, aes(x = gdpPercap, y = lifeExp, color = continent, size = p
 geom_point()
 ```
 
-<img src="assets/fig/unnamed-chunk-29-1.png" title="plot of chunk unnamed-chunk-29" alt="plot of chunk unnamed-chunk-29" width="800px" height="300px" />
+<img src="figure/unnamed-chunk-29-1.png" title="plot of chunk unnamed-chunk-29" alt="plot of chunk unnamed-chunk-29" width="800px" height="300px" />
 
 ---
 
@@ -517,7 +517,7 @@ ggplot(data = gm_dt, aes(x = gdpPercap, y = lifeExp)) +
   geom_point(aes(color = continent,size = pop))
 ```
 
-<img src="assets/fig/unnamed-chunk-30-1.png" title="plot of chunk unnamed-chunk-30" alt="plot of chunk unnamed-chunk-30" width="800px" height="300px" />
+<img src="figure/unnamed-chunk-30-1.png" title="plot of chunk unnamed-chunk-30" alt="plot of chunk unnamed-chunk-30" width="800px" height="300px" />
 
 ---
 
@@ -536,7 +536,7 @@ ggplot(data = gm_dt) + geom_point(aes(x = gdpPercap, y = lifeExp)) + stat_smooth
 ## Error: stat_smooth requires the following missing aesthetics: x and y
 ```
 
-<img src="assets/fig/unnamed-chunk-31-1.png" title="plot of chunk unnamed-chunk-31" alt="plot of chunk unnamed-chunk-31" width="500px" height="400px" />
+<img src="figure/unnamed-chunk-31-1.png" title="plot of chunk unnamed-chunk-31" alt="plot of chunk unnamed-chunk-31" width="500px" height="400px" />
 
 ---
 
@@ -552,7 +552,7 @@ ggplot(data = gm_dt) + geom_point(aes(x = gdpPercap, y = lifeExp)) +
   stat_smooth(aes(x = gdpPercap, y = lifeExp))
 ```
 
-<img src="assets/fig/unnamed-chunk-32-1.png" title="plot of chunk unnamed-chunk-32" alt="plot of chunk unnamed-chunk-32" width="400px" height="300px" />
+<img src="figure/unnamed-chunk-32-1.png" title="plot of chunk unnamed-chunk-32" alt="plot of chunk unnamed-chunk-32" width="400px" height="300px" />
 
 ---
 
@@ -568,7 +568,7 @@ ggplot(data = gm_dt, aes(x = gdpPercap, y = lifeExp, color = continent)) + geom_
 stat_smooth()
 ```
 
-<img src="assets/fig/unnamed-chunk-33-1.png" title="plot of chunk unnamed-chunk-33" alt="plot of chunk unnamed-chunk-33" width="800px" height="300px" />
+<img src="figure/unnamed-chunk-33-1.png" title="plot of chunk unnamed-chunk-33" alt="plot of chunk unnamed-chunk-33" width="800px" height="300px" />
 
 --- &radio
 
@@ -650,7 +650,7 @@ Data, axes and geometry specified.
 
 ---
 
-## Exercise Iris
+## Exercise 1
 
 ---
 
@@ -700,7 +700,7 @@ To plot the values of a vector with continuous values we can use a histogram. A 
 ggplot(ind, aes(HDI)) + geom_histogram() + mytheme
 ```
 
-<img src="assets/fig/unnamed-chunk-36-1.png" title="plot of chunk unnamed-chunk-36" alt="plot of chunk unnamed-chunk-36" width="800px" height="400px" />
+<img src="figure/unnamed-chunk-36-1.png" title="plot of chunk unnamed-chunk-36" alt="plot of chunk unnamed-chunk-36" width="800px" height="400px" />
 
 ---
 ## Histogram: setting the number of bins
@@ -713,11 +713,11 @@ in the `bins` argument of the `geom_histogram()` function:
 ggplot(ind, aes(HDI)) + geom_histogram(bins=10) + mytheme
 ```
 
-<img src="assets/fig/unnamed-chunk-37-1.png" title="plot of chunk unnamed-chunk-37" alt="plot of chunk unnamed-chunk-37" width="800px" height="400px" />
+<img src="figure/unnamed-chunk-37-1.png" title="plot of chunk unnamed-chunk-37" alt="plot of chunk unnamed-chunk-37" width="800px" height="400px" />
 
 ---
 
-## Exercise Histograms
+## Exercise 2
 
 ---
 
@@ -736,7 +736,7 @@ comparing the different distributions of each category.
 ggplot(mpg, aes(class, hwy)) + geom_boxplot() + mytheme
 ```
 
-<img src="assets/fig/unnamed-chunk-38-1.png" title="plot of chunk unnamed-chunk-38" alt="plot of chunk unnamed-chunk-38" width="800px" height="400px" />
+<img src="figure/unnamed-chunk-38-1.png" title="plot of chunk unnamed-chunk-38" alt="plot of chunk unnamed-chunk-38" width="800px" height="400px" />
 
 ---
 
@@ -750,7 +750,7 @@ A violin plot is an alternative to the boxplot for visualizing either one contin
 ggplot(mpg, aes(class, hwy)) + geom_violin() + mytheme
 ```
 
-<img src="assets/fig/unnamed-chunk-39-1.png" title="plot of chunk unnamed-chunk-39" alt="plot of chunk unnamed-chunk-39" width="800px" height="400px" />
+<img src="figure/unnamed-chunk-39-1.png" title="plot of chunk unnamed-chunk-39" alt="plot of chunk unnamed-chunk-39" width="800px" height="400px" />
 
 ---
 
@@ -803,11 +803,11 @@ ggplot(dt, aes(group, value)) + geom_boxplot() + facet_wrap(~variable) + mytheme
 
 Boxplots are bad for bimodal data since they only show one mode (the median), but are ok for both symmetric and non-symmetric data, since the quartiles are not symmetric.
 
-<img src="assets/fig/unnamed-chunk-41-1.png" title="plot of chunk unnamed-chunk-41" alt="plot of chunk unnamed-chunk-41" width="500px" height="400px" />
+<img src="figure/unnamed-chunk-41-1.png" title="plot of chunk unnamed-chunk-41" alt="plot of chunk unnamed-chunk-41" width="500px" height="400px" />
 
 ---
 
-## Boxplots/Violin plots exercise
+## Exercise 3
 
 ---
 
@@ -824,7 +824,7 @@ Scatter plots are a useful plot type for easily visualizing the relationship bet
 ggplot(mpg, aes(displ, hwy)) + geom_point() + mytheme
 ```
 
-<img src="assets/fig/unnamed-chunk-42-1.png" title="plot of chunk unnamed-chunk-42" alt="plot of chunk unnamed-chunk-42" width="600px" height="400px" />
+<img src="figure/unnamed-chunk-42-1.png" title="plot of chunk unnamed-chunk-42" alt="plot of chunk unnamed-chunk-42" width="600px" height="400px" />
 
 ---
 
@@ -837,7 +837,7 @@ We can modify the previous plot by coloring the points depending on the vehicle 
 ggplot(mpg, aes(displ, hwy, color = class)) + geom_point() + mytheme
 ```
 
-<img src="assets/fig/unnamed-chunk-43-1.png" title="plot of chunk unnamed-chunk-43" alt="plot of chunk unnamed-chunk-43" width="600px" height="400px" />
+<img src="figure/unnamed-chunk-43-1.png" title="plot of chunk unnamed-chunk-43" alt="plot of chunk unnamed-chunk-43" width="600px" height="400px" />
 
 ---
 
@@ -849,7 +849,7 @@ Sometimes, too many colors can be hard to distinguish. In such cases, we can use
 ggplot(mpg, aes(displ, hwy)) + geom_point() + facet_wrap(~class) + mytheme
 ```
 
-<img src="assets/fig/unnamed-chunk-44-1.png" title="plot of chunk unnamed-chunk-44" alt="plot of chunk unnamed-chunk-44" width="600px" height="400px" />
+<img src="figure/unnamed-chunk-44-1.png" title="plot of chunk unnamed-chunk-44" alt="plot of chunk unnamed-chunk-44" width="600px" height="400px" />
 
 ---
 
@@ -864,7 +864,7 @@ We can also show the strength of the movement of values up and down through time
 ggplot(economics, aes(date, unemploy/pop)) + geom_line() + mytheme
 ```
 
-<img src="assets/fig/unnamed-chunk-45-1.png" title="plot of chunk unnamed-chunk-45" alt="plot of chunk unnamed-chunk-45" width="600px" height="400px" />
+<img src="figure/unnamed-chunk-45-1.png" title="plot of chunk unnamed-chunk-45" alt="plot of chunk unnamed-chunk-45" width="600px" height="400px" />
 
 --- &radio
 
@@ -887,8 +887,7 @@ A **To show a connection between a series of individual data points**
 
 ---
 
-## Scatterplot exercise
-
+## Exercise 4
 
 ---
 
@@ -1042,7 +1041,11 @@ ggplot(dt, aes(year, cases, color = country))+
   geom_line()
 ```
 
-<img src="assets/fig/unnamed-chunk-52-1.png" title="plot of chunk unnamed-chunk-52" alt="plot of chunk unnamed-chunk-52" width="500px" height="400px" />
+<img src="figure/unnamed-chunk-52-1.png" title="plot of chunk unnamed-chunk-52" alt="plot of chunk unnamed-chunk-52" width="500px" height="400px" />
+
+---
+
+## Exercise 5
 
 ---
 
@@ -1420,6 +1423,180 @@ unite(table5, col = new, century, year, sep = "")
 
 ---
 
+## Exercise 6
+
+---
+
+## Merging
+
+Sometimes we may have multiple tables giving parts of information that we want to have in one table. In such cases, `merge()` functions allows us to combine tables based on common columns using the `by` argument.
+
+There are different types of merging but this is more advanced.
+
+---
+
+## Merging
+
+If we for example want to know how the airports are called behind the IATA_CODE codes, we can load another table containing additional information about the airports.
+
+```r
+airports <- fread('extdata/airports.csv')
+```
+
+
+
+```r
+head(airports)
+```
+
+```
+##    IATA_CODE                             AIRPORT        CITY STATE COUNTRY
+## 1:       ABE Lehigh Valley International Airport   Allentown    PA     USA
+## 2:       ABI            Abilene Regional Airport     Abilene    TX     USA
+## 3:       ABQ   Albuquerque International Sunport Albuquerque    NM     USA
+## 4:       ABR           Aberdeen Regional Airport    Aberdeen    SD     USA
+## 5:       ABY  Southwest Georgia Regional Airport      Albany    GA     USA
+## 6:       ACK          Nantucket Memorial Airport   Nantucket    MA     USA
+##    LATITUDE  LONGITUDE
+## 1: 40.65236  -75.44040
+## 2: 32.41132  -99.68190
+## 3: 35.04022 -106.60919
+## 4: 45.44906  -98.42183
+## 5: 31.53552  -84.19447
+## 6: 41.25305  -70.06018
+```
+
+---
+
+## Merging
+
+If we for example want to know how the airports are called behind the IATA_CODE codes, we can load another table containing additional information about the airports.
+
+```r
+flights <- fread('extdata/flightsLAX.csv')
+```
+
+
+```r
+head(flights)
+```
+
+```
+##    YEAR MONTH DAY DAY_OF_WEEK AIRLINE FLIGHT_NUMBER TAIL_NUMBER ORIGIN_AIRPORT
+## 1: 2015     1   1           4      AA          2336      N3KUAA            LAX
+## 2: 2015     1   1           4      AA           258      N3HYAA            LAX
+## 3: 2015     1   1           4      US          2013      N584UW            LAX
+## 4: 2015     1   1           4      DL          1434      N547US            LAX
+## 5: 2015     1   1           4      AA           115      N3CTAA            LAX
+## 6: 2015     1   1           4      UA          1545      N76517            LAX
+##    DESTINATION_AIRPORT SCHEDULED_DEPARTURE DEPARTURE_TIME DEPARTURE_DELAY
+## 1:                 PBI                  10              2              -8
+## 2:                 MIA                  20             15              -5
+## 3:                 CLT                  30             44              14
+## 4:                 MSP                  35             35               0
+## 5:                 MIA                 105            103              -2
+## 6:                 IAH                 115            112              -3
+##    TAXI_OUT WHEELS_OFF SCHEDULED_TIME ELAPSED_TIME AIR_TIME DISTANCE WHEELS_ON
+## 1:       12         14            280          279      263     2330       737
+## 2:       15         30            285          281      258     2342       748
+## 3:       13         57            273          249      228     2125       745
+## 4:       18         53            214          210      188     1535       601
+## 5:       14        117            286          276      255     2342       832
+## 6:       11        123            183          175      156     1379       559
+##    TAXI_IN SCHEDULED_ARRIVAL ARRIVAL_TIME ARRIVAL_DELAY DIVERTED CANCELLED
+## 1:       4               750          741            -9        0         0
+## 2:       8               805          756            -9        0         0
+## 3:       8               803          753           -10        0         0
+## 4:       4               609          605            -4        0         0
+## 5:       7               851          839           -12        0         0
+## 6:       8               618          607           -11        0         0
+##    CANCELLATION_REASON AIR_SYSTEM_DELAY SECURITY_DELAY AIRLINE_DELAY
+## 1:                                   NA             NA            NA
+## 2:                                   NA             NA            NA
+## 3:                                   NA             NA            NA
+## 4:                                   NA             NA            NA
+## 5:                                   NA             NA            NA
+## 6:                                   NA             NA            NA
+##    LATE_AIRCRAFT_DELAY WEATHER_DELAY
+## 1:                  NA            NA
+## 2:                  NA            NA
+## 3:                  NA            NA
+## 4:                  NA            NA
+## 5:                  NA            NA
+## 6:                  NA            NA
+```
+
+---
+
+## Merging
+
+
+```r
+head(merge(flights, airports,
+           by.x = "DESTINATION_AIRPORT", by.y = 'IATA_CODE'))
+```
+
+```
+##    DESTINATION_AIRPORT YEAR MONTH DAY DAY_OF_WEEK AIRLINE FLIGHT_NUMBER
+## 1:                 ABQ 2015     1   1           4      OO          2575
+## 2:                 ABQ 2015     1   1           4      WN          2077
+## 3:                 ABQ 2015     1   1           4      OO          2623
+## 4:                 ABQ 2015     1   1           4      WN          2520
+## 5:                 ABQ 2015     1   1           4      OO          6474
+## 6:                 ABQ 2015     1   1           4      WN          4721
+##    TAIL_NUMBER ORIGIN_AIRPORT SCHEDULED_DEPARTURE DEPARTURE_TIME
+## 1:      N477CA            LAX                 915            921
+## 2:      N387SW            LAX                 950            943
+## 3:      N492SW            LAX                1450           1449
+## 4:      N652SW            LAX                1815           1851
+## 5:      N980SW            LAX                1955           1951
+## 6:      N934WN            LAX                2040           2041
+##    DEPARTURE_DELAY TAXI_OUT WHEELS_OFF SCHEDULED_TIME ELAPSED_TIME AIR_TIME
+## 1:               6       20        941            115          113       87
+## 2:              -7        8        951            105          109       88
+## 3:              -1       15       1504            110          121       89
+## 4:              36        7       1858            105          103       90
+## 5:              -4       19       2010            115          125      100
+## 6:               1        6       2047            100          107       88
+##    DISTANCE WHEELS_ON TAXI_IN SCHEDULED_ARRIVAL ARRIVAL_TIME ARRIVAL_DELAY
+## 1:      677      1208       6              1210         1214             4
+## 2:      677      1219      13              1235         1232            -3
+## 3:      677      1733      17              1740         1750            10
+## 4:      677      2128       6              2100         2134            34
+## 5:      677      2250       6              2250         2256             6
+## 6:      677      2315      13              2320         2328             8
+##    DIVERTED CANCELLED CANCELLATION_REASON AIR_SYSTEM_DELAY SECURITY_DELAY
+## 1:        0         0                                   NA             NA
+## 2:        0         0                                   NA             NA
+## 3:        0         0                                   NA             NA
+## 4:        0         0                                    0              0
+## 5:        0         0                                   NA             NA
+## 6:        0         0                                   NA             NA
+##    AIRLINE_DELAY LATE_AIRCRAFT_DELAY WEATHER_DELAY
+## 1:            NA                  NA            NA
+## 2:            NA                  NA            NA
+## 3:            NA                  NA            NA
+## 4:            34                   0             0
+## 5:            NA                  NA            NA
+## 6:            NA                  NA            NA
+##                              AIRPORT        CITY STATE COUNTRY LATITUDE
+## 1: Albuquerque International Sunport Albuquerque    NM     USA 35.04022
+## 2: Albuquerque International Sunport Albuquerque    NM     USA 35.04022
+## 3: Albuquerque International Sunport Albuquerque    NM     USA 35.04022
+## 4: Albuquerque International Sunport Albuquerque    NM     USA 35.04022
+## 5: Albuquerque International Sunport Albuquerque    NM     USA 35.04022
+## 6: Albuquerque International Sunport Albuquerque    NM     USA 35.04022
+##    LONGITUDE
+## 1: -106.6092
+## 2: -106.6092
+## 3: -106.6092
+## 4: -106.6092
+## 5: -106.6092
+## 6: -106.6092
+```
+
+---
+
 ## Take-home
 
 * Visualization is as important as statistics. Both are needed.
@@ -1455,6 +1632,7 @@ Interesting blog post:
   * <http://simplystatistics.org/2016/02/17/non-tidy-data/>
 
 ---
+
 ## Plotting libraries
 
 - http://www.r-graph-gallery.com/portfolio/ggplot2-package/
