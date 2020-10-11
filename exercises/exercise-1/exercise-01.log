@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.10.11)  11 OCT 2020 17:42
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.10.11)  12 OCT 2020 00:04
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -706,101 +706,120 @@ LaTeX Font Info:    Font shape `T1/lmss/bx/it' in size <14.4> not available
 [1
 
 {/Users/fateme/Library/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-LaTeX Font Info:    Trying to load font information for TS1+lmss on input line 
-153.
-(/Users/fateme/Library/TinyTeX/texmf-dist/tex/latex/lm/ts1lmss.fd
-File: ts1lmss.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <10> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 153.
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 154.
 LaTeX Font Info:    Trying to load font information for T1+fvm on input line 15
-5.
+6.
 (/Users/fateme/Library/TinyTeX/texmf-dist/tex/latex/bera/t1fvm.fd
 File: t1fvm.fd 2004/09/07 scalable font definitions for T1/fvm.
 )
 LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
-(Font)              scaled to size 7.98004pt on input line 155.
-LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 1
-95.
+(Font)              scaled to size 7.98004pt on input line 156.
+[2]
+LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 2
+31.
 (/Users/fateme/Library/TinyTeX/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OML+lmm on input line 1
-95.
+LaTeX Font Info:    Trying to load font information for OML+lmm on input line 2
+31.
 (/Users/fateme/Library/TinyTeX/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-195.
+231.
 (/Users/fateme/Library/TinyTeX/texmf-dist/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-195.
+231.
 (/Users/fateme/Library/TinyTeX/texmf-dist/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 195.
+(Font)              <10> on input line 231.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 195.
+(Font)              <7> on input line 231.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 195.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 195
+(Font)              <5> on input line 231.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 231
 .
 (/Users/fateme/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 195
+LaTeX Font Info:    Trying to load font information for U+msb on input line 231
 .
 (/Users/fateme/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Underfull \hbox (badness 2582) in paragraph at lines 194--197
-[]\T1/lmss/m/n/10 Download the GTEx data (an-no-ta-tion v7) from the fol-low-in
-g link: [][]$https :
+Overfull \hbox (26.3006pt too wide) in paragraph at lines 231--232
+[]\T1/lmss/m/n/10 Remove the rows that are NA from \T1/lmss/m/sl/10 data_Brain$
+\OML/lmm/m/it/10 SMEXPEFF \OMS/lmsy/m/n/10 ^^C \OML/lmm/m/it/10 and \OMS/lmsy/m
+/n/10 ^^C \OML/lmm/m/it/10 data[]rain$\T1/lmss/m/sl/10 SME1MPRT\T1/lmss/m/n/10 
+.
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 194--197
-\T1/lmss/m/n/10 / / storage . googleapis . com / gtex _ analysis _ v7 / annotat
-ions / GTEx _ v7 _ Annotations _
- []
-
-[2] [3] (./exercise-01.aux)
+LaTeX Font Info:    Trying to load font information for TS1+lmss on input line 
+251.
+(/Users/fateme/Library/TinyTeX/texmf-dist/tex/latex/lm/ts1lmss.fd
+File: ts1lmss.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+<exercise-01_files/figure-latex/unnamed-chunk-7-1.pdf, id=87, 867.24pt x 867.24
+pt>
+File: exercise-01_files/figure-latex/unnamed-chunk-7-1.pdf Graphic file (type p
+df)
+<use exercise-01_files/figure-latex/unnamed-chunk-7-1.pdf>
+Package pdftex.def Info: exercise-01_files/figure-latex/unnamed-chunk-7-1.pdf  
+used on input line 292.
+(pdftex.def)             Requested size: 341.43787pt x 341.43787pt.
+[3]
+<exercise-01_files/figure-latex/unnamed-chunk-7-2.pdf, id=110, 867.24pt x 867.2
+4pt>
+File: exercise-01_files/figure-latex/unnamed-chunk-7-2.pdf Graphic file (type p
+df)
+<use exercise-01_files/figure-latex/unnamed-chunk-7-2.pdf>
+Package pdftex.def Info: exercise-01_files/figure-latex/unnamed-chunk-7-2.pdf  
+used on input line 293.
+(pdftex.def)             Requested size: 341.43787pt x 341.43787pt.
+[4 <./exercise-01_files/figure-latex/unnamed-chunk-7-1.pdf>] [5 <./exercise-01_
+files/figure-latex/unnamed-chunk-7-2.pdf>] (./exercise-01.aux)
 Package rerunfilecheck Info: File `exercise-01.out' has not changed.
-(rerunfilecheck)             Checksum: 4AF278CE8768BD09A5D3DCDB2F40FDCF;320.
+(rerunfilecheck)             Checksum: 24F59EC0661FD210115C5DAB92343D90;411.
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 11869 strings out of 481886
- 185977 string characters out of 5931217
- 504822 words of memory out of 5000000
- 27850 multiletter control sequences out of 15000+600000
+ 11907 strings out of 481886
+ 186942 string characters out of 5931217
+ 505967 words of memory out of 5000000
+ 27868 multiletter control sequences out of 15000+600000
  584063 words of font info for 66 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 72i,13n,77p,1200b,439s stack positions out of 5000i,500n,10000p,200000b,80000s
- </Users/fateme/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm144
-0.600pk>{/Users/fateme/Library/TinyTeX/texmf-dist/fonts/enc/dvips/base/8r.enc}{
-/Users/fateme/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/Users/f
-ateme/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc} </Users/fateme/
-Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1000.600pk> </Users/f
-ateme/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm0900.600pk> </U
-sers/fateme/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1200.600p
-k> </Users/fateme/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm172
-8.600pk> </Users/fateme/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/e
-crm2074.600pk></Users/fateme/Library/TinyTeX/texmf-dist/fonts/type1/public/bera
-/fvmr8a.pfb></Users/fateme/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lms
-s10.pfb></Users/fateme/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmssbo1
-0.pfb></Users/fateme/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmssbx10.
-pfb></Users/fateme/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsso10.pfb
->
-Output written on exercise-01.pdf (3 pages, 145403 bytes).
+ 72i,13n,77p,1200b,467s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/Users/fateme/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}{/Use
+rs/fateme/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/Users/f
+ateme/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc} </Users/fate
+me/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1440.600pk>{/Users
+/fateme/Library/TinyTeX/texmf-dist/fonts/enc/dvips/base/8r.enc}{/Users/fateme/L
+ibrary/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc} </Users/fateme/Library/
+TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1000.600pk> </Users/fateme/Li
+brary/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm0900.600pk> </Users/fat
+eme/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1200.600pk> </Use
+rs/fateme/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1728.600pk>
+ </Users/fateme/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm2074.
+600pk></Users/fateme/Library/TinyTeX/texmf-dist/fonts/type1/public/bera/fvmr8a.
+pfb></Users/fateme/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb>
+</Users/fateme/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></Use
+rs/fateme/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmss10.pfb></Users/f
+ateme/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmssbo10.pfb></Users/fat
+eme/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmssbx10.pfb></Users/fatem
+e/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsso10.pfb></Users/fateme/L
+ibrary/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb>
+Output written on exercise-01.pdf (5 pages, 175005 bytes).
 PDF statistics:
- 233 PDF objects out of 1000 (max. 8388607)
- 114 compressed objects within 2 object streams
- 26 named destinations out of 1000 (max. 500000)
- 49 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 314 PDF objects out of 1000 (max. 8388607)
+ 166 compressed objects within 2 object streams
+ 43 named destinations out of 1000 (max. 500000)
+ 75 words of extra memory for PDF output out of 10000 (max. 10000000)
 
