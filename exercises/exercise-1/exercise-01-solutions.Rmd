@@ -1,6 +1,6 @@
 ---
-title: "CeDoSIA SS2020 - Exercise Sheet 1: Introduction to R"
-author: "Vangelis Theodorakis, Xueqi Cao, Daniela Andrade Salazar, Julien Gagneur"
+title: "Exercise sheet: Day 1"
+author: "Vangelis Theodorakis, Fatemeh Behjati, Julien Gagneur"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 vignette: >
   %\VignetteIndexEntry{CeDoSIA SS2020 - Exercise Sheet 1: Introduction to R}
@@ -14,7 +14,7 @@ output:
 knitr::opts_chunk$set(fig.width=12, fig.height=12, error=TRUE, warning=FALSE,
         message=FALSE, 
         #echo=FALSE, results="hide"
-         echo=TRUE, results="show"
+        echo=TRUE, results="show"
 )
 ```
 
@@ -107,85 +107,145 @@ f3
 rev(f3)
 ```
 
-# Computation on matrices
+# Data tables
 
-Create a 10 by 5 matrix which contains the the numbers from 1 to 50 column-wise. Name the rows as 'row_n' and columns as 'col_n'. Compute the mean and sum of each row and column. Add vector seq(60,100,10) as another row to the matrix. 
+The purpose of this exercise is to get familiarize with data.table and try out some of its useful features.
 
-Generate another matrix with the same dimensions, containing random numbers between 1 and 100. Subtract this matrix from the first one. 
+## Basic operations
+Please follow the steps listed below:
 
-Plot the covariance matrix of the columns of the resulting matrix with spearman correlation coefficients.
+1)  Download the GTEx data (annotation v7) from the following link:
+https://storage.googleapis.com/gtex_analysis_v7/annotations/GTEx_v7_Annotations_SampleAttributesDS.txt
 
-**Hint:** Check out functions paste0(), colMeans(), rowMeans(), colSums(), rowSums(), sample(), cor() and corrplot() (in package 'corrplot') 
+2) Read the file downloaded above and store it in a variable named: *data*.
 
+3) Inspect *data* by checking properties such as: *class(data)*, *dim(data)*, *colnames(data)*, *data[1:3, 1:5]*, *unique(data$SMTS)*.
 
-```{r }
+4) Count how many NA's exist in *data*.
+
+```{r}
 # Answer :
-m <- matrix(1:50, ncol = 5) 
-rownames(m) <- paste0("row_", 1:nrow(m))
-colnames(m) <- paste0("col_", 1:ncol(m))
-colMeans(m)
-rowMeans(m)
-colSums(m)
-rowSums(m)
+library(data.table)
+data <- fread("~/GTEx_v7_Annotations_SampleAttributesDS.txt")
 
-m <- rbind(m,seq(60,100,10))
-n <- matrix(sample(1:100, length(m), replace=T), ncol = ncol(m))
-m <- m-n
-M <- cor(m, method = "spearman")
-#corrplot::corrplot(M, method = "number")
+print("class of data is")
+class(data)
+
+print("dim of data is")
+dim(data)
+
+print("column names of data are")
+colnames(data)
+
+print("a small subset of data looks like")
+data[1:3, 1:5]
+      
+print("tissue types in data:")
+unique(data$SMTS)
 ```
-#  Data frame manipulation
 
-Create a 3 by 4 matrix that contains the numbers 1 to 12 and then convert it into a data frame. Assign zero to the elements at row 2 which are greater than 4. Set the rownames to "row1", "row2", "row3" and column names to "col1", "col2", "col3" and "col4". Assign 0 to all elements in columns "col3" and "col4". Add a new column named "Letters" with values c("A", "B", "C"). Inspect the structure of the data frame.
+## More exciting operations
+Continue from the previous part and perform the following actions:
+
+3) Subset the data based on the *Brain* cell type sample and store the result in a variable called: *data_Brain*.
+
+4) Inspect the *data_Brain* similar to the point 3 above.
+
+5) Examine the range of values in *SMEXPEFF* field of *data_Brain*. How can you make it more meaningful?
+
+6) For *data_Brain*, compute the average of the values stored in the "SMEXPEFF" column. Also, compute the min of values stored in "SME1MPRT".
+
+7) Compute the correlation between the two columns mentioned above.
+
+8) Remove the rows that are NA from the *data_Brain$SMEXPEFF*. Retry the correlation on the NA-removed *data_Brain_noNA*.
+
+**Hint:** Use the is.na() function to find the rows that are NA.
+```{r}
+# Answer :
+#3
+data_Brain <- data[data$SMTS == "Brain", ]
+
+#4
+print("class of data_Brain is")
+class(data_Brain)
+
+print("dim of data_Brain is")
+dim(data_Brain)
+
+print("column names of data_Brain are")
+colnames(data_Brain)
+
+print("a small subset of data_Brain looks like")
+data_Brain[1:3, 1:5]
+      
+print("tissue types in data_Brain:e")
+unique(data_Brain$SMTS)
+
+#5
+print("range of values in data_Brain$SMEXPEFF (Expression Profiling Efficiency):")
+range(data_Brain$SMEXPEFF)
+
+print("range of values in data_Brain$SMEXPEFF when NA's are removed:")
+range(data_Brain$SMEXPEFF, na.rm= T)
+#6
+mean(data_Brain$SMEXPEFF)
+mean(data_Brain$SMEXPEFF, na.rm= T)
+
+min(data_Brain$SME1MPRT)
+min(data_Brain$SME1MPRT, na.rm= T)
+#7
+cor(data_Brain$SME1MPRT, data_Brain$SMEXPEFF)
+#8
+data_Brain <- data_Brain[!is.na(data_Brain$SMEXPEFF), ]
+cor(data_Brain$SME1MPRT, data_Brain$SMEXPEFF)
+```
+
+# Looping
+- Initialize a variable called *counter* by 0.
+- Using a for loop that iterates 10 times, increment *counter* by 1.
+- Print the final value in *counter*.
 
 ```{r}
 #Answer :
-x <- matrix(1:12,3,4)
-x <- as.data.frame(x)
-x
-x[2, x[2,]>4] <- 0
-rownames(x) <- paste0("row",1:3)
-colnames(x) <- paste0("col",1:4)
-x[,paste0("col",3:4)] <- 0
-x$Letters <- c("A","B","C")
+
+# Looping
+counter <- 0
+for(i in seq(10)){
+  counter <- counter + 1
+}
+print(counter)
 ```
-
-# Data frame operations
-Compute the number of women who survived the Titanic. Start by loading the data into  a data frame using the following command:
-
-```{r echo=T, results="show"}
-tab <- read.csv("../../extdata/titanic.csv")
-```
-
-```{r}
-head(tab)
-# number of females survived the Titanic
-nrow(tab[tab$sex == "female" & tab$survived == 1,])
-
-# total number of passangers 
-nrow(tab)
-```
-
-# Looping and writing your own functions
-
-Write a function named "generateDataFrameSummary" which takes a data frame as input and outputs the  medians of the rows and columns (NA values are discarded), and number of NA values in each row and column as a list.
+Write a function named *get_counts* that takes a GTEx data table as input and outputs the total counts of rows that the sample tissue type (*SMTS*) is *Heart* and the sample analysis freeze (*SMAFRZE*) is *RNASEQ*. How about if you try the same but for *Blood*.
+If this task was too easy, can you modify your function such that instead of taking only one argument, it takes two additional ones, one for the *SMTS* and another for *SMAFRZE*. Iterate over all possible values of *SMTS* (**Hint:** *unique(data$SMTS)*) and call your function by providing the sample tissue type.
 
 ```{r}
 #Answer :
-
-generateDataFrameSummary <- function(inputDF){
-  
-  return(list( rowMedians = apply(inputDF, 1, median, na.rm=T),
-               colMedians = apply(inputDF, 2, median, na.rm=T),
-               rowNANum   = apply(inputDF, 1, function(x){ sum(is.na(x)) }),
-               colNANum   = apply(inputDF, 2, function(x){ sum(is.na(x)) })))
-  
+get_counts <- function(gtex){
+  counter <- 0
+  for(i in seq(nrow(gtex)))
+    if(gtex$SMTS[i] == "Heart" & gtex$SMAFRZE[i] == "RNASEQ"){
+      counter <- counter + 1
+    }
+  return(counter)
 }
 
-# test the function
-df <- as.data.frame(matrix(rnorm(1000), nrow=50))
-df[sample(c(T, F), nrow(df), replace=TRUE), 
-   sample(c(T, F), ncol(df), replace=TRUE)] <- NA
-head(df)
-generateDataFrameSummary(df)
+fun_res <- get_counts(data)
+print(fun_res)
+
+#modified version
+get_counts2 <- function(gtex, var1, var2){
+  counter <- 0
+  for(i in seq(nrow(gtex)))
+    if(gtex$SMTS[i] == var1 & gtex$SMAFRZE[i] == var2){
+      counter <- counter + 1
+    }
+  return(counter)
+}
+
+all_tissues <- unique(data$SMTS)
+for(ts in all_tissues){
+  fun_res <- get_counts2(data, ts, "RNASEQ")
+  print(paste("Number of RNASEQ cases for", ts, ":", fun_res))
+}
+
 ```
