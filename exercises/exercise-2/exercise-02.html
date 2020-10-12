@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Exercise sheet: Day 2</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Exercise sheet: Day 2">
+  <meta name="author" content="Vangelis Theodorakis, Fatemeh Behjati, Julien Gagneur, Marcel Schulz">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="http://slidifylibraries2.googlecode.com/git/inst/libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="http://slidifylibraries2.googlecode.com/git/inst/libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="http://slidifylibraries2.googlecode.com/git/inst/libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="http://slidifylibraries2.googlecode.com/git/inst/libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="http://slidifylibraries2.googlecode.com/git/inst/libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="http://slidifylibraries2.googlecode.com/git/inst/libraries/frameworks/io2012/js/slides" 
+    src="http://slidifylibraries2.googlecode.com/git/inst/libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  
+  <hgroup class="auto-fadein">
+    <h1>Exercise sheet: Day 2</h1>
+    <h2></h2>
+    <p>Vangelis Theodorakis, Fatemeh Behjati, Julien Gagneur, Marcel Schulz<br/></p>
+  </hgroup>
+  
+  <article></article>  
+  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  
+  <hgroup>
+    <h1>Setup</h1>
+  </hgroup>
+  
+  <article data-timings="">
+    <pre><code class="r">library(data.table)
+library(magrittr)   # Needed for %&gt;% operator
+library(tidyr)
+</code></pre>
+
+<pre><code>## 
+## Attaching package: &#39;tidyr&#39;
+</code></pre>
+
+<pre><code>## The following object is masked from &#39;package:magrittr&#39;:
+## 
+##     extract
+</code></pre>
+
+<pre><code class="r">library(readxl)
+library(dplyr)
+</code></pre>
+
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;
+</code></pre>
+
+<pre><code>## The following objects are masked from &#39;package:data.table&#39;:
+## 
+##     between, first, last
+</code></pre>
+
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag
+</code></pre>
+
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union
+</code></pre>
+
+<h1>Introduction to ggplot</h1>
+
+<p>The <code>iris</code> data is included in the ggplot2 package. First load <code>ggplot2</code> package, then load <code>iris</code> data by <code>data(iris)</code>. Check <code>iris</code> data with <code>head(iris)</code>. </p>
+
+<p>1) Are there any relationships/correlations between petal length and width? How would you show it?</p>
+
+<p>2) Do petal lengths and widths correlate in every species?</p>
+
+<pre><code class="r">## Answer: 1)
+data(iris)
+ggplot(data = iris, aes(x = Petal.Length, y = Petal.Width)) +
+  geom_point() 
+</code></pre>
+
+<pre><code>## Error in ggplot(data = iris, aes(x = Petal.Length, y = Petal.Width)): could not find function &quot;ggplot&quot;
+</code></pre>
+
+<pre><code class="r">## Answer: 2)
+ggplot(data = iris, aes(x = Petal.Length, y = Petal.Width, color = Species)) +
+  geom_point()
+</code></pre>
+
+<pre><code>## Error in ggplot(data = iris, aes(x = Petal.Length, y = Petal.Width, color = Species)): could not find function &quot;ggplot&quot;
+</code></pre>
+
+<h1>Histograms</h1>
+
+<p>Get the <em>gtex-annotation.csv</em> data and do a histogram of the RIN (RNA integrity number) column using 10, 20, 50, 100 bins to see how this affects the visualisation.</p>
+
+<pre><code class="r">gtex.annotation &lt;- fread(&quot;gtex-dummy-dataset.csv&quot;)
+</code></pre>
+
+<pre><code>## Error in fread(&quot;gtex-dummy-dataset.csv&quot;): File &#39;gtex-dummy-dataset.csv&#39; does not exist or is non-readable. getwd()==&#39;/data/nasif12/home_if12/theodora/Projects/ncRNA-workshop/exercises/exercise-2&#39;
+</code></pre>
+
+<pre><code class="r">ggplot(gtex.annotation, aes(RIN)) + geom_histogram(bins = 50)
+</code></pre>
+
+<pre><code>## Error in ggplot(gtex.annotation, aes(RIN)): could not find function &quot;ggplot&quot;
+</code></pre>
+
+<h1>Boxplots</h1>
+
+<p>Get the <em>gtex-annotation.csv</em> data and do some boxplots of the RIN (RNA integrity number) column against the age groups. Do you see something interesting? Do the same using violin plots. Now try to combine the violin and the boxplot into one plot (use <code>width = 0.2</code>).</p>
+
+<pre><code class="r">ggplot(gtex.annotation, aes(age.group, RIN)) + geom_boxplot()
+</code></pre>
+
+<pre><code>## Error in ggplot(gtex.annotation, aes(age.group, RIN)): could not find function &quot;ggplot&quot;
+</code></pre>
+
+<pre><code class="r">ggplot(gtex.annotation, aes(age.group, RIN)) + geom_violin() + geom_boxplot(width=0.2)
+</code></pre>
+
+<pre><code>## Error in ggplot(gtex.annotation, aes(age.group, RIN)): could not find function &quot;ggplot&quot;
+</code></pre>
+
+<h1>Scatterplot</h1>
+
+<p>Make a scatterplot between the fake.age and the RIN for heart. Do you see any associasion between fake.age and RIN? Now color the points by <code>sex</code> so that you have the labels <code>Male</code> and <code>Female</code> on the legend. Do you see any associasion between fake.age and RIN when it is controled for sex?</p>
+
+<pre><code class="r">sex &lt;- gtex.annotation$sex
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;gtex.annotation&#39; not found
+</code></pre>
+
+<pre><code class="r">sex[sex == 2 &amp; !is.na(sex)] &lt;- &quot;Female&quot;
+</code></pre>
+
+<pre><code>## Error in sex[sex == 2 &amp; !is.na(sex)] &lt;- &quot;Female&quot;: object &#39;sex&#39; not found
+</code></pre>
+
+<pre><code class="r">sex[sex == 1 &amp; !is.na(sex)] &lt;- &quot;Male&quot;
+</code></pre>
+
+<pre><code>## Error in sex[sex == 1 &amp; !is.na(sex)] &lt;- &quot;Male&quot;: object &#39;sex&#39; not found
+</code></pre>
+
+<pre><code class="r">gtex.annotation$sex &lt;- sex
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;sex&#39; not found
+</code></pre>
+
+<pre><code class="r">ggplot(gtex.annotation[tissue == &quot;Heart&quot;], aes(fake.age, RIN)) + geom_point()
+</code></pre>
+
+<pre><code>## Error in ggplot(gtex.annotation[tissue == &quot;Heart&quot;], aes(fake.age, RIN)): could not find function &quot;ggplot&quot;
+</code></pre>
+
+<pre><code class="r">ggplot(gtex.annotation[tissue == &quot;Heart&quot;], aes(fake.age, RIN, color=sex)) + geom_point()
+</code></pre>
+
+<pre><code>## Error in ggplot(gtex.annotation[tissue == &quot;Heart&quot;], aes(fake.age, RIN, : could not find function &quot;ggplot&quot;
+</code></pre>
+
+<h1>Understanding a messy dataset</h1>
+
+<p>The following file describes the number of times a person bought a product &quot;a&quot; and &quot;b&quot;</p>
+
+<pre><code class="r">messy_file &lt;- file.path(&#39;extdata&#39;, &#39;example_product_data.csv&#39;)
+messy_dt &lt;- fread(messy_file)
+messy_dt
+</code></pre>
+
+<pre><code>##            name producta productb
+## 1:     John Doe       NA       12
+## 2:    Marry Doe        3        1
+## 3: John Johnson        5        1
+</code></pre>
+
+<p>Why is this data-set messy? Which columns should a tidy version of this table have?</p>
+
+<pre><code class="r"># Answer: 
+# Vales are stored as column names. 
+# Tidy data columns: name, product, n
+</code></pre>
+
+<h1>Fixing a messy dataset</h1>
+
+<p>Read the weather dataset <code>weather.txt</code>. It contains the minimal and maximal temperature on a certain city (id) over different dates (year, month, d1-d31). Why is this dataset messy? How would a tidy version of it look like? Create its tidy version.</p>
+
+<pre><code class="r">messy_dt &lt;- fread(&quot;extdata/weather.txt&quot;)
+messy_dt %&gt;% head
+</code></pre>
+
+<pre><code>##             id year month element d1  d2  d3 d4  d5 d6 d7 d8 d9 d10 d11 d12 d13
+## 1: MX000017004 2010     1    TMAX NA  NA  NA NA  NA NA NA NA NA  NA  NA  NA  NA
+## 2: MX000017004 2010     1    TMIN NA  NA  NA NA  NA NA NA NA NA  NA  NA  NA  NA
+## 3: MX000017004 2010     2    TMAX NA 273 241 NA  NA NA NA NA NA  NA 297  NA  NA
+## 4: MX000017004 2010     2    TMIN NA 144 144 NA  NA NA NA NA NA  NA 134  NA  NA
+## 5: MX000017004 2010     3    TMAX NA  NA  NA NA 321 NA NA NA NA 345  NA  NA  NA
+## 6: MX000017004 2010     3    TMIN NA  NA  NA NA 142 NA NA NA NA 168  NA  NA  NA
+##    d14 d15 d16 d17 d18 d19 d20 d21 d22 d23 d24 d25 d26 d27 d28 d29 d30 d31
+## 1:  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA 278  NA
+## 2:  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA 145  NA
+## 3:  NA  NA  NA  NA  NA  NA  NA  NA  NA 299  NA  NA  NA  NA  NA  NA  NA  NA
+## 4:  NA  NA  NA  NA  NA  NA  NA  NA  NA 107  NA  NA  NA  NA  NA  NA  NA  NA
+## 5:  NA  NA 311  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA
+## 6:  NA  NA 176  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA
+</code></pre>
+
+<pre><code class="r">dim(messy_dt)
+</code></pre>
+
+<pre><code>## [1] 22 35
+</code></pre>
+
+<pre><code class="r">## Why is it messy?
+
+## Answer: 
+## 1. Variables are stored as columns (days)
+## 2. A single entity is scattered across many cells (date)
+## 3. Element column is not a variable.
+##
+## Tidy version: id, date, tmin, tmax
+</code></pre>
+
+<pre><code class="r">## Fix a messy data
+
+### First melt the table: wide -&gt; long
+dt &lt;- melt(data = messy_dt, 
+           id.vars = c(&quot;id&quot;, &quot;year&quot;, &quot;month&quot;, &quot;element&quot;), 
+           variable.name = &quot;day&quot;) 
+</code></pre>
+
+<pre><code>## Warning in melt.data.table(data = messy_dt, id.vars = c(&quot;id&quot;, &quot;year&quot;, &quot;month&quot;, :
+## &#39;measure.vars&#39; [d1, d2, d3, d4, ...] are not all of the same type. By order
+## of hierarchy, the molten data value column will be of type &#39;integer&#39;. All
+## measure variables not of type &#39;integer&#39; will be coerced too. Check DETAILS in ?
+## melt.data.table for more on coercion.
+</code></pre>
+
+<pre><code class="r"># You can ignore the warning message
+# measure.vars is missing. When missing, measure.vars will become all columns outside id.vars.
+# value.name: name for the molten data values column(s). The default name is &#39;value&#39;. 
+
+
+### Then make the column day into integer
+dt[, day := as.integer(gsub(pattern = &quot;d&quot;, replacement = &quot;&quot;, x = day))]
+
+
+### Join all date related columns into one. Use unite or paste
+# 1. Using unite():
+dt &lt;- unite(dt, &quot;date&quot;, c(&quot;year&quot;, &quot;month&quot;, &quot;day&quot;), sep = &quot;-&quot;, remove = TRUE)
+
+## 2. Using paste():
+# dt[, date := paste(year, month, day, sep = &quot;-&quot;)] # convert to date
+# dt[, c(&quot;year&quot;, &quot;month&quot;, &quot;day&quot;) := NULL] # remove reduntant columns
+
+
+### Dcast the table: long -&gt; wide
+dt &lt;- dcast(data = dt, formula = ... ~ element, value.var = &quot;value&quot;) 
+
+
+### Remove entries with both NA values,
+tidy_dt &lt;- dt[!(is.na(TMAX) &amp; is.na(TMIN))] 
+
+
+## na.omit(dt) would also do the job
+# tidy_dt &lt;- na.omit(dt)
+
+head(tidy_dt)
+</code></pre>
+
+<pre><code>##             id       date TMAX TMIN
+## 1: MX000017004  2010-1-30  278  145
+## 2: MX000017004 2010-10-14  295  130
+## 3: MX000017004 2010-10-15  287  105
+## 4: MX000017004 2010-10-28  312  150
+## 5: MX000017004  2010-10-5  270  140
+## 6: MX000017004  2010-10-7  281  129
+</code></pre>
+
+<pre><code class="r">dim(tidy_dt)
+</code></pre>
+
+<pre><code>## [1] 33  4
+</code></pre>
+
+<pre><code class="r"># An alternative tidy code version
+tidy_dt &lt;- messy_dt %&gt;% 
+  melt(id.vars=c(&#39;id&#39;, &#39;year&#39;, &#39;month&#39;, &#39;element&#39;), na.rm=TRUE) %&gt;% 
+  .[, variable := gsub(&#39;d&#39;, &#39;&#39;, variable)] %&gt;% 
+  unite(date, year, month, variable, sep=&#39;-&#39;) %&gt;% 
+  dcast(... ~ element) %&gt;% 
+  .[, date := as.Date(date)]
+</code></pre>
+
+<pre><code>## Warning in melt.data.table(., id.vars = c(&quot;id&quot;, &quot;year&quot;, &quot;month&quot;, &quot;element&quot;), :
+## &#39;measure.vars&#39; [d1, d2, d3, d4, ...] are not all of the same type. By order
+## of hierarchy, the molten data value column will be of type &#39;integer&#39;. All
+## measure variables not of type &#39;integer&#39; will be coerced too. Check DETAILS in ?
+## melt.data.table for more on coercion.
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='Setup'>
+         1
+      </a>
+    </li>
+    
+    </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="http://slidifylibraries2.googlecode.com/git/inst/libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>

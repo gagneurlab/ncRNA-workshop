@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2019.11.6)  22 JUN 2020 09:26
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2019.11.6)  13 OCT 2020 00:10
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -803,11 +803,11 @@ Package: titling 2009/09/04 v2.1d maketitle typesetting
 \thanksmargin=\skip52
 \droptitle=\skip53
 )
-(/data/nasif12/modules_if12/SL7/i12g/R/3.6.1-Bioc3.10/lib64/R/library/BiocStyle
+(/data/nasif12/modules_if12/SL7/i12g/R/4.0.1-Bioc3.11/lib64/R/library/BiocStyle
 /resources/tex/Bioconductor.sty
 
 LaTeX Warning: You have requested package `/data/nasif12/modules_if12/SL7/i12g/
-R/3.6.1-Bioc3.10/lib64/R/library/BiocStyle/resources/tex/Bioconductor',
+R/4.0.1-Bioc3.11/lib64/R/library/BiocStyle/resources/tex/Bioconductor',
                but the package provides `Bioconductor'.
 
 Package: Bioconductor 2016/06/22 Bioconductor LaTeX Style
@@ -1040,7 +1040,7 @@ fancyhdr/fancyhdr.sty
 )
 
 Package Fancyhdr Warning: \fancyhead's `E' option without twoside option is use
-less on input line 173.
+less on input line 162.
 
 
 (/data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/tex/latex/
@@ -1395,13 +1395,6 @@ LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <20.74> not available
 LaTeX Font Info:    Font shape `T1/lmss/bx/it' in size <14.4> not available
 (Font)              Font shape `T1/lmss/bx/sl' tried instead on input line 137.
 
-
-Underfull \hbox (badness 3260) in paragraph at lines 137--137
-\T1/lmss/bx/sl/14.4 Vangelis Theodor-akis, Xueqi Cao, Daniela An-drade
- []
-
-LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <10> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 139.
 (./exercise-02.toc)
 \tf@toc=\write6
 \openout6 = `exercise-02.toc'.
@@ -1409,85 +1402,24 @@ LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <10> not available
 [1
 
 {/opt/modules/i12g/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-LaTeX Font Info:    Try loading font information for T1+fvm on input line 150.
+LaTeX Font Info:    Try loading font information for T1+fvm on input line 149.
 
 (/data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/tex/latex/
 bera/t1fvm.fd
 File: t1fvm.fd 2004/09/07 scalable font definitions for T1/fvm.
 )
 LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
-(Font)              scaled to size 7.98004pt on input line 150.
+(Font)              scaled to size 7.98004pt on input line 149.
 LaTeX Font Info:    Font shape `T1/fvm/m/it' in size <10> not available
 (Font)              Font shape `T1/fvm/m/sl' tried instead on input line 152.
 LaTeX Font Info:    Font shape `T1/fvm/m/sl' will be
 (Font)              scaled to size 7.98004pt on input line 152.
-LaTeX Font Info:    Try loading font information for OT1+lmr on input line 177.
-
-
-(/data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/tex/latex/
-lm/ot1lmr.fd
-File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)
-(/data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/tex/latex/
-microtype/mt-cmr.cfg
-File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman 
-(RS)
-)
-LaTeX Font Info:    Try loading font information for OML+lmm on input line 177.
-
-
-(/data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/tex/latex/
-lm/omllmm.fd
-File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)
-LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 177
-.
-
-(/data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/tex/latex/
-lm/omslmsy.fd
-File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)
-LaTeX Font Info:    Try loading font information for OMX+lmex on input line 177
-.
-
-(/data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/tex/latex/
-lm/omxlmex.fd
-File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 177.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 177.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 177.
-LaTeX Font Info:    Try loading font information for U+msa on input line 177.
-
-(/data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/tex/latex/
-amsfonts/umsa.fd
-File: umsa.fd 2013/01/14 v3.01 AMS symbols A
-)
-(/data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/tex/latex/
-microtype/mt-msa.cfg
-File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
-)
-LaTeX Font Info:    Try loading font information for U+msb on input line 177.
-
-(/data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/tex/latex/
-amsfonts/umsb.fd
-File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
-(/data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/tex/latex/
-microtype/mt-msb.cfg
-File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
-)
-LaTeX Font Info:    Try loading font information for TS1+lmss on input line 181
-.
-
-(/data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/tex/latex/
-lm/ts1lmss.fd
-File: ts1lmss.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)
-LaTeX Font Info:    Try loading font information for TS1+fvm on input line 209.
+LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <10> not available
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 175.
+LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <10> not available
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 192.
+[2]
+LaTeX Font Info:    Try loading font information for TS1+fvm on input line 194.
 
 
 (/data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/tex/latex/
@@ -1495,61 +1427,43 @@ bera/ts1fvm.fd
 File: ts1fvm.fd 2004/09/07 scalable font definitions for TS1/fvm.
 )
 LaTeX Font Info:    Font shape `TS1/fvm/m/n' will be
-(Font)              scaled to size 7.98004pt on input line 209.
-[2]
-LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <10> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 218.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 271.
+(Font)              scaled to size 7.98004pt on input line 194.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 235.
 [3]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 271.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 235.
 (./exercise-02.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 271.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 271.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 235.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 235.
 Package rerunfilecheck Info: File `exercise-02.out' has not changed.
-(rerunfilecheck)             Checksum: CFCFEF3E2D2A3883EEC4B35BBEA71D48;343.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 271.
+(rerunfilecheck)             Checksum: 2F103DCDE4444680DE8F0CC02E7DCA99;359.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 235.
  ) 
 Here is how much of TeX's memory you used:
- 13922 strings out of 493013
- 222102 string characters out of 6118181
- 345273 words of memory out of 5000000
- 17099 multiletter control sequences out of 15000+600000
- 62846 words of font info for 71 fonts, out of 8000000 for 9000
+ 13671 strings out of 493013
+ 215929 string characters out of 6118181
+ 343090 words of memory out of 5000000
+ 16909 multiletter control sequences out of 15000+600000
+ 49954 words of font info for 51 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  43i,13n,45p,1108b,409s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/fonts/en
 c/dvips/lm/lm-ec.enc}{/data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/
-texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}{/data/nasif12/modules_if12/SL7/i12g/t
-exlive/2016/texlive/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/data/nasif12/
-modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/fonts/enc/dvips/lm/lm-mat
-hit.enc}{/data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/fo
-nts/enc/dvips/lm/lm-rm.enc}{/data/nasif12/modules_if12/SL7/i12g/texlive/2016/te
-xlive/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}{/data/nasif12/modules_if12/S
-L7/i12g/texlive/2016/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</data/nasi
-f12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/fonts/type1/public/be
-ra/fvmr8a.pfb></data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-d
-ist/fonts/type1/public/bera/fvmro8a.pfb></data/nasif12/modules_if12/SL7/i12g/te
-xlive/2016/texlive/texmf-dist/fonts/type1/public/lm/lmex10.pfb></data/nasif12/m
-odules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/fonts/type1/public/lm/lmmi
-10.pfb></data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/fon
-ts/type1/public/lm/lmmi7.pfb></data/nasif12/modules_if12/SL7/i12g/texlive/2016/
-texlive/texmf-dist/fonts/type1/public/lm/lmr10.pfb></data/nasif12/modules_if12/
-SL7/i12g/texlive/2016/texlive/texmf-dist/fonts/type1/public/lm/lmr7.pfb></data/
-nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/fonts/type1/publi
-c/lm/lmss10.pfb></data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf
--dist/fonts/type1/public/lm/lmssbo10.pfb></data/nasif12/modules_if12/SL7/i12g/t
-exlive/2016/texlive/texmf-dist/fonts/type1/public/lm/lmssbx10.pfb></data/nasif1
-2/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/fonts/type1/public/lm/l
-msso10.pfb></data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist
-/fonts/type1/public/lm/lmsy10.pfb></data/nasif12/modules_if12/SL7/i12g/texlive/
-2016/texlive/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></data/nasif12/modules_
-if12/SL7/i12g/texlive/2016/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.p
-fb></data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/fonts/t
-ype1/urw/helvetic/uhvr8a.pfb>
-Output written on exercise-02.pdf (3 pages, 161965 bytes).
+texmf-dist/fonts/enc/dvips/base/8r.enc}</data/nasif12/modules_if12/SL7/i12g/tex
+live/2016/texlive/texmf-dist/fonts/type1/public/bera/fvmr8a.pfb></data/nasif12/
+modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/fonts/type1/public/bera/f
+vmro8a.pfb></data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist
+/fonts/type1/public/lm/lmss10.pfb></data/nasif12/modules_if12/SL7/i12g/texlive/
+2016/texlive/texmf-dist/fonts/type1/public/lm/lmssbo10.pfb></data/nasif12/modul
+es_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/fonts/type1/public/lm/lmssbx10
+.pfb></data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/fonts
+/type1/public/lm/lmsso10.pfb></data/nasif12/modules_if12/SL7/i12g/texlive/2016/
+texlive/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></data/nasif12/modules_i
+f12/SL7/i12g/texlive/2016/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pf
+b>
+Output written on exercise-02.pdf (3 pages, 127995 bytes).
 PDF statistics:
- 143 PDF objects out of 1000 (max. 8388607)
- 115 compressed objects within 2 object streams
- 21 named destinations out of 1000 (max. 500000)
- 8241 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 111 PDF objects out of 1000 (max. 8388607)
+ 90 compressed objects within 1 object stream
+ 20 named destinations out of 1000 (max. 500000)
+ 6201 words of extra memory for PDF output out of 10000 (max. 10000000)
 
