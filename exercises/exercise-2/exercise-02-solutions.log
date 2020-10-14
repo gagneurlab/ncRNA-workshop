@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2019.11.6)  13 OCT 2020 00:04
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2019.11.6)  14 OCT 2020 13:40
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**exercise-01.tex
-(./exercise-01.tex
+**exercise-02-solutions.tex
+(./exercise-02-solutions.tex
 LaTeX2e <2016/03/31> patch level 3
 Babel <3.9r> and hyphenation patterns for 83 language(s) loaded.
 
@@ -1242,8 +1242,8 @@ Style option: `fancyvrb' v2.7a, with DG/SPQR fixes, and firstline=lastline fix
 \c@FancyVerbLine=\count141
 \FV@StepNumber=\count142
 \FV@OutFile=\write4
-) (./exercise-01.aux)
-\openout1 = `exercise-01.aux'.
+) (./exercise-02-solutions.aux)
+\openout1 = `exercise-02-solutions.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 136.
 LaTeX Font Info:    ... okay on input line 136.
@@ -1341,9 +1341,9 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 136.
 LaTeX Info: Redefining \pageref on input line 136.
 LaTeX Info: Redefining \nameref on input line 136.
-(./exercise-01.out) (./exercise-01.out)
+(./exercise-02-solutions.out) (./exercise-02-solutions.out)
 \@outlinefile=\write5
-\openout5 = `exercise-01.out'.
+\openout5 = `exercise-02-solutions.out'.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -1395,27 +1395,95 @@ LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <20.74> not available
 LaTeX Font Info:    Font shape `T1/lmss/bx/it' in size <14.4> not available
 (Font)              Font shape `T1/lmss/bx/sl' tried instead on input line 137.
 
-(./exercise-01.toc)
+(./exercise-02-solutions.toc)
 \tf@toc=\write6
-\openout6 = `exercise-01.toc'.
+\openout6 = `exercise-02-solutions.toc'.
 
 [1
 
 {/opt/modules/i12g/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <10> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 154.
-LaTeX Font Info:    Try loading font information for T1+fvm on input line 156.
+LaTeX Font Info:    Try loading font information for T1+fvm on input line 149.
 
 (/data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/tex/latex/
 bera/t1fvm.fd
 File: t1fvm.fd 2004/09/07 scalable font definitions for T1/fvm.
 )
 LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
-(Font)              scaled to size 7.98004pt on input line 156.
+(Font)              scaled to size 7.98004pt on input line 149.
+LaTeX Font Info:    Font shape `T1/fvm/m/it' in size <10> not available
+(Font)              Font shape `T1/fvm/m/sl' tried instead on input line 152.
+LaTeX Font Info:    Font shape `T1/fvm/m/sl' will be
+(Font)              scaled to size 7.98004pt on input line 152.
+
+<exercise-02-solutions_files/figure-latex/unnamed-chunk-1-1.pdf, id=55, 857.202
+5pt x 857.2025pt>
+File: exercise-02-solutions_files/figure-latex/unnamed-chunk-1-1.pdf Graphic fi
+le (type pdf)
+<use exercise-02-solutions_files/figure-latex/unnamed-chunk-1-1.pdf>
+Package pdftex.def Info: exercise-02-solutions_files/figure-latex/unnamed-chunk
+-1-1.pdf used on input line 182.
+(pdftex.def)             Requested size: 341.43614pt x 341.43614pt.
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <10> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 212.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 182.
 [2]
-LaTeX Font Info:    Try loading font information for TS1+fvm on input line 216.
+<exercise-02-solutions_files/figure-latex/unnamed-chunk-2-1.pdf, id=67, 851.18p
+t x 857.2025pt>
+File: exercise-02-solutions_files/figure-latex/unnamed-chunk-2-1.pdf Graphic fi
+le (type pdf)
+<use exercise-02-solutions_files/figure-latex/unnamed-chunk-2-1.pdf>
+Package pdftex.def Info: exercise-02-solutions_files/figure-latex/unnamed-chunk
+-2-1.pdf used on input line 193.
+(pdftex.def)             Requested size: 341.44005pt x 343.85591pt.
+[3 <./exercise-02-solutions_files/figure-latex/unnamed-chunk-1-1.pdf>]
+LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <10> not available
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 198.
+
+<exercise-02-solutions_files/figure-latex/unnamed-chunk-3-1.pdf, id=79, 857.202
+5pt x 855.195pt>
+File: exercise-02-solutions_files/figure-latex/unnamed-chunk-3-1.pdf Graphic fi
+le (type pdf)
+<use exercise-02-solutions_files/figure-latex/unnamed-chunk-3-1.pdf>
+Package pdftex.def Info: exercise-02-solutions_files/figure-latex/unnamed-chunk
+-3-1.pdf used on input line 208.
+(pdftex.def)             Requested size: 341.43614pt x 340.63654pt.
+[4 <./exercise-02-solutions_files/figure-latex/unnamed-chunk-2-1.pdf>]
+<exercise-02-solutions_files/figure-latex/unnamed-chunk-4-1.pdf, id=93, 857.202
+5pt x 857.2025pt>
+File: exercise-02-solutions_files/figure-latex/unnamed-chunk-4-1.pdf Graphic fi
+le (type pdf)
+<use exercise-02-solutions_files/figure-latex/unnamed-chunk-4-1.pdf>
+Package pdftex.def Info: exercise-02-solutions_files/figure-latex/unnamed-chunk
+-4-1.pdf used on input line 222.
+(pdftex.def)             Requested size: 341.43614pt x 341.43614pt.
+[5 <./exercise-02-solutions_files/figure-latex/unnamed-chunk-3-1.pdf>]
+<exercise-02-solutions_files/figure-latex/unnamed-chunk-4-2.pdf, id=106, 857.20
+25pt x 857.2025pt>
+File: exercise-02-solutions_files/figure-latex/unnamed-chunk-4-2.pdf Graphic fi
+le (type pdf)
+<use exercise-02-solutions_files/figure-latex/unnamed-chunk-4-2.pdf>
+Package pdftex.def Info: exercise-02-solutions_files/figure-latex/unnamed-chunk
+-4-2.pdf used on input line 231.
+(pdftex.def)             Requested size: 341.43614pt x 341.43614pt.
+[6 <./exercise-02-solutions_files/figure-latex/unnamed-chunk-4-1.pdf>]
+<exercise-02-solutions_files/figure-latex/unnamed-chunk-5-1.pdf, id=118, 857.20
+25pt x 857.2025pt>
+File: exercise-02-solutions_files/figure-latex/unnamed-chunk-5-1.pdf Graphic fi
+le (type pdf)
+<use exercise-02-solutions_files/figure-latex/unnamed-chunk-5-1.pdf>
+Package pdftex.def Info: exercise-02-solutions_files/figure-latex/unnamed-chunk
+-5-1.pdf used on input line 253.
+(pdftex.def)             Requested size: 341.43614pt x 341.43614pt.
+[7 <./exercise-02-solutions_files/figure-latex/unnamed-chunk-4-2.pdf>]
+<exercise-02-solutions_files/figure-latex/unnamed-chunk-5-2.pdf, id=132, 851.18
+pt x 857.2025pt>
+File: exercise-02-solutions_files/figure-latex/unnamed-chunk-5-2.pdf Graphic fi
+le (type pdf)
+<use exercise-02-solutions_files/figure-latex/unnamed-chunk-5-2.pdf>
+Package pdftex.def Info: exercise-02-solutions_files/figure-latex/unnamed-chunk
+-5-2.pdf used on input line 262.
+(pdftex.def)             Requested size: 341.44005pt x 343.85591pt.
+[8 <./exercise-02-solutions_files/figure-latex/unnamed-chunk-5-1.pdf>]
+LaTeX Font Info:    Try loading font information for TS1+fvm on input line 271.
 
 
 (/data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/tex/latex/
@@ -1423,156 +1491,53 @@ bera/ts1fvm.fd
 File: ts1fvm.fd 2004/09/07 scalable font definitions for TS1/fvm.
 )
 LaTeX Font Info:    Font shape `TS1/fvm/m/n' will be
-(Font)              scaled to size 7.98004pt on input line 216.
+(Font)              scaled to size 7.98004pt on input line 271.
+[9 <./exercise-02-solutions_files/figure-latex/unnamed-chunk-5-2.pdf>]
+LaTeX Font Info:    Font shape `TS1/fvm/m/it' in size <10> not available
+(Font)              Font shape `TS1/fvm/m/sl' tried instead on input line 343.
+LaTeX Font Info:    Font shape `TS1/fvm/m/sl' will be
+(Font)              scaled to size 7.98004pt on input line 343.
 
-Overfull \hbox (784.4523pt too wide) in paragraph at lines 216--216
-[]\T1/fvm/m/n/10 ## Error in fread("~/GTEx_v7_Annotations_SampleAttributesDS.tx
-t"): File \TS1/fvm/m/n/10 '\T1/fvm/m/n/10 ~/GTEx_v7_Annotations_SampleAttribute
-sDS.txt\TS1/fvm/m/n/10 ' \T1/fvm/m/n/10 does not exist or is non-readable. getw
-d()==\TS1/fvm/m/n/10 '\T1/fvm/m/n/10 /data/nasif12/home_if12/theodora/Projects/
-ncRNA-workshop/exercises/exercise-1\TS1/fvm/m/n/10 '[] 
+Overfull \vbox (0.54759pt too high) detected at line 382
  []
 
-LaTeX Font Info:    Try loading font information for OT1+lmr on input line 237.
-
-
-(/data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/tex/latex/
-lm/ot1lmr.fd
-File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)
-(/data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/tex/latex/
-microtype/mt-cmr.cfg
-File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman 
-(RS)
-)
-LaTeX Font Info:    Try loading font information for OML+lmm on input line 237.
-
-
-(/data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/tex/latex/
-lm/omllmm.fd
-File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)
-LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 237
-.
-
-(/data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/tex/latex/
-lm/omslmsy.fd
-File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)
-LaTeX Font Info:    Try loading font information for OMX+lmex on input line 237
-.
-
-(/data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/tex/latex/
-lm/omxlmex.fd
-File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 237.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 237.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 237.
-LaTeX Font Info:    Try loading font information for U+msa on input line 237.
-
-(/data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/tex/latex/
-amsfonts/umsa.fd
-File: umsa.fd 2013/01/14 v3.01 AMS symbols A
-)
-(/data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/tex/latex/
-microtype/mt-msa.cfg
-File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
-)
-LaTeX Font Info:    Try loading font information for U+msb on input line 237.
-
-(/data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/tex/latex/
-amsfonts/umsb.fd
-File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
-(/data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/tex/latex/
-microtype/mt-msb.cfg
-File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
-)
-Overfull \hbox (19.71669pt too wide) in paragraph at lines 237--238
-[]\T1/lmss/m/n/10 (-20) Remove the rows that are NA from \T1/lmss/m/sl/10 (-20)
- data_Brain$\OML/lmm/m/it/10 SMEXPEFF \OMS/lmsy/m/n/10 ^^C \OML/lmm/m/it/10 and
- \OMS/lmsy/m/n/10 ^^C \OML/lmm/m/it/10 data[]rain$\T1/lmss/m/sl/10 (-20) SME1MP
-RT\T1/lmss/m/n/10 (-20) .
- []
-
-
-Overfull \hbox (1.40265pt too wide) in paragraph at lines 258--258
-[]\T1/fvm/m/n/10 ## Error in mean(data_Brain$SMEXPEFF, na.rm = T): object \TS1/
-fvm/m/n/10 '\T1/fvm/m/n/10 data_Brain\TS1/fvm/m/n/10 ' \T1/fvm/m/n/10 not found
-[] 
- []
-
-LaTeX Font Info:    Try loading font information for TS1+lmss on input line 275
-.
-
-(/data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/tex/latex/
-lm/ts1lmss.fd
-File: ts1lmss.fd 2009/10/30 v1.6 Font defs for Latin Modern
-) [3]
-<exercise-01_files/figure-latex/unnamed-chunk-7-1.pdf, id=102, 805.0075pt x 843
-.15pt>
-File: exercise-01_files/figure-latex/unnamed-chunk-7-1.pdf Graphic file (type p
-df)
-<use exercise-01_files/figure-latex/unnamed-chunk-7-1.pdf>
-Package pdftex.def Info: exercise-01_files/figure-latex/unnamed-chunk-7-1.pdf u
-sed on input line 321.
-(pdftex.def)             Requested size: 341.42966pt x 357.6071pt.
-[4]
-<exercise-01_files/figure-latex/unnamed-chunk-7-2.pdf, id=110, 805.0075pt x 843
-.15pt>
-File: exercise-01_files/figure-latex/unnamed-chunk-7-2.pdf Graphic file (type p
-df)
-<use exercise-01_files/figure-latex/unnamed-chunk-7-2.pdf>
-Package pdftex.def Info: exercise-01_files/figure-latex/unnamed-chunk-7-2.pdf u
-sed on input line 322.
-(pdftex.def)             Requested size: 341.42966pt x 357.6071pt.
-[5 <./exercise-01_files/figure-latex/unnamed-chunk-7-1.pdf>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 325.
-[6 <./exercise-01_files/figure-latex/unnamed-chunk-7-2.pdf>]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 325.
-(./exercise-01.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 325.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 325.
-Package rerunfilecheck Info: File `exercise-01.out' has not changed.
-(rerunfilecheck)             Checksum: 24F59EC0661FD210115C5DAB92343D90;411.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 325.
+[10]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 397.
+[11]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 397.
+(./exercise-02-solutions.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 397.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 397.
+Package rerunfilecheck Info: File `exercise-02-solutions.out' has not changed.
+(rerunfilecheck)             Checksum: 2F103DCDE4444680DE8F0CC02E7DCA99;359.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 397.
  ) 
 Here is how much of TeX's memory you used:
- 13995 strings out of 493013
- 223189 string characters out of 6118181
- 345149 words of memory out of 5000000
- 17123 multiletter control sequences out of 15000+600000
- 70596 words of font info for 86 fonts, out of 8000000 for 9000
+ 13711 strings out of 493013
+ 218087 string characters out of 6118181
+ 347121 words of memory out of 5000000
+ 16940 multiletter control sequences out of 15000+600000
+ 50248 words of font info for 52 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 43i,13n,45p,1108b,478s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 43i,13n,45p,1118b,417s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/fonts/en
-c/dvips/lm/lm-ts1.enc}{/data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive
-/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/data/nasif12/modules_if12/SL7/i1
-2g/texlive/2016/texlive/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/data/nasi
-f12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/fonts/enc/dvips/base/
-8r.enc}{/data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/fon
-ts/enc/dvips/lm/lm-ec.enc}</data/nasif12/modules_if12/SL7/i12g/texlive/2016/tex
-live/texmf-dist/fonts/type1/public/bera/fvmr8a.pfb></data/nasif12/modules_if12/
-SL7/i12g/texlive/2016/texlive/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></dat
-a/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/fonts/type1/pub
-lic/lm/lmmi7.pfb></data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texm
-f-dist/fonts/type1/public/lm/lmss10.pfb></data/nasif12/modules_if12/SL7/i12g/te
-xlive/2016/texlive/texmf-dist/fonts/type1/public/lm/lmssbo10.pfb></data/nasif12
-/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/fonts/type1/public/lm/lm
-ssbx10.pfb></data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist
-/fonts/type1/public/lm/lmsso10.pfb></data/nasif12/modules_if12/SL7/i12g/texlive
-/2016/texlive/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></data/nasif12/module
-s_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvb8a
+c/dvips/lm/lm-ec.enc}{/data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/
+texmf-dist/fonts/enc/dvips/base/8r.enc}</data/nasif12/modules_if12/SL7/i12g/tex
+live/2016/texlive/texmf-dist/fonts/type1/public/bera/fvmr8a.pfb></data/nasif12/
+modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/fonts/type1/public/bera/f
+vmro8a.pfb></data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist
+/fonts/type1/public/lm/lmss10.pfb></data/nasif12/modules_if12/SL7/i12g/texlive/
+2016/texlive/texmf-dist/fonts/type1/public/lm/lmssbo10.pfb></data/nasif12/modul
+es_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/fonts/type1/public/lm/lmssbx10
 .pfb></data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/fonts
-/type1/urw/helvetic/uhvr8a.pfb>
-Output written on exercise-01.pdf (6 pages, 157068 bytes).
+/type1/public/lm/lmsso10.pfb></data/nasif12/modules_if12/SL7/i12g/texlive/2016/
+texlive/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></data/nasif12/modules_i
+f12/SL7/i12g/texlive/2016/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pf
+b>
+Output written on exercise-02-solutions.pdf (11 pages, 274310 bytes).
 PDF statistics:
- 187 PDF objects out of 1000 (max. 8388607)
- 153 compressed objects within 2 object streams
- 44 named destinations out of 1000 (max. 500000)
- 8267 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 203 PDF objects out of 1000 (max. 8388607)
+ 152 compressed objects within 2 object streams
+ 28 named destinations out of 1000 (max. 500000)
+ 6236 words of extra memory for PDF output out of 10000 (max. 10000000)
 
