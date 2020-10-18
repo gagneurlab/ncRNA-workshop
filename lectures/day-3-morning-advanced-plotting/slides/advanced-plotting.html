@@ -4,7 +4,7 @@
   <title>Make your paper figures professionally: Scientific data analysis and visualization with R</title>
   <meta charset="utf-8">
   <meta name="description" content="Make your paper figures professionally: Scientific data analysis and visualization with R">
-  <meta name="author" content="Vangelis Theodorakis, Fatemeh Behjati, Julien Gagneur, Marcel Schultz">
+  <meta name="author" content="Vangelis Theodorakis, Fatemeh Behjati, Julien Gagneur, Marcel Schulz">
   <meta name="generator" content="slidify" />
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta http-equiv="X-UA-Compatible" content="chrome=1">
@@ -36,7 +36,7 @@
   <hgroup class="auto-fadein">
     <h1>Make your paper figures professionally: Scientific data analysis and visualization with R</h1>
     <h2>Grammar of graphics and Basic Plotting</h2>
-    <p>Vangelis Theodorakis, Fatemeh Behjati, Julien Gagneur, Marcel Schultz<br/></p>
+    <p>Vangelis Theodorakis, Fatemeh Behjati, Julien Gagneur, Marcel Schulz<br/></p>
   </hgroup>
   
   <article></article>  
@@ -99,12 +99,9 @@ function toc(cur) {
 
 <!-- START LECTURE -->
 
-<pre><code>## Error in knitr::include_graphics(&quot;assets/img/lec05_syllabus.png&quot;): Cannot find the file(s): &quot;assets/img/lec05_syllabus.png&quot;
-</code></pre>
+<h2>Day 3 Schedule</h2>
 
-<hr>
-
-<h2>Density plots</h2>
+<p><img src="../../../assets/img/day-03-syllabus.png" title="plot of chunk unnamed-chunk-1" alt="plot of chunk unnamed-chunk-1" width="800px" height="400px" /></p>
 
   </article>
   <!-- Presenter Notes -->
@@ -112,6 +109,96 @@ function toc(cur) {
 </slide>
 
 <slide class="" id="slide-2" style="background:;">
+  
+  <hgroup>
+    <h2>Exercises 1</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-3" style="background:;">
+  
+  <hgroup>
+    <h2>Density plots</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Sometimes histograms are not the optimal plots to investigate distributions. In such cases density plots can be very usefull.</p>
+
+<p>As an example, we can visualize the distribution of the Human Development Index (HDI) in the <code>ind</code> dataset by means of a density plot with <code>geom_density()</code>:</p>
+
+<pre><code class="r">ggplot(ind, aes(HDI)) + geom_density() + mytheme
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-2-1.png" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" width="500px" height="400px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  
+  <hgroup>
+    <h2>Density plots</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>The <code>bw</code> argument of the <code>geom_density()</code> function allows to tweak the bandwidth of a density plot manually. The default option is a bandwidth rule, which is usually a good choice.</p>
+
+<p>Setting a small bandwidth on the previous plot has a huge impact on the plot:</p>
+
+<pre><code class="r">ggplot(ind, aes(HDI)) + geom_density(bw=0.01) + ggtitle(&#39;Small bandwidth&#39;) +
+  mytheme
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-3-1.png" title="plot of chunk unnamed-chunk-3" alt="plot of chunk unnamed-chunk-3" width="500px" height="400px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-5" style="background:;">
+  
+  <hgroup>
+    <h2>Density plots</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Setting a large bandwidth has also a huge impact on the plot:</p>
+
+<pre><code class="r">ggplot(ind, aes(HDI)) + geom_density(bw=1) + ggtitle(&#39;Large bandwidth&#39;) +
+  mytheme
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-4-1.png" title="plot of chunk unnamed-chunk-4" alt="plot of chunk unnamed-chunk-4" width="500px" height="400px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-6" style="background:;">
+  
+  <hgroup>
+    <h2>Density plots</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Thus, we should be careful when changing the bandwidth, since we can get a wrong impression from the distribution of a continuous variable.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-7" style="background:;">
   
   <hgroup>
     <h2>Multidimensional data</h2>
@@ -129,7 +216,7 @@ function toc(cur) {
   
 </slide>
 
-<slide class="" id="slide-3" style="background:;">
+<slide class="" id="slide-8" style="background:;">
   
   <hgroup>
     <h2>Small dimensionality, ~3-10 variables</h2>
@@ -148,7 +235,7 @@ ggpairs(mpg, columns = c(&quot;displ&quot;,&quot;cyl&quot;,&quot;cty&quot;,&quot
   
 </slide>
 
-<slide class="" id="slide-4" style="background:;">
+<slide class="" id="slide-9" style="background:;">
   
   <hgroup>
     <h2>Small dimensionality, ~3-10 variables</h2>
@@ -157,14 +244,14 @@ ggpairs(mpg, columns = c(&quot;displ&quot;,&quot;cyl&quot;,&quot;cty&quot;,&quot
   <article data-timings="">
     <p><strong>Plot matrix</strong></p>
 
-<p><img src="assets/fig/lec07_ggpairs2-1.png" title="plot of chunk lec07_ggpairs2" alt="plot of chunk lec07_ggpairs2" width="500px" height="400px" /></p>
+<p><img src="assets/fig/unnamed-chunk-6-1.png" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" width="500px" height="400px" /></p>
 
   </article>
   <!-- Presenter Notes -->
   
 </slide>
 
-<slide class="" id="slide-5" style="background:;">
+<slide class="" id="slide-10" style="background:;">
   
   <hgroup>
     <h2>Medium dimensionality, &lt;100 variables</h2>
@@ -176,14 +263,14 @@ ggpairs(mpg, columns = c(&quot;displ&quot;,&quot;cyl&quot;,&quot;cty&quot;,&quot
 <pre><code class="r">GGally::ggcorr(mtcars, geom = &#39;circle&#39;, params=c(corMethod=&quot;spearman&quot;)) 
 </code></pre>
 
-<p><img src="assets/fig/lec07_corplot-1.png" title="plot of chunk lec07_corplot" alt="plot of chunk lec07_corplot" width="500px" height="400px" /></p>
+<p><img src="assets/fig/unnamed-chunk-7-1.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" width="500px" height="400px" /></p>
 
   </article>
   <!-- Presenter Notes -->
   
 </slide>
 
-<slide class="" id="slide-6" style="background:;">
+<slide class="" id="slide-11" style="background:;">
   
   <hgroup>
     <h2>High dimensionality, &gt;100, &gt;&gt;100 variables</h2>
@@ -205,7 +292,7 @@ ggplot(mtcars_melted, aes(variable, Cars)) +
   
 </slide>
 
-<slide class="" id="slide-7" style="background:;">
+<slide class="" id="slide-12" style="background:;">
   
   <hgroup>
     <h2>High dimensionality, &gt;100, &gt;&gt;100 variables</h2>
@@ -221,7 +308,7 @@ ggplot(mtcars_melted, aes(variable, Cars)) +
   
 </slide>
 
-<slide class="" id="slide-8" style="background:;">
+<slide class="" id="slide-13" style="background:;">
   
   <hgroup>
     <h2>Heatmaps with hierarchical clustering</h2>
@@ -239,7 +326,7 @@ pheatmap(mtcars)
   
 </slide>
 
-<slide class="" id="slide-9" style="background:;">
+<slide class="" id="slide-14" style="background:;">
   
   <hgroup>
     <h2>Heatmaps with hierarchical clustering</h2>
@@ -255,7 +342,7 @@ pheatmap(mtcars)
   
 </slide>
 
-<slide class="" id="slide-10" style="background:;">
+<slide class="" id="slide-15" style="background:;">
   
   <hgroup>
     <h2>Heatmaps with hierarchical clustering with scaling</h2>
@@ -274,7 +361,7 @@ pheatmap(mtcars)
   
 </slide>
 
-<slide class="" id="slide-11" style="background:;">
+<slide class="" id="slide-16" style="background:;">
   
   <article data-timings="">
     <script type='text/javascript'>toc("Conditioning")</script>
@@ -284,7 +371,7 @@ pheatmap(mtcars)
   
 </slide>
 
-<slide class="" id="slide-12" style="background:;">
+<slide class="" id="slide-17" style="background:;">
   
   <article data-timings="">
     <p><br/><br/>
@@ -298,7 +385,7 @@ pheatmap(mtcars)
   
 </slide>
 
-<slide class="" id="slide-13" style="background:;">
+<slide class="" id="slide-18" style="background:;">
   
   <hgroup>
     <h2>Question</h2>
@@ -332,7 +419,7 @@ pheatmap(mtcars)
   
 </slide>
 
-<slide class="" id="slide-14" style="background:;">
+<slide class="" id="slide-19" style="background:;">
   
   <hgroup>
     <h2>Question</h2>
@@ -370,7 +457,7 @@ pheatmap(mtcars)
   
 </slide>
 
-<slide class="" id="slide-15" style="background:;">
+<slide class="" id="slide-20" style="background:;">
   
   <hgroup>
     <h2>Confounders</h2>
@@ -390,7 +477,7 @@ Negative correlation between tea drinking and lung cancer:</p>
   
 </slide>
 
-<slide class="" id="slide-16" style="background:;">
+<slide class="" id="slide-21" style="background:;">
   
   <hgroup>
     <h2>Simulation of a confounder</h2>
@@ -406,7 +493,7 @@ Negative correlation between tea drinking and lung cancer:</p>
   
 </slide>
 
-<slide class="" id="slide-17" style="background:;">
+<slide class="" id="slide-22" style="background:;">
   
   <hgroup>
     <h2>Simulation of a confounder</h2>
@@ -418,17 +505,17 @@ Negative correlation between tea drinking and lung cancer:</p>
 <pre><code class="r">head(dt, n=10)
 </code></pre>
 
-<pre><code>##     Genotype Expression  Phenotype
-##  1:       AA   4.939291 2.64527121
-##  2:       AA   3.046467 1.02860972
-##  3:       AA   4.671952 0.06257079
-##  4:       AB   5.773916 5.58712846
-##  5:       BB   7.040729 8.70974445
-##  6:       AB   6.624168 5.64488205
-##  7:       AA   5.010156 2.85618874
-##  8:       AB   6.231052 2.36653022
-##  9:       AB   6.967483 4.25342892
-## 10:       BB   8.506309 5.37050589
+<pre><code>##     Genotype Expression   Phenotype
+##  1:       AB   5.334425  5.16227623
+##  2:       AA   6.942958 -0.02131788
+##  3:       AB   7.932899  6.33396466
+##  4:       BB   7.780627  6.01240484
+##  5:       BB   8.212588  6.94913601
+##  6:       AB   6.566281  3.33022429
+##  7:       AB   5.384597  6.71195945
+##  8:       BB   8.221428  7.39374565
+##  9:       BB   8.429404  5.80557431
+## 10:       AA   7.070461  0.62818684
 </code></pre>
 
   </article>
@@ -436,7 +523,7 @@ Negative correlation between tea drinking and lung cancer:</p>
   
 </slide>
 
-<slide class="" id="slide-18" style="background:;">
+<slide class="" id="slide-23" style="background:;">
   
   <hgroup>
     <h2>Confounder variable induces a correlation</h2>
@@ -455,7 +542,7 @@ Negative correlation between tea drinking and lung cancer:</p>
   
 </slide>
 
-<slide class="" id="slide-19" style="background:;">
+<slide class="" id="slide-24" style="background:;">
   
   <hgroup>
     <h2>Confounder variable induces a correlation</h2>
@@ -467,7 +554,7 @@ Negative correlation between tea drinking and lung cancer:</p>
 <pre><code class="r">dt[, cor(Phenotype, Expression)] 
 </code></pre>
 
-<pre><code>## [1] 0.6300597
+<pre><code>## [1] 0.6180117
 </code></pre>
 
 <p>&nbsp;...but are they directly correlated? Does this indicates that one is the cause of the other one?</p>
@@ -477,7 +564,7 @@ Negative correlation between tea drinking and lung cancer:</p>
   
 </slide>
 
-<slide class="" id="slide-20" style="background:;">
+<slide class="" id="slide-25" style="background:;">
   
   <hgroup>
     <h2>Facets allows plotting conditioning on a third variable (potential confounder)</h2>
@@ -494,7 +581,7 @@ Negative correlation between tea drinking and lung cancer:</p>
   
 </slide>
 
-<slide class="" id="slide-21" style="background:;">
+<slide class="" id="slide-26" style="background:;">
   
   <hgroup>
     <h2>Facets allows plotting conditioning on a third variable (potential confounder)</h2>
@@ -504,10 +591,10 @@ Negative correlation between tea drinking and lung cancer:</p>
     <pre><code class="r">dt[, cor(Expression, Phenotype), by = &quot;Genotype&quot;]
 </code></pre>
 
-<pre><code>##    Genotype           V1
-## 1:       AA -0.013573546
-## 2:       AB -0.007420982
-## 3:       BB  0.040612184
+<pre><code>##    Genotype          V1
+## 1:       AB -0.00203611
+## 2:       AA -0.06517382
+## 3:       BB  0.04706681
 </code></pre>
 
   </article>
@@ -515,7 +602,20 @@ Negative correlation between tea drinking and lung cancer:</p>
   
 </slide>
 
-<slide class="" id="slide-22" style="background:;">
+<slide class="" id="slide-27" style="background:;">
+  
+  <hgroup>
+    <h2>Exercise 2</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-28" style="background:;">
   
   <hgroup>
     <h2>Conditioning can rule out direct correlation and therefore causation</h2>
@@ -531,7 +631,7 @@ Negative correlation between tea drinking and lung cancer:</p>
   
 </slide>
 
-<slide class="" id="slide-23" style="background:;">
+<slide class="" id="slide-29" style="background:;">
   
   <hgroup>
     <h2>The <code>diamonds</code> data</h2>
@@ -554,7 +654,7 @@ Negative correlation between tea drinking and lung cancer:</p>
   
 </slide>
 
-<slide class="" id="slide-24" style="background:;">
+<slide class="" id="slide-30" style="background:;">
   
   <hgroup>
     <h2>The <code>diamonds</code> data</h2>
@@ -614,7 +714,7 @@ Negative correlation between tea drinking and lung cancer:</p>
   
 </slide>
 
-<slide class="" id="slide-25" style="background:;">
+<slide class="" id="slide-31" style="background:;">
   
   <hgroup>
     <h2>Conditioning with categorial variables: multi-way histograms</h2>
@@ -634,7 +734,7 @@ Negative correlation between tea drinking and lung cancer:</p>
   
 </slide>
 
-<slide class="" id="slide-26" style="background:;">
+<slide class="" id="slide-32" style="background:;">
   
   <hgroup>
     <h2>Conditioning with categorial variables: multi-way histograms</h2>
@@ -648,7 +748,7 @@ Negative correlation between tea drinking and lung cancer:</p>
   
 </slide>
 
-<slide class="" id="slide-27" style="background:;">
+<slide class="" id="slide-33" style="background:;">
   
   <hgroup>
     <h2>Conditioning with categorial variables: multi-way histograms <code>stack</code></h2>
@@ -668,7 +768,7 @@ Negative correlation between tea drinking and lung cancer:</p>
   
 </slide>
 
-<slide class="" id="slide-28" style="background:;">
+<slide class="" id="slide-34" style="background:;">
   
   <hgroup>
     <h2>Conditioning with categorial variables: multi-way histograms <code>fill</code></h2>
@@ -688,7 +788,7 @@ Negative correlation between tea drinking and lung cancer:</p>
   
 </slide>
 
-<slide class="" id="slide-29" style="background:;">
+<slide class="" id="slide-35" style="background:;">
   
   <hgroup>
     <h2>Conditioning with categorial variables: multi-way histograms <code>dodge</code></h2>
@@ -708,7 +808,7 @@ Negative correlation between tea drinking and lung cancer:</p>
   
 </slide>
 
-<slide class="" id="slide-30" style="background:;">
+<slide class="" id="slide-36" style="background:;">
   
   <article data-timings="">
     <script type='text/javascript'>toc("Colors")</script>
@@ -718,7 +818,7 @@ Negative correlation between tea drinking and lung cancer:</p>
   
 </slide>
 
-<slide class="" id="slide-31" style="background:;">
+<slide class="" id="slide-37" style="background:;">
   
   <hgroup>
     <h2>Color coding in R</h2>
@@ -737,7 +837,7 @@ Negative correlation between tea drinking and lung cancer:</p>
   
 </slide>
 
-<slide class="" id="slide-32" style="background:;">
+<slide class="" id="slide-38" style="background:;">
   
   <hgroup>
     <h2>Color coding in R</h2>
@@ -761,7 +861,7 @@ p + geom_bar(aes(fill = factor(x))) + scale_fill_brewer(palette=&quot;Spectral&q
   
 </slide>
 
-<slide class="" id="slide-33" style="background:;">
+<slide class="" id="slide-39" style="background:;">
   
   <hgroup>
     <h2>Color coding in R</h2>
@@ -784,7 +884,7 @@ p + geom_bar(fill = x) + mytheme
   
 </slide>
 
-<slide class="" id="slide-34" style="background:;">
+<slide class="" id="slide-40" style="background:;">
   
   <hgroup>
     <h2>Color coding in R</h2>
@@ -814,7 +914,7 @@ p + geom_bar(fill=c(&quot;green&quot;, &quot;red&quot;, &quot;blue&quot;, &quot;
   
 </slide>
 
-<slide class="" id="slide-35" style="background:;">
+<slide class="" id="slide-41" style="background:;">
   
   <hgroup>
     <h2>Color coding in R</h2>
@@ -844,7 +944,7 @@ p + geom_bar(fill=c(&quot;green&quot;, &quot;red&quot;, &quot;blue&quot;, &quot;
   
 </slide>
 
-<slide class="" id="slide-36" style="background:;">
+<slide class="" id="slide-42" style="background:;">
   
   <hgroup>
     <h2>Color coding in R</h2>
@@ -867,7 +967,7 @@ p + geom_bar(fill=c(&quot;#FFFFFF&quot;, &quot;#FFFF00&quot;, &quot;#666666&quot
   
 </slide>
 
-<slide class="" id="slide-37" style="background:;">
+<slide class="" id="slide-43" style="background:;">
   
   <hgroup>
     <h2>RColorBrewer</h2>
@@ -886,7 +986,7 @@ p + geom_bar(fill=c(&quot;#FFFFFF&quot;, &quot;#FFFF00&quot;, &quot;#666666&quot
   
 </slide>
 
-<slide class="" id="slide-38" style="background:;">
+<slide class="" id="slide-44" style="background:;">
   
   <hgroup>
     <h2>Careful with colors</h2>
@@ -901,14 +1001,14 @@ p + geom_bar(fill=c(&quot;#FFFFFF&quot;, &quot;#FFFF00&quot;, &quot;#666666&quot
 <li>Visual perception is relative, not absolute.</li>
 </ul>
 
-<p><img src="assets/img/lec07_col_contrast.png" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" width="500px" height="400px" /></p>
+<p><img src="assets/img/lec07_col_contrast.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" width="500px" height="400px" /></p>
 
   </article>
   <!-- Presenter Notes -->
   
 </slide>
 
-<slide class="" id="slide-39" style="background:;">
+<slide class="" id="slide-45" style="background:;">
   
   <hgroup>
     <h2>Careful with colors</h2>
@@ -932,7 +1032,7 @@ use a background color that <code>contrasts sufficiently</code> with the object.
   
 </slide>
 
-<slide class="" id="slide-40" style="background:;">
+<slide class="" id="slide-46" style="background:;">
   
   <hgroup>
     <h2>Careful with colors</h2>
@@ -941,14 +1041,23 @@ use a background color that <code>contrasts sufficiently</code> with the object.
   <article data-timings="">
     <h3>Use color meaningfully and with restraint</h3>
 
-<p><img src="assets/fig/unnamed-chunk-7-1.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" width="500px" height="400px" /></p>
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;poke_dt&#39; not found
+</code></pre>
+
+<pre><code>## Error in factor(Type, levels = as.character(Type)): object &#39;Type&#39; not found
+</code></pre>
+
+<pre><code>## Error in FUN(X[[i]], ...): object &#39;Type&#39; not found
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-14-1.png" title="plot of chunk unnamed-chunk-14" alt="plot of chunk unnamed-chunk-14" width="500px" height="400px" /></p>
 
   </article>
   <!-- Presenter Notes -->
   
 </slide>
 
-<slide class="" id="slide-41" style="background:;">
+<slide class="" id="slide-47" style="background:;">
   
   <hgroup>
     <h2>Careful with colors</h2>
@@ -975,7 +1084,7 @@ and <code>bright</code> and/or dark colors to <code>highlight</code> information
   
 </slide>
 
-<slide class="" id="slide-42" style="background:;">
+<slide class="" id="slide-48" style="background:;">
   
   <hgroup>
     <h2>Careful with colors</h2>
@@ -991,27 +1100,27 @@ and <code>bright</code> and/or dark colors to <code>highlight</code> information
 <li>Sequential: quantitative differences</li>
 </ul>
 
-<p><img src="assets/img/lec07_col_seq_pal.png" title="plot of chunk unnamed-chunk-8" alt="plot of chunk unnamed-chunk-8" width="500px" height="400px" /></p>
+<p><img src="assets/img/lec07_col_seq_pal.png" title="plot of chunk unnamed-chunk-15" alt="plot of chunk unnamed-chunk-15" width="500px" height="400px" /></p>
 
 <ul>
 <li>Diverging: quantitative differences, breakpoint</li>
 </ul>
 
-<p><img src="assets/img/lec07_col_div_pal.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" width="500px" height="400px" /></p>
+<p><img src="assets/img/lec07_col_div_pal.png" title="plot of chunk unnamed-chunk-16" alt="plot of chunk unnamed-chunk-16" width="500px" height="400px" /></p>
 
   </article>
   <!-- Presenter Notes -->
   
 </slide>
 
-<slide class="" id="slide-43" style="background:;">
+<slide class="" id="slide-49" style="background:;">
   
   <hgroup>
     <h2>What&#39;s wrong with the following plot?</h2>
   </hgroup>
   
   <article data-timings="">
-    <p><img src="assets/img/lec07-bad1.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" width="400px" height="400px" /></p>
+    <p><img src="assets/img/lec07-bad1.png" title="plot of chunk unnamed-chunk-17" alt="plot of chunk unnamed-chunk-17" width="400px" height="400px" /></p>
 
 <p>Xiong et al., Science 2014</p>
 
@@ -1020,14 +1129,14 @@ and <code>bright</code> and/or dark colors to <code>highlight</code> information
   
 </slide>
 
-<slide class="" id="slide-44" style="background:;">
+<slide class="" id="slide-50" style="background:;">
   
   <hgroup>
     <h2>What&#39;s wrong with the following plot?</h2>
   </hgroup>
   
   <article data-timings="">
-    <p><img src="assets/img/lec07-bad1.png" title="plot of chunk unnamed-chunk-11" alt="plot of chunk unnamed-chunk-11" width="400px" height="400px" /></p>
+    <p><img src="assets/img/lec07-bad1.png" title="plot of chunk unnamed-chunk-18" alt="plot of chunk unnamed-chunk-18" width="400px" height="400px" /></p>
 
 <ol>
 <li><p>Rainbow color where there are no breakpoints. Color bundaries are created based on author&#39;s interest.</p></li>
@@ -1039,7 +1148,7 @@ and <code>bright</code> and/or dark colors to <code>highlight</code> information
   
 </slide>
 
-<slide class="" id="slide-45" style="background:;">
+<slide class="" id="slide-51" style="background:;">
   
   <hgroup>
     <h2>Themes control non-data parts of your plots:</h2>
@@ -1063,7 +1172,7 @@ and <code>bright</code> and/or dark colors to <code>highlight</code> information
   
 </slide>
 
-<slide class="" id="slide-46" style="background:;">
+<slide class="" id="slide-52" style="background:;">
   
   <hgroup>
     <h2>Complete themes</h2>
@@ -1084,7 +1193,7 @@ and <code>bright</code> and/or dark colors to <code>highlight</code> information
   
 </slide>
 
-<slide class="" id="slide-47" style="background:;">
+<slide class="" id="slide-53" style="background:;">
   
   <hgroup>
     <h2>More themes with <code>ggthemes</code> package (from github)</h2>
@@ -1106,7 +1215,7 @@ ggplot(ind, aes(CPI, HDI, color=region)) +
   
 </slide>
 
-<slide class="" id="slide-48" style="background:;">
+<slide class="" id="slide-54" style="background:;">
   
   <hgroup>
     <h2>Axis title</h2>
@@ -1127,7 +1236,7 @@ ggplot(ind, aes(CPI, HDI, color=region)) +
   
 </slide>
 
-<slide class="" id="slide-49" style="background:;">
+<slide class="" id="slide-55" style="background:;">
   
   <hgroup>
     <h2>Axis title</h2>
@@ -1148,7 +1257,7 @@ ggplot(ind, aes(CPI, HDI, color=region)) +
   
 </slide>
 
-<slide class="" id="slide-50" style="background:;">
+<slide class="" id="slide-56" style="background:;">
   
   <hgroup>
     <h2>Summary axis elements (don&#39;t have to know them by heart)</h2>
@@ -1216,7 +1325,7 @@ ggplot(ind, aes(CPI, HDI, color=region)) +
   
 </slide>
 
-<slide class="" id="slide-51" style="background:;">
+<slide class="" id="slide-57" style="background:;">
   
   <hgroup>
     <h2>Plot title themes</h2>
@@ -1236,7 +1345,7 @@ ggplot(ind, aes(CPI, HDI, color=region)) +
   
 </slide>
 
-<slide class="" id="slide-52" style="background:;">
+<slide class="" id="slide-58" style="background:;">
   
   <hgroup>
     <h2>Plot title themes (don&#39;t have to know them by heart)</h2>
@@ -1274,7 +1383,7 @@ ggplot(ind, aes(CPI, HDI, color=region)) +
   
 </slide>
 
-<slide class="" id="slide-53" style="background:;">
+<slide class="" id="slide-59" style="background:;">
   
   <hgroup>
     <h2>Legend themes (don&#39;t have to know them by heart)</h2>
@@ -1296,7 +1405,7 @@ base + theme(
   
 </slide>
 
-<slide class="" id="slide-54" style="background:;">
+<slide class="" id="slide-60" style="background:;">
   
   <hgroup>
     <h2>Legend themes (don&#39;t have to know them by heart)</h2>
@@ -1369,7 +1478,7 @@ base + theme(
   
 </slide>
 
-<slide class="" id="slide-55" style="background:;">
+<slide class="" id="slide-61" style="background:;">
   
   <article data-timings="">
     <script type='text/javascript'>toc("Interactive Plots")</script>
@@ -1379,7 +1488,7 @@ base + theme(
   
 </slide>
 
-<slide class="" id="slide-56" style="background:;">
+<slide class="" id="slide-62" style="background:;">
   
   <hgroup>
     <h2>Interactive plots with plotly</h2>
@@ -1398,7 +1507,7 @@ save_plotly_as_widget(p, file.path(getwd(), tmpf1))
   
 </slide>
 
-<slide class="" id="slide-57" style="background:;">
+<slide class="" id="slide-63" style="background:;">
   
   <hgroup>
     <h2>Interactive plots with plotly</h2>
@@ -1412,7 +1521,7 @@ save_plotly_as_widget(p, file.path(getwd(), tmpf1))
   
 </slide>
 
-<slide class="" id="slide-58" style="background:;">
+<slide class="" id="slide-64" style="background:;">
   
   <article data-timings="">
     <script type='text/javascript'>toc("Do's and dont's")</script>
@@ -1422,7 +1531,7 @@ save_plotly_as_widget(p, file.path(getwd(), tmpf1))
   
 </slide>
 
-<slide class="" id="slide-59" style="background:;">
+<slide class="" id="slide-65" style="background:;">
   
   <hgroup>
     <h2>Chart junk</h2>
@@ -1443,7 +1552,7 @@ width='800' height='600'>
   
 </slide>
 
-<slide class="" id="slide-60" style="background:;">
+<slide class="" id="slide-66" style="background:;">
   
   <hgroup>
     <h2>Chart junk</h2>
@@ -1468,7 +1577,7 @@ width='800' height='600'>
   
 </slide>
 
-<slide class="" id="slide-61" style="background:;">
+<slide class="" id="slide-67" style="background:;">
   
   <hgroup>
     <h2>Know when to include 0</h2>
@@ -1487,7 +1596,7 @@ width='800' height='600'>
   
 </slide>
 
-<slide class="" id="slide-62" style="background:;">
+<slide class="" id="slide-68" style="background:;">
   
   <hgroup>
     <h2>Know when to include 0</h2>
@@ -1509,7 +1618,7 @@ width='800' height='600'>
   
 </slide>
 
-<slide class="" id="slide-63" style="background:;">
+<slide class="" id="slide-69" style="background:;">
   
   <hgroup>
     <h2>Know when to include 0</h2>
@@ -1528,7 +1637,7 @@ width='800' height='600'>
   
 </slide>
 
-<slide class="" id="slide-64" style="background:;">
+<slide class="" id="slide-70" style="background:;">
   
   <hgroup>
     <h2>Avoid pseudo three dimensional plots</h2>
@@ -1540,14 +1649,14 @@ width='800' height='600'>
 <li>Although your screen is flat and two dimensional, the plot tries to imitate three dimensions and assigns a dimension to each variable.</li>
 </ul>
 
-<p><img src="https://raw.githubusercontent.com/kbroman/Talk_Graphs/master/Figs/fig8b.png" title="plot of chunk unnamed-chunk-12" alt="plot of chunk unnamed-chunk-12" width="500px" height="400px" /></p>
+<p><img src="https://raw.githubusercontent.com/kbroman/Talk_Graphs/master/Figs/fig8b.png" title="plot of chunk unnamed-chunk-19" alt="plot of chunk unnamed-chunk-19" width="500px" height="400px" /></p>
 
   </article>
   <!-- Presenter Notes -->
   
 </slide>
 
-<slide class="" id="slide-65" style="background:;">
+<slide class="" id="slide-71" style="background:;">
   
   <hgroup>
     <h2>Avoid pseudo three dimensional plots</h2>
@@ -1560,14 +1669,14 @@ width='800' height='600'>
 <li>Can you tell when the purple ribbon intersects the red one? </li>
 </ul>
 
-<p><img src="https://raw.githubusercontent.com/kbroman/Talk_Graphs/master/Figs/fig8b.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" width="500px" height="400px" /></p>
+<p><img src="https://raw.githubusercontent.com/kbroman/Talk_Graphs/master/Figs/fig8b.png" title="plot of chunk unnamed-chunk-20" alt="plot of chunk unnamed-chunk-20" width="500px" height="400px" /></p>
 
   </article>
   <!-- Presenter Notes -->
   
 </slide>
 
-<slide class="" id="slide-66" style="background:;">
+<slide class="" id="slide-72" style="background:;">
   
   <hgroup>
     <h2>Avoid pseudo three dimensional plots</h2>
@@ -1583,7 +1692,7 @@ width='800' height='600'>
   
 </slide>
 
-<slide class="" id="slide-67" style="background:;">
+<slide class="" id="slide-73" style="background:;">
   
   <hgroup>
     <h2>Descriptive plots</h2>
@@ -1602,7 +1711,7 @@ width='800' height='600'>
   
 </slide>
 
-<slide class="" id="slide-68" style="background:;">
+<slide class="" id="slide-74" style="background:;">
   
   <hgroup>
     <h2>Demonstrative plots</h2>
@@ -1621,7 +1730,7 @@ width='800' height='600'>
   
 </slide>
 
-<slide class="" id="slide-69" style="background:;">
+<slide class="" id="slide-75" style="background:;">
   
   <hgroup>
     <h2>Descriptive vs. demonstrative plots</h2>
@@ -1639,7 +1748,7 @@ width='800' height='600'>
   
 </slide>
 
-<slide class="" id="slide-70" style="background:;">
+<slide class="" id="slide-76" style="background:;">
   
   <hgroup>
     <h2>Have expressive figure titles</h2>
@@ -1658,7 +1767,7 @@ width='800' height='600'>
   
 </slide>
 
-<slide class="" id="slide-71" style="background:;">
+<slide class="" id="slide-77" style="background:;">
   
   <hgroup>
     <h2>The further away an airport, the longer the flight</h2>
@@ -1677,7 +1786,7 @@ ggplot(flightsLAX, aes(DISTANCE, AIR_TIME)) +
   
 </slide>
 
-<slide class="" id="slide-72" style="background:;">
+<slide class="" id="slide-78" style="background:;">
   
   <hgroup>
     <h2>Question</h2>
@@ -1716,7 +1825,7 @@ ggplot(flightsLAX, aes(DISTANCE, AIR_TIME)) +
   
 </slide>
 
-<slide class="" id="slide-73" style="background:;">
+<slide class="" id="slide-79" style="background:;">
   
   <hgroup>
     <h2>Question</h2>
@@ -1741,7 +1850,20 @@ B <strong>light grey major grid lines</strong></p>
   
 </slide>
 
-<slide class="" id="slide-74" style="background:;">
+<slide class="" id="slide-80" style="background:;">
+  
+  <hgroup>
+    <h2>Exercise 3</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-81" style="background:;">
   
   <hgroup>
     <h2>References</h2>
@@ -1780,512 +1902,561 @@ B <strong>light grey major grid lines</strong></p>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=2 title='Multidimensional data'>
+        data-slide=2 title='Exercises 1'>
          2
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=3 title='Small dimensionality, ~3-10 variables'>
+        data-slide=3 title='Density plots'>
          3
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=4 title='Small dimensionality, ~3-10 variables'>
+        data-slide=4 title='Density plots'>
          4
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=5 title='Medium dimensionality, &lt;100 variables'>
+        data-slide=5 title='Density plots'>
          5
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=6 title='High dimensionality, &gt;100, &gt;&gt;100 variables'>
+        data-slide=6 title='Density plots'>
          6
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=7 title='High dimensionality, &gt;100, &gt;&gt;100 variables'>
+        data-slide=7 title='Multidimensional data'>
          7
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=8 title='Heatmaps with hierarchical clustering'>
+        data-slide=8 title='Small dimensionality, ~3-10 variables'>
          8
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=9 title='Heatmaps with hierarchical clustering'>
+        data-slide=9 title='Small dimensionality, ~3-10 variables'>
          9
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=10 title='Heatmaps with hierarchical clustering with scaling'>
+        data-slide=10 title='Medium dimensionality, &lt;100 variables'>
          10
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=11 title='NA'>
+        data-slide=11 title='High dimensionality, &gt;100, &gt;&gt;100 variables'>
          11
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=12 title='NA'>
+        data-slide=12 title='High dimensionality, &gt;100, &gt;&gt;100 variables'>
          12
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=13 title='Question'>
+        data-slide=13 title='Heatmaps with hierarchical clustering'>
          13
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=14 title='Question'>
+        data-slide=14 title='Heatmaps with hierarchical clustering'>
          14
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=15 title='Confounders'>
+        data-slide=15 title='Heatmaps with hierarchical clustering with scaling'>
          15
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=16 title='Simulation of a confounder'>
+        data-slide=16 title='NA'>
          16
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=17 title='Simulation of a confounder'>
+        data-slide=17 title='NA'>
          17
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=18 title='Confounder variable induces a correlation'>
+        data-slide=18 title='Question'>
          18
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=19 title='Confounder variable induces a correlation'>
+        data-slide=19 title='Question'>
          19
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=20 title='Facets allows plotting conditioning on a third variable (potential confounder)'>
+        data-slide=20 title='Confounders'>
          20
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=21 title='Facets allows plotting conditioning on a third variable (potential confounder)'>
+        data-slide=21 title='Simulation of a confounder'>
          21
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=22 title='Conditioning can rule out direct correlation and therefore causation'>
+        data-slide=22 title='Simulation of a confounder'>
          22
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=23 title='The <code>diamonds</code> data'>
+        data-slide=23 title='Confounder variable induces a correlation'>
          23
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=24 title='The <code>diamonds</code> data'>
+        data-slide=24 title='Confounder variable induces a correlation'>
          24
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=25 title='Conditioning with categorial variables: multi-way histograms'>
+        data-slide=25 title='Facets allows plotting conditioning on a third variable (potential confounder)'>
          25
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=26 title='Conditioning with categorial variables: multi-way histograms'>
+        data-slide=26 title='Facets allows plotting conditioning on a third variable (potential confounder)'>
          26
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=27 title='Conditioning with categorial variables: multi-way histograms <code>stack</code>'>
+        data-slide=27 title='Exercise 2'>
          27
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=28 title='Conditioning with categorial variables: multi-way histograms <code>fill</code>'>
+        data-slide=28 title='Conditioning can rule out direct correlation and therefore causation'>
          28
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=29 title='Conditioning with categorial variables: multi-way histograms <code>dodge</code>'>
+        data-slide=29 title='The <code>diamonds</code> data'>
          29
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=30 title='NA'>
+        data-slide=30 title='The <code>diamonds</code> data'>
          30
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=31 title='Color coding in R'>
+        data-slide=31 title='Conditioning with categorial variables: multi-way histograms'>
          31
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=32 title='Color coding in R'>
+        data-slide=32 title='Conditioning with categorial variables: multi-way histograms'>
          32
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=33 title='Color coding in R'>
+        data-slide=33 title='Conditioning with categorial variables: multi-way histograms <code>stack</code>'>
          33
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=34 title='Color coding in R'>
+        data-slide=34 title='Conditioning with categorial variables: multi-way histograms <code>fill</code>'>
          34
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=35 title='Color coding in R'>
+        data-slide=35 title='Conditioning with categorial variables: multi-way histograms <code>dodge</code>'>
          35
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=36 title='Color coding in R'>
+        data-slide=36 title='NA'>
          36
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=37 title='RColorBrewer'>
+        data-slide=37 title='Color coding in R'>
          37
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=38 title='Careful with colors'>
+        data-slide=38 title='Color coding in R'>
          38
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=39 title='Careful with colors'>
+        data-slide=39 title='Color coding in R'>
          39
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=40 title='Careful with colors'>
+        data-slide=40 title='Color coding in R'>
          40
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=41 title='Careful with colors'>
+        data-slide=41 title='Color coding in R'>
          41
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=42 title='Careful with colors'>
+        data-slide=42 title='Color coding in R'>
          42
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=43 title='What&#39;s wrong with the following plot?'>
+        data-slide=43 title='RColorBrewer'>
          43
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=44 title='What&#39;s wrong with the following plot?'>
+        data-slide=44 title='Careful with colors'>
          44
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=45 title='Themes control non-data parts of your plots:'>
+        data-slide=45 title='Careful with colors'>
          45
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=46 title='Complete themes'>
+        data-slide=46 title='Careful with colors'>
          46
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=47 title='More themes with <code>ggthemes</code> package (from github)'>
+        data-slide=47 title='Careful with colors'>
          47
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=48 title='Axis title'>
+        data-slide=48 title='Careful with colors'>
          48
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=49 title='Axis title'>
+        data-slide=49 title='What&#39;s wrong with the following plot?'>
          49
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=50 title='Summary axis elements (don&#39;t have to know them by heart)'>
+        data-slide=50 title='What&#39;s wrong with the following plot?'>
          50
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=51 title='Plot title themes'>
+        data-slide=51 title='Themes control non-data parts of your plots:'>
          51
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=52 title='Plot title themes (don&#39;t have to know them by heart)'>
+        data-slide=52 title='Complete themes'>
          52
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=53 title='Legend themes (don&#39;t have to know them by heart)'>
+        data-slide=53 title='More themes with <code>ggthemes</code> package (from github)'>
          53
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=54 title='Legend themes (don&#39;t have to know them by heart)'>
+        data-slide=54 title='Axis title'>
          54
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=55 title='NA'>
+        data-slide=55 title='Axis title'>
          55
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=56 title='Interactive plots with plotly'>
+        data-slide=56 title='Summary axis elements (don&#39;t have to know them by heart)'>
          56
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=57 title='Interactive plots with plotly'>
+        data-slide=57 title='Plot title themes'>
          57
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=58 title='NA'>
+        data-slide=58 title='Plot title themes (don&#39;t have to know them by heart)'>
          58
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=59 title='Chart junk'>
+        data-slide=59 title='Legend themes (don&#39;t have to know them by heart)'>
          59
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=60 title='Chart junk'>
+        data-slide=60 title='Legend themes (don&#39;t have to know them by heart)'>
          60
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=61 title='Know when to include 0'>
+        data-slide=61 title='NA'>
          61
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=62 title='Know when to include 0'>
+        data-slide=62 title='Interactive plots with plotly'>
          62
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=63 title='Know when to include 0'>
+        data-slide=63 title='Interactive plots with plotly'>
          63
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=64 title='Avoid pseudo three dimensional plots'>
+        data-slide=64 title='NA'>
          64
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=65 title='Avoid pseudo three dimensional plots'>
+        data-slide=65 title='Chart junk'>
          65
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=66 title='Avoid pseudo three dimensional plots'>
+        data-slide=66 title='Chart junk'>
          66
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=67 title='Descriptive plots'>
+        data-slide=67 title='Know when to include 0'>
          67
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=68 title='Demonstrative plots'>
+        data-slide=68 title='Know when to include 0'>
          68
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=69 title='Descriptive vs. demonstrative plots'>
+        data-slide=69 title='Know when to include 0'>
          69
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=70 title='Have expressive figure titles'>
+        data-slide=70 title='Avoid pseudo three dimensional plots'>
          70
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=71 title='The further away an airport, the longer the flight'>
+        data-slide=71 title='Avoid pseudo three dimensional plots'>
          71
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=72 title='Question'>
+        data-slide=72 title='Avoid pseudo three dimensional plots'>
          72
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=73 title='Question'>
+        data-slide=73 title='Descriptive plots'>
          73
       </a>
     </li>
     
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=74 title='References'>
+        data-slide=74 title='Demonstrative plots'>
          74
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=75 title='Descriptive vs. demonstrative plots'>
+         75
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=76 title='Have expressive figure titles'>
+         76
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=77 title='The further away an airport, the longer the flight'>
+         77
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=78 title='Question'>
+         78
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=79 title='Question'>
+         79
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=80 title='Exercise 3'>
+         80
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=81 title='References'>
+         81
       </a>
     </li>
     

@@ -1,6 +1,6 @@
 ---
 title       : 'Make your paper figures professionally: Scientific data analysis and visualization with R'
-author      : Vangelis Theodorakis, Fatemeh Behjati, Julien Gagneur, Marcel Schultz
+author      : Vangelis Theodorakis, Fatemeh Behjati, Julien Gagneur, Marcel Schulz
 subtitle    : Grammar of graphics and Basic Plotting
 framework   : io2012
 highlighter : highlight.js
@@ -62,13 +62,64 @@ function toc(cur) {
 
 <!-- START LECTURE -->
 
+## Day 3 Schedule
 
-```
-## Error in knitr::include_graphics("assets/img/lec05_syllabus.png"): Cannot find the file(s): "assets/img/lec05_syllabus.png"
-```
+<img src="../../../assets/img/day-03-syllabus.png" title="plot of chunk unnamed-chunk-1" alt="plot of chunk unnamed-chunk-1" width="800px" height="400px" />
+
+---
+
+## Exercises 1
+
 ---
 
 ## Density plots
+
+Sometimes histograms are not the optimal plots to investigate distributions. In such cases density plots can be very usefull.
+
+As an example, we can visualize the distribution of the Human Development Index (HDI) in the `ind` dataset by means of a density plot with `geom_density()`:
+
+
+```r
+ggplot(ind, aes(HDI)) + geom_density() + mytheme
+```
+
+<img src="assets/fig/unnamed-chunk-2-1.png" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" width="500px" height="400px" />
+
+---
+
+## Density plots
+
+The `bw` argument of the `geom_density()` function allows to tweak the bandwidth of a density plot manually. The default option is a bandwidth rule, which is usually a good choice.
+
+Setting a small bandwidth on the previous plot has a huge impact on the plot:
+
+
+```r
+ggplot(ind, aes(HDI)) + geom_density(bw=0.01) + ggtitle('Small bandwidth') +
+  mytheme
+```
+
+<img src="assets/fig/unnamed-chunk-3-1.png" title="plot of chunk unnamed-chunk-3" alt="plot of chunk unnamed-chunk-3" width="500px" height="400px" />
+
+---
+
+## Density plots
+
+Setting a large bandwidth has also a huge impact on the plot:
+
+
+```r
+ggplot(ind, aes(HDI)) + geom_density(bw=1) + ggtitle('Large bandwidth') +
+  mytheme
+```
+
+<img src="assets/fig/unnamed-chunk-4-1.png" title="plot of chunk unnamed-chunk-4" alt="plot of chunk unnamed-chunk-4" width="500px" height="400px" />
+
+---
+
+## Density plots
+
+Thus, we should be careful when changing the bandwidth, since we can get a wrong impression from the distribution of a continuous variable.
 
 ---
 
@@ -99,7 +150,7 @@ ggpairs(mpg, columns = c("displ","cyl","cty","hwy"),
 
 **Plot matrix**
 
-<img src="assets/fig/lec07_ggpairs2-1.png" title="plot of chunk lec07_ggpairs2" alt="plot of chunk lec07_ggpairs2" width="500px" height="400px" />
+<img src="assets/fig/unnamed-chunk-6-1.png" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" width="500px" height="400px" />
 
 ---
 
@@ -112,7 +163,7 @@ Correlation plots, "corrgrams", "correlograms"
 GGally::ggcorr(mtcars, geom = 'circle', params=c(corMethod="spearman")) 
 ```
 
-<img src="assets/fig/lec07_corplot-1.png" title="plot of chunk lec07_corplot" alt="plot of chunk lec07_corplot" width="500px" height="400px" />
+<img src="assets/fig/unnamed-chunk-7-1.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" width="500px" height="400px" />
 
 ---
 
@@ -248,17 +299,17 @@ head(dt, n=10)
 ```
 
 ```
-##     Genotype Expression  Phenotype
-##  1:       AA   4.939291 2.64527121
-##  2:       AA   3.046467 1.02860972
-##  3:       AA   4.671952 0.06257079
-##  4:       AB   5.773916 5.58712846
-##  5:       BB   7.040729 8.70974445
-##  6:       AB   6.624168 5.64488205
-##  7:       AA   5.010156 2.85618874
-##  8:       AB   6.231052 2.36653022
-##  9:       AB   6.967483 4.25342892
-## 10:       BB   8.506309 5.37050589
+##     Genotype Expression   Phenotype
+##  1:       AB   5.334425  5.16227623
+##  2:       AA   6.942958 -0.02131788
+##  3:       AB   7.932899  6.33396466
+##  4:       BB   7.780627  6.01240484
+##  5:       BB   8.212588  6.94913601
+##  6:       AB   6.566281  3.33022429
+##  7:       AB   5.384597  6.71195945
+##  8:       BB   8.221428  7.39374565
+##  9:       BB   8.429404  5.80557431
+## 10:       AA   7.070461  0.62818684
 ```
 
 ---
@@ -286,7 +337,7 @@ dt[, cor(Phenotype, Expression)]
 ```
 
 ```
-## [1] 0.6300597
+## [1] 0.6180117
 ```
 &nbsp;...but are they directly correlated? Does this indicates that one is the cause of the other one?
 
@@ -311,11 +362,15 @@ dt[, cor(Expression, Phenotype), by = "Genotype"]
 ```
 
 ```
-##    Genotype           V1
-## 1:       AA -0.013573546
-## 2:       AB -0.007420982
-## 3:       BB  0.040612184
+##    Genotype          V1
+## 1:       AB -0.00203611
+## 2:       AA -0.06517382
+## 3:       BB  0.04706681
 ```
+
+---
+
+## Exercise 2
 
 ---
 
@@ -548,7 +603,7 @@ display.brewer.all()
 * Perception of an object is influenced by the context
 * Visual perception is relative, not absolute.
 
-<img src="assets/img/lec07_col_contrast.png" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" width="500px" height="400px" />
+<img src="assets/img/lec07_col_contrast.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" width="500px" height="400px" />
 
 
 ---
@@ -570,7 +625,20 @@ use a background color that `contrasts sufficiently` with the object.
 ## Careful with colors
 ### Use color meaningfully and with restraint
 
-<img src="assets/fig/unnamed-chunk-7-1.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" width="500px" height="400px" />
+
+```
+## Error in eval(expr, envir, enclos): object 'poke_dt' not found
+```
+
+```
+## Error in factor(Type, levels = as.character(Type)): object 'Type' not found
+```
+
+```
+## Error in FUN(X[[i]], ...): object 'Type' not found
+```
+
+<img src="assets/fig/unnamed-chunk-14-1.png" title="plot of chunk unnamed-chunk-14" alt="plot of chunk unnamed-chunk-14" width="500px" height="400px" />
 
 
 ---
@@ -598,23 +666,23 @@ Different types of color palettes
 * Categorical: separate items into distinct groups
 * Sequential: quantitative differences
 
-<img src="assets/img/lec07_col_seq_pal.png" title="plot of chunk unnamed-chunk-8" alt="plot of chunk unnamed-chunk-8" width="500px" height="400px" />
+<img src="assets/img/lec07_col_seq_pal.png" title="plot of chunk unnamed-chunk-15" alt="plot of chunk unnamed-chunk-15" width="500px" height="400px" />
 
 * Diverging: quantitative differences, breakpoint
 
-<img src="assets/img/lec07_col_div_pal.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" width="500px" height="400px" />
+<img src="assets/img/lec07_col_div_pal.png" title="plot of chunk unnamed-chunk-16" alt="plot of chunk unnamed-chunk-16" width="500px" height="400px" />
 
 ---
 ## What's wrong with the following plot?
 
-<img src="assets/img/lec07-bad1.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" width="400px" height="400px" />
+<img src="assets/img/lec07-bad1.png" title="plot of chunk unnamed-chunk-17" alt="plot of chunk unnamed-chunk-17" width="400px" height="400px" />
 
 Xiong et al., Science 2014
 
 ---
 ## What's wrong with the following plot?
 
-<img src="assets/img/lec07-bad1.png" title="plot of chunk unnamed-chunk-11" alt="plot of chunk unnamed-chunk-11" width="400px" height="400px" />
+<img src="assets/img/lec07-bad1.png" title="plot of chunk unnamed-chunk-18" alt="plot of chunk unnamed-chunk-18" width="400px" height="400px" />
 
 1. Rainbow color where there are no breakpoints. Color bundaries are created based on author's interest.
 
@@ -846,7 +914,7 @@ Chart junk is identified as poor *data-ink ratio*.
 - The figure below, taken from the scientific literature [CITE: DNA Fingerprinting: A Review of the Controversy Kathryn Roeder Statistical Science Vol. 9, No. 2 (May, 1994), pp. 222-247] shows three variables: dose, drug type and survival.
 - Although your screen is flat and two dimensional, the plot tries to imitate three dimensions and assigns a dimension to each variable.
 
-<img src="https://raw.githubusercontent.com/kbroman/Talk_Graphs/master/Figs/fig8b.png" title="plot of chunk unnamed-chunk-12" alt="plot of chunk unnamed-chunk-12" width="500px" height="400px" />
+<img src="https://raw.githubusercontent.com/kbroman/Talk_Graphs/master/Figs/fig8b.png" title="plot of chunk unnamed-chunk-19" alt="plot of chunk unnamed-chunk-19" width="500px" height="400px" />
 
 ---
 ## Avoid pseudo three dimensional plots
@@ -855,7 +923,7 @@ Chart junk is identified as poor *data-ink ratio*.
 - To see this, try to determine the values of the survival variable in the plot above.
 - Can you tell when the purple ribbon intersects the red one? 
 
-<img src="https://raw.githubusercontent.com/kbroman/Talk_Graphs/master/Figs/fig8b.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" width="500px" height="400px" />
+<img src="https://raw.githubusercontent.com/kbroman/Talk_Graphs/master/Figs/fig8b.png" title="plot of chunk unnamed-chunk-20" alt="plot of chunk unnamed-chunk-20" width="500px" height="400px" />
 
 ---
 ## Avoid pseudo three dimensional plots
@@ -863,7 +931,6 @@ Chart junk is identified as poor *data-ink ratio*.
 This is an example in which we can easily use color to represent the categorical variable:
 
 <img src="assets/fig/lec07_3d-1.png" title="This plot demonstrates that using color is more than enough to distinguish the three lines." alt="This plot demonstrates that using color is more than enough to distinguish the three lines." width="500px" height="400px" />
-
 
 ---
 ## Descriptive plots
@@ -949,6 +1016,10 @@ Bright colors and bold text draw attention. Batik Gangster actually exists. Grid
 
 Light grey does not draw attention and grid lines are less important than data.
 
+
+---
+
+## Exercise 3
 
 ---
 ## References

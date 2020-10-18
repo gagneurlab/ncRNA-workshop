@@ -1,6 +1,6 @@
 ---
 title       : 'Make your paper figures professionally: Scientific data analysis and visualization with R'
-author      : Vangelis Theodorakis, Fatemeh Behjati, Julien Gagneur, Marcel Schultz
+author      : Vangelis Theodorakis, Fatemeh Behjati, Julien Gagneur, Marcel Schulz
 subtitle    : Grammar of graphics and Basic Plotting
 framework   : io2012
 highlighter : highlight.js
@@ -70,10 +70,6 @@ opts_chunk$set(
 imgprefix <- 'assets/img/lec06_07_plotting/'
 figprefix <- 'assets/fig/lec07_'
 
-# data
-poke_dt <- readRDS('../../../extdata/tidy_pokemon_poke_dt.RDS')
-moves_dt <- readRDS('../../../extdata/tidy_pokemon_moves_dt.RDS')
-olydt <- fread('../../../extdata/summer_olympic_medals_ALL_MEDALISTS.csv')
 ind <- fread('../../../extdata/CPI_HDI.csv')
 
 mysize <- 15
@@ -85,18 +81,63 @@ mytheme <- theme(
     )
 
 
-options(knitr.package.unnamed.chunk.label="lecture-07")
+options(knitr.package.unnamed.chunk.label="day-03")
 ```
 
 
 <!-- START LECTURE -->
 
+## Day 3 Schedule
+
 ```{r, out.width = "800px", echo=FALSE}
-knitr::include_graphics("assets/img/lec05_syllabus.png")
+knitr::include_graphics("../../../assets/img/day-03-syllabus.png")
 ```
+
+---
+
+## Exercises 1
+
 ---
 
 ## Density plots
+
+Sometimes histograms are not the optimal plots to investigate distributions. In such cases density plots can be very usefull.
+
+As an example, we can visualize the distribution of the Human Development Index (HDI) in the `ind` dataset by means of a density plot with `geom_density()`:
+
+```{r warning=FALSE, message=FALSE}
+ggplot(ind, aes(HDI)) + geom_density() + mytheme
+```
+
+---
+
+## Density plots
+
+The `bw` argument of the `geom_density()` function allows to tweak the bandwidth of a density plot manually. The default option is a bandwidth rule, which is usually a good choice.
+
+Setting a small bandwidth on the previous plot has a huge impact on the plot:
+
+```{r}
+ggplot(ind, aes(HDI)) + geom_density(bw=0.01) + ggtitle('Small bandwidth') +
+  mytheme
+```
+
+---
+
+## Density plots
+
+Setting a large bandwidth has also a huge impact on the plot:
+
+```{r}
+ggplot(ind, aes(HDI)) + geom_density(bw=1) + ggtitle('Large bandwidth') +
+  mytheme
+```
+
+---
+
+## Density plots
+
+Thus, we should be careful when changing the bandwidth, since we can get a wrong impression from the distribution of a continuous variable.
 
 ---
 
@@ -114,7 +155,7 @@ knitr::include_graphics("assets/img/lec05_syllabus.png")
 
 **Plot matrix**
 
-```{r lec07_ggpairs, fig.width=4, fig.height=4, eval=FALSE}
+```{r fig.width=4, fig.height=4, eval=FALSE}
 library(GGally)
 ggpairs(mpg, columns = c("displ","cyl","cty","hwy"),
         upper = list(continuous = wrap("cor", method = "spearman"))) + mytheme
@@ -126,7 +167,7 @@ ggpairs(mpg, columns = c("displ","cyl","cty","hwy"),
 
 **Plot matrix**
 
-```{r lec07_ggpairs2, fig.width=4, fig.height=4, echo=FALSE}
+```{r fig.width=4, fig.height=4, echo=FALSE}
 library(GGally)
 ggpairs(mpg, columns = c("displ","cyl","cty","hwy"),
         upper = list(continuous = wrap("cor", method = "spearman"))) + mytheme
@@ -138,7 +179,7 @@ ggpairs(mpg, columns = c("displ","cyl","cty","hwy"),
 
 Correlation plots, "corrgrams", "correlograms"
 
-```{r lec07_corplot}
+```{r}
 GGally::ggcorr(mtcars, geom = 'circle', params=c(corMethod="spearman")) 
 ```
 
@@ -148,7 +189,7 @@ GGally::ggcorr(mtcars, geom = 'circle', params=c(corMethod="spearman"))
 
 Heatmaps
 
-```{r lec07_heatmap,  fig.height=3, fig.width=4, out.width="580px", eval=FALSE}
+```{r   fig.height=3, fig.width=4, out.width="580px", eval=FALSE}
 mtcars_melted <- as.data.table(scale(mtcars[1:10,]), keep.rownames = "Cars") %>%
                   melt(id.var = "Cars")
 mtcars_melted <- mtcars_melted
@@ -328,6 +369,10 @@ ggplot(dt, aes(Phenotype, Expression)) + geom_point() + facet_wrap(~ Genotype)
 ```{r lec07_scat_cond2, fig.width=4.5, out.width = "450px"}
 dt[, cor(Expression, Phenotype), by = "Genotype"]
 ```
+
+---
+
+## Exercise 2
 
 ---
 
@@ -874,7 +919,6 @@ dat %>% melt('log.dose',
   geom_line() + mytheme
 ```
 
-
 ---
 ## Descriptive plots
  
@@ -956,6 +1000,10 @@ Bright colors and bold text draw attention. Batik Gangster actually exists. Grid
 
 Light grey does not draw attention and grid lines are less important than data.
 
+
+---
+
+## Exercise 3
 
 ---
 ## References
