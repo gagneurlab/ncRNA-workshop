@@ -1,8 +1,8 @@
 ---
-title: "CeDoSIA SS2020 - Exercise Sheet 4: Simple Data Manipulation & Visualization II"
-author: "Vangelis Theodorakis, Xueqi Cao, Daniela Andrade Salazar, Julien Gagneur"
-date: "`r format(Sys.time(), '%d %B, %Y')`"
-package: "`r pkg_ver('BiocStyle')`"
+title:   'Make your paper figures professionally: Scientific data analysis and visualization with R'
+author:   Vangelis Theodorakis, Fatemeh Behjati, Julien Gagneur, Marcel Schulz
+date:     "`r format(Sys.time(), '%d %B, %Y')`"
+package:  "`r pkg_ver('BiocStyle')`"
 vignette: >
   %\VignetteIndexEntry{CeDoSIA SS2020 - Exercise Sheet 2: Data Analysis and Visualization}
   %\VignetteEngine{knitr::rmarkdown}
@@ -19,19 +19,109 @@ knitr::opts_chunk$set(
   results="hide"
 )
 
-# setwd("./lectures")
 ```
 
-## Setup
+# Setup
 
 ```{r, config, echo = T}
 library(ggplot2)
 library(data.table)
 library(magrittr)   # Needed for %>% operator
 library(tidyr)
-library(ggthemes)
 ```
 
+
+# Choosing the appropriate visualization method
+
+Match each chart type with the relationship it shows best.
+
+1. shows distribution and quantiles, especially useful when comparing distributions.
+2. highlights individual values, supports comparison, can show rankings or deviations
+categories and totals
+3. shows overall changes and patterns, usually over time
+4. shows relationship between two quantitative variables.
+
+Options: bar chart, line chart, scatterplot, boxplot
+
+```{r}
+# 1. boxplot
+# 2. bar chart
+# 3. line chart
+# 4. scatterplot
+```
+
+# Getting to know your dataset
+
+`Iris` is a classical and widely used dataset in machine learning literature. It was first introduced by R.A. Fisher in his 1936 paper. Load the \textit{iris} data into your R environment. What is the dimension of the dataset? What kind of data type does each column has? How many Species does it contain?
+
+
+```{r fig.width=2, fig.height=2, echo=FALSE, eval=T, fig.align='center'}
+library(png)
+library(grid)
+img <- readPNG("../../assets/img/lec03_iris.png")
+grid.raster(img)
+```
+
+
+```{r}
+# Solution
+dim(iris)
+head(iris)
+sapply(iris, class)
+## iris %>% as.data.table %>% .[, .N, by=Species]
+table(iris$Species)
+```
+
+# Data exploration
+
+How are the lengths and widths of sepals and petals distributed? How would you visualize them? `Hint: tidy the data set and facet_wrap()`.
+
+```{r }
+# Solution
+iris_melt <- melt(iris, id.var=c("Species"))
+
+head(iris_melt)
+
+ggplot(data = iris_melt, aes(x = value)) + 
+  geom_histogram() + 
+  facet_wrap( ~ variable)
+```
+
+
+# Misleading plots
+
+1) Visualize the lengths and widths of the sepals and petals from the iris data with boxplots. 
+2) Add jitter (`geom_jitter()`) to visualize all points. Discuss: in this case, why is it not good to visualize the data with boxplots?
+3) Alternatives to boxplot are violin plots (`geom_violin()`) and beanplots (`geom_beeswarm()` from library `ggbeeswarm`. Install it with `install.packages("ggbeeswarm")`). Apply both options to the same data. 
+4) Which pattern shows up when moving from boxplot to violin/bean plot? Give possible explanations for it. How could you prove your theories graphically?
+
+
+```{r}
+# Solution
+library(ggbeeswarm)
+
+# 1)
+ggplot(iris_melt, aes(variable, value)) +
+  geom_boxplot() 
+
+# 2)
+ggplot(iris_melt, aes(variable, value)) +
+  geom_boxplot() + 
+  geom_jitter(width = 0.3, size = .5)
+# petal distributions are bimodal, boxplot cannot visualize this property.
+
+# 3)
+ggplot(iris_melt, aes(variable, value)) +
+  geom_violin() +
+  geom_boxplot(width=0.03) # Overlay boxplot to visualize median can interquartile range.
+
+ggplot(iris_melt, aes(variable, value)) +
+  geom_beeswarm(size=0.5)
+
+# 4) The difference in the measurements might be due to the Species
+ggplot(iris_melt, aes(variable, value, color = Species)) +
+  geom_beeswarm(size=0.5)
+```
 
 # Enchancing plots
 
@@ -44,7 +134,7 @@ Below is a graph taken from a published paper. Read the figure legend.
 ```{r fig.width=7, fig.height=6, echo=FALSE, eval=T, fig.pos="H"}
 library(png)
 library(grid)
-img <- readPNG("../assets/img/lec07_quast2013_slc_fig2.png")
+img <- readPNG("../../assets/img/lec07_quast2013_slc_fig2.png")
 grid.raster(img)
 # ![Quast et al 2013, Plos ONE, Fig2](assets/img/lec07_quast2013_slc_fig2.png)
 ```
@@ -165,3 +255,4 @@ ggplot(titanic, aes(factor(survived), age)) +
   facet_grid(pclass~ sex)
 
 ```
+

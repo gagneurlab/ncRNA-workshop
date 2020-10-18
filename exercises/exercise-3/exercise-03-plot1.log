@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2019.11.6)  29 JUN 2020 17:17
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2019.11.6)  18 OCT 2020 11:53
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -803,11 +803,11 @@ Package: titling 2009/09/04 v2.1d maketitle typesetting
 \thanksmargin=\skip52
 \droptitle=\skip53
 )
-(/data/nasif12/modules_if12/SL7/i12g/R/3.6.1-Bioc3.10/lib64/R/library/BiocStyle
+(/data/nasif12/modules_if12/SL7/i12g/R/4.0.1-Bioc3.11/lib64/R/library/BiocStyle
 /resources/tex/Bioconductor.sty
 
 LaTeX Warning: You have requested package `/data/nasif12/modules_if12/SL7/i12g/
-R/3.6.1-Bioc3.10/lib64/R/library/BiocStyle/resources/tex/Bioconductor',
+R/4.0.1-Bioc3.11/lib64/R/library/BiocStyle/resources/tex/Bioconductor',
                but the package provides `Bioconductor'.
 
 Package: Bioconductor 2016/06/22 Bioconductor LaTeX Style
@@ -1040,7 +1040,7 @@ fancyhdr/fancyhdr.sty
 )
 
 Package Fancyhdr Warning: \fancyhead's `E' option without twoside option is use
-less on input line 173.
+less on input line 162.
 
 
 (/data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/tex/latex/
@@ -1392,13 +1392,13 @@ File: t1phv.fd 2001/06/04 scalable font definitions for T1/phv.
 )
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <20.74> not available
 (Font)              Font shape `T1/phv/b/n' tried instead on input line 137.
+
+Underfull \hbox (badness 1668) in paragraph at lines 137--137
+[]\T1/phv/b/n/20.74 Make your pa-per fig-ures pro-fes-sion-ally:
+ []
+
 LaTeX Font Info:    Font shape `T1/lmss/bx/it' in size <14.4> not available
 (Font)              Font shape `T1/lmss/bx/sl' tried instead on input line 137.
-
-
-Underfull \hbox (badness 3260) in paragraph at lines 137--137
-\T1/lmss/bx/sl/14.4 Vangelis Theodor-akis, Xueqi Cao, Daniela An-drade
- []
 
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <10> not available
 (Font)              Font shape `T1/phv/b/n' tried instead on input line 139.
@@ -1422,97 +1422,60 @@ LaTeX Font Info:    Font shape `T1/fvm/m/it' in size <10> not available
 LaTeX Font Info:    Font shape `T1/fvm/m/sl' will be
 (Font)              scaled to size 7.98004pt on input line 153.
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <10> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 191.
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 182.
 
-<exercise-03-plot1_files/figure-latex/unnamed-chunk-2-1.pdf, id=44, 134.5025pt 
+<exercise-03-plot1_files/figure-latex/unnamed-chunk-2-1.pdf, id=56, 134.5025pt 
 x 144.54pt>
 File: exercise-03-plot1_files/figure-latex/unnamed-chunk-2-1.pdf Graphic file (
 type pdf)
 <use exercise-03-plot1_files/figure-latex/unnamed-chunk-2-1.pdf>
 Package pdftex.def Info: exercise-03-plot1_files/figure-latex/unnamed-chunk-2-1
-.pdf used on input line 195.
+.pdf used on input line 186.
 (pdftex.def)             Requested size: 134.5042pt x 144.54182pt.
 [2 <./exercise-03-plot1_files/figure-latex/unnamed-chunk-2-1.pdf>]
-<exercise-03-plot1_files/figure-latex/unnamed-chunk-4-1.pdf, id=65, 351.3125pt 
-x 277.035pt>
-File: exercise-03-plot1_files/figure-latex/unnamed-chunk-4-1.pdf Graphic file (
-type pdf)
-<use exercise-03-plot1_files/figure-latex/unnamed-chunk-4-1.pdf>
-Package pdftex.def Info: exercise-03-plot1_files/figure-latex/unnamed-chunk-4-1
-.pdf used on input line 249.
-(pdftex.def)             Requested size: 341.45886pt x 269.2647pt.
-[3]
-Overfull \hbox (1.14554pt too wide) in paragraph at lines 262--264
+Overfull \hbox (1.14554pt too wide) in paragraph at lines 206--208
 []\T1/lmss/m/n/10 (-20) Alternatives to box-plot are vi-o-lin plots ([][]\T1/fv
 m/m/n/10 geom_violin()[]\T1/lmss/m/n/10 (-20) ) and bean-plots ([][]\T1/fvm/m/n
 /10 geom_beeswarm()[]
  []
 
 
-<exercise-03-plot1_files/figure-latex/unnamed-chunk-5-1.pdf, id=71, 351.3125pt 
-x 277.035pt>
-File: exercise-03-plot1_files/figure-latex/unnamed-chunk-5-1.pdf Graphic file (
+<exercise-03-plot1_files/figure-latex/unnamed-chunk-6-1.pdf, id=79, 505.89pt x 
+289.08pt>
+File: exercise-03-plot1_files/figure-latex/unnamed-chunk-6-1.pdf Graphic file (
 type pdf)
-<use exercise-03-plot1_files/figure-latex/unnamed-chunk-5-1.pdf>
-Package pdftex.def Info: exercise-03-plot1_files/figure-latex/unnamed-chunk-5-1
-.pdf used on input line 279.
-(pdftex.def)             Requested size: 341.45886pt x 269.2647pt.
-[4 <./exercise-03-plot1_files/figure-latex/unnamed-chunk-4-1.pdf>]
-<exercise-03-plot1_files/figure-latex/unnamed-chunk-5-2.pdf, id=88, 351.3125pt 
-x 277.035pt>
-File: exercise-03-plot1_files/figure-latex/unnamed-chunk-5-2.pdf Graphic file (
-type pdf)
-<use exercise-03-plot1_files/figure-latex/unnamed-chunk-5-2.pdf>
-Package pdftex.def Info: exercise-03-plot1_files/figure-latex/unnamed-chunk-5-2
-.pdf used on input line 292.
-(pdftex.def)             Requested size: 341.45886pt x 269.2647pt.
-[5 <./exercise-03-plot1_files/figure-latex/unnamed-chunk-5-1.pdf> <./exercise-0
-3-plot1_files/figure-latex/unnamed-chunk-5-2.pdf>]
-<exercise-03-plot1_files/figure-latex/unnamed-chunk-5-3.pdf, id=107, 351.3125pt
- x 277.035pt>
-File: exercise-03-plot1_files/figure-latex/unnamed-chunk-5-3.pdf Graphic file (
-type pdf)
-<use exercise-03-plot1_files/figure-latex/unnamed-chunk-5-3.pdf>
-Package pdftex.def Info: exercise-03-plot1_files/figure-latex/unnamed-chunk-5-3
-.pdf used on input line 306.
-(pdftex.def)             Requested size: 341.45886pt x 269.2647pt.
+<use exercise-03-plot1_files/figure-latex/unnamed-chunk-6-1.pdf>
+Package pdftex.def Info: exercise-03-plot1_files/figure-latex/unnamed-chunk-6-1
+.pdf used on input line 225.
+(pdftex.def)             Requested size: 341.43785pt x 195.10733pt.
+LaTeX Font Info:    Try loading font information for TS1+fvm on input line 235.
 
-<exercise-03-plot1_files/figure-latex/unnamed-chunk-5-4.pdf, id=108, 351.3125pt
- x 277.035pt>
-File: exercise-03-plot1_files/figure-latex/unnamed-chunk-5-4.pdf Graphic file (
-type pdf)
-<use exercise-03-plot1_files/figure-latex/unnamed-chunk-5-4.pdf>
-Package pdftex.def Info: exercise-03-plot1_files/figure-latex/unnamed-chunk-5-4
-.pdf used on input line 317.
-(pdftex.def)             Requested size: 341.45886pt x 269.2647pt.
-[6 <./exercise-03-plot1_files/figure-latex/unnamed-chunk-5-3.pdf>]
-<exercise-03-plot1_files/figure-latex/unnamed-chunk-5-5.pdf, id=120, 345.29pt x
- 277.035pt>
-File: exercise-03-plot1_files/figure-latex/unnamed-chunk-5-5.pdf Graphic file (
-type pdf)
-<use exercise-03-plot1_files/figure-latex/unnamed-chunk-5-5.pdf>
-Package pdftex.def Info: exercise-03-plot1_files/figure-latex/unnamed-chunk-5-5
-.pdf used on input line 329.
-(pdftex.def)             Requested size: 341.43771pt x 273.94421pt.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 332.
-[7 <./exercise-03-plot1_files/figure-latex/unnamed-chunk-5-4.pdf> <./exercise-0
-3-plot1_files/figure-latex/unnamed-chunk-5-5.pdf>]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 332.
+
+(/data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/tex/latex/
+bera/ts1fvm.fd
+File: ts1fvm.fd 2004/09/07 scalable font definitions for TS1/fvm.
+)
+LaTeX Font Info:    Font shape `TS1/fvm/m/n' will be
+(Font)              scaled to size 7.98004pt on input line 235.
+[3 <./exercise-03-plot1_files/figure-latex/unnamed-chunk-6-1.pdf>]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 253.
+[4]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 253.
 (./exercise-03-plot1.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 332.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 332.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 253.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 253.
 Package rerunfilecheck Info: File `exercise-03-plot1.out' has not changed.
-(rerunfilecheck)             Checksum: 5187B2514C6C9E9833BCB74CCE4226C6;290.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 332.
+(rerunfilecheck)             Checksum: 98979BED7B81CB4B493C4661100EA17D;407.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 253.
  ) 
 Here is how much of TeX's memory you used:
- 13683 strings out of 493013
- 217430 string characters out of 6118181
- 344295 words of memory out of 5000000
- 16917 multiletter control sequences out of 15000+600000
- 49797 words of font info for 51 fonts, out of 8000000 for 9000
+ 13706 strings out of 493013
+ 216924 string characters out of 6118181
+ 344422 words of memory out of 5000000
+ 16929 multiletter control sequences out of 15000+600000
+ 54235 words of font info for 56 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 43i,13n,45p,1114b,417s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 43i,14n,45p,1114b,472s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/fonts/en
 c/dvips/lm/lm-ec.enc}{/data/nasif12/modules_if12/SL7/i12g/texlive/2016/texlive/
 texmf-dist/fonts/enc/dvips/base/8r.enc}</data/nasif12/modules_if12/SL7/i12g/tex
@@ -1527,10 +1490,10 @@ es_if12/SL7/i12g/texlive/2016/texlive/texmf-dist/fonts/type1/public/lm/lmssbx10
 texlive/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></data/nasif12/modules_i
 f12/SL7/i12g/texlive/2016/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pf
 b>
-Output written on exercise-03-plot1.pdf (7 pages, 682200 bytes).
+Output written on exercise-03-plot1.pdf (4 pages, 600731 bytes).
 PDF statistics:
- 178 PDF objects out of 1000 (max. 8388607)
- 132 compressed objects within 2 object streams
- 26 named destinations out of 1000 (max. 500000)
- 6220 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 140 PDF objects out of 1000 (max. 8388607)
+ 109 compressed objects within 2 object streams
+ 29 named destinations out of 1000 (max. 500000)
+ 6211 words of extra memory for PDF output out of 10000 (max. 10000000)
 
