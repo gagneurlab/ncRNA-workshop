@@ -126,7 +126,7 @@ Continue from the previous part and perform the following actions:
 
 8) What is the range of values in this newly created column?
 
-9) How do the mean values of *undecided* look like when grouped by *pollster*? How do they look like when grouped by *poll_type*?
+9) How do the mean values of *undecided* look like when grouped by *pollster*? How do they look like when grouped by *poll_type*? What is this mean value when *pollster* is *YouGov*?
 
 10) Remove the column *remain_polls* created in step 7.
 
@@ -147,6 +147,8 @@ brexit_DT[, range(remain_polls)]
 #9
 brexit_DT[, mean(undecided), by= pollster]
 brexit_DT[, mean(undecided), by= poll_type]
+# YouGov
+brexit_DT[pollster == "YouGov", mean(undecided), by= poll_type]
 
 #10
 brexit_DT[, remain_polls := NULL]

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.10.11)  9 APR 2021 07:48
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.10.11)  9 APR 2021 07:55
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -750,7 +750,7 @@ s10.pfb></Users/fateme/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmssbo1
 0.pfb></Users/fateme/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmssbx10.
 pfb></Users/fateme/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsso10.pfb
 >
-Output written on exercise-01.pdf (3 pages, 152797 bytes).
+Output written on exercise-01.pdf (3 pages, 153189 bytes).
 PDF statistics:
  276 PDF objects out of 1000 (max. 8388607)
  139 compressed objects within 2 object streams
