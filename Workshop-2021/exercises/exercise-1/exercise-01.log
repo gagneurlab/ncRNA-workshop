@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.10.11)  9 APR 2021 07:55
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.10.11)  9 APR 2021 09:01
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -715,45 +715,39 @@ File: t1fvm.fd 2004/09/07 scalable font definitions for T1/fvm.
 )
 LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
 (Font)              scaled to size 7.98004pt on input line 157.
-[2]
-LaTeX Font Info:    Trying to load font information for TS1+lmss on input line 
-258.
-(/Users/fateme/Library/TinyTeX/texmf-dist/tex/latex/lm/ts1lmss.fd
-File: ts1lmss.fd 2009/10/30 v1.6 Font defs for Latin Modern
-) [3] (./exercise-01.aux)
+[2] [3] (./exercise-01.aux)
 Package rerunfilecheck Info: File `exercise-01.out' has not changed.
-(rerunfilecheck)             Checksum: 24F59EC0661FD210115C5DAB92343D90;411.
+(rerunfilecheck)             Checksum: FCA393AAC25A4BB17CC353664E1B5327;277.
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 11793 strings out of 481886
- 183941 string characters out of 5931217
- 505963 words of memory out of 5000000
- 27792 multiletter control sequences out of 15000+600000
- 571808 words of font info for 50 fonts, out of 8000000 for 9000
+ 11746 strings out of 481886
+ 183132 string characters out of 5931217
+ 505868 words of memory out of 5000000
+ 27760 multiletter control sequences out of 15000+600000
+ 568670 words of font info for 48 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  72i,13n,77p,1200b,439s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/Users/fateme/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc} </Us
-ers/fateme/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1440.600pk
->{/Users/fateme/Library/TinyTeX/texmf-dist/fonts/enc/dvips/base/8r.enc}{/Users/
-fateme/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc} </Users/fateme/
-Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1000.600pk> </Users/f
-ateme/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm0900.600pk> </U
-sers/fateme/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1200.600p
-k> </Users/fateme/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm172
-8.600pk> </Users/fateme/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/e
-crm2074.600pk></Users/fateme/Library/TinyTeX/texmf-dist/fonts/type1/public/bera
-/fvmr8a.pfb></Users/fateme/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lms
-s10.pfb></Users/fateme/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmssbo1
-0.pfb></Users/fateme/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmssbx10.
-pfb></Users/fateme/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsso10.pfb
->
-Output written on exercise-01.pdf (3 pages, 153189 bytes).
+ </Users/fateme/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm144
+0.600pk>{/Users/fateme/Library/TinyTeX/texmf-dist/fonts/enc/dvips/base/8r.enc}{
+/Users/fateme/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc} </Users/
+fateme/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1000.600pk> </
+Users/fateme/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm0900.600
+pk> </Users/fateme/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm12
+00.600pk> </Users/fateme/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/
+ecrm1728.600pk> </Users/fateme/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknapp
+en/ec/ecrm2074.600pk></Users/fateme/Library/TinyTeX/texmf-dist/fonts/type1/publ
+ic/bera/fvmr8a.pfb></Users/fateme/Library/TinyTeX/texmf-dist/fonts/type1/public
+/lm/lmss10.pfb></Users/fateme/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/
+lmssbo10.pfb></Users/fateme/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lm
+ssbx10.pfb></Users/fateme/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmss
+o10.pfb>
+Output written on exercise-01.pdf (3 pages, 138635 bytes).
 PDF statistics:
- 276 PDF objects out of 1000 (max. 8388607)
- 139 compressed objects within 2 object streams
- 42 named destinations out of 1000 (max. 500000)
- 65 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 217 PDF objects out of 1000 (max. 8388607)
+ 110 compressed objects within 2 object streams
+ 31 named destinations out of 1000 (max. 500000)
+ 41 words of extra memory for PDF output out of 10000 (max. 10000000)
 
