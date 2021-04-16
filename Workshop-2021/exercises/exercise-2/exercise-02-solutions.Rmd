@@ -57,8 +57,10 @@ ggplot(data = iris, aes(x = Petal.Length, y = Petal.Width, color = Species)) +
 
 Get the _gtex-annotation.csv_ data and do a histogram of the RIN (RNA integrity number) column using 10, 20, 50, 100 bins to see how this affects the visualisation.
 
+
 ```{r}
-gtex.annotation <- fread("~/Projects/ncRNA-workshop/extdata/gtex-dummy-dataset.csv")
+## Here you should provide the path to data on YOUR computer
+gtex.annotation <- fread("~/R_workshop/ncRNA-workshop/Workshop-2021/extdata/gtex-dummy-dataset.csv")
 ggplot(gtex.annotation, aes(RIN)) + geom_histogram(bins = 50)
 ```
 
@@ -96,7 +98,8 @@ ggplot(gtex.annotation[tissue == "Heart"], aes(fake.age, RIN, color=sex)) + geom
 The following file describes the number of times a person bought a product "a" and "b"
 
 ```{r}
-messy_file <- file.path('extdata', 'example_product_data.csv')
+## Here you should provide the path to data on YOUR computer
+messy_file <- "~/R_workshop/ncRNA-workshop/Workshop-2021/extdata/example_product_data.csv"
 messy_dt <- fread(messy_file)
 messy_dt
 ```
@@ -114,8 +117,9 @@ Why is this data-set messy? Which columns should a tidy version of this table ha
 Read the weather dataset `weather.txt`. It contains the minimal and maximal temperature on a certain city (id) over different dates (year, month, d1-d31). Why is this dataset messy? How would a tidy version of it look like? Create its tidy version.
 
 ```{r}
-messy_dt <- fread("extdata/weather.txt")
-messy_dt %>% head
+## Here you should provide the path to data on YOUR computer
+messy_dt <- fread("~/R_workshop/ncRNA-workshop/Workshop-2021/extdata/weather.txt")
+head(messy_dt)
 dim(messy_dt)
 ```
 
@@ -174,7 +178,7 @@ dim(tidy_dt)
 ```
 
 ```{r}
-# An alternative tidy code version
+# An alternative tidy code version (using the pipe operator)
 tidy_dt <- messy_dt %>% 
   melt(id.vars=c('id', 'year', 'month', 'element'), na.rm=TRUE) %>% 
   .[, variable := gsub('d', '', variable)] %>% 

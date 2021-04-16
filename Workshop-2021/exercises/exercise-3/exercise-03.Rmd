@@ -58,7 +58,7 @@ Options: bar chart, line chart, scatterplot, boxplot
 ```{r fig.width=2, fig.height=2, echo=FALSE, eval=T, fig.align='center'}
 library(png)
 library(grid)
-img <- readPNG("../../assets/img/lec03_iris.png")
+img <- readPNG("~/R_workshop/ncRNA-workshop/Workshop-2020/assets/img/lec03_iris.png")
 grid.raster(img)
 ```
 
@@ -134,7 +134,7 @@ Below is a graph taken from a published paper. Read the figure legend.
 ```{r fig.width=7, fig.height=6, echo=FALSE, eval=T, fig.pos="H"}
 library(png)
 library(grid)
-img <- readPNG("../../assets/img/lec07_quast2013_slc_fig2.png")
+img <- readPNG("~/R_workshop/ncRNA-workshop/Workshop-2020/assets/img/lec07_quast2013_slc_fig2.png")
 grid.raster(img)
 # ![Quast et al 2013, Plos ONE, Fig2](assets/img/lec07_quast2013_slc_fig2.png)
 ```
@@ -228,7 +228,7 @@ Finally, visualize the interaction of age, gender and passenger class in determi
 
 ```{r}
 ## Load data
-titanic <- fread("../../extdata/titanic.csv")
+titanic <- fread("~/R_workshop/ncRNA-workshop/Workshop-2020/extdata/titanic.csv")
 titanic
 
 ## Did age play a role?

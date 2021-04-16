@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.10.11)  12 APR 2021 09:44
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.10.11)  16 APR 2021 12:46
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -737,23 +737,69 @@ Package pdftex.def Info: exercise-02-solutions_files/figure-latex/unnamed-chunk
 [3 <./exercise-02-solutions_files/figure-latex/unnamed-chunk-1-1.pdf>]
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <10> not available
 (Font)              Font shape `T1/lmss/m/sl' tried instead on input line 199.
-LaTeX Font Info:    Trying to load font information for TS1+fvm on input line 2
-04.
+<exercise-02-solutions_files/figure-latex/unnamed-chunk-3-1.pdf, id=80, 867.24p
+t x 867.24pt>
+File: exercise-02-solutions_files/figure-latex/unnamed-chunk-3-1.pdf Graphic fi
+le (type pdf)
+<use exercise-02-solutions_files/figure-latex/unnamed-chunk-3-1.pdf>
+Package pdftex.def Info: exercise-02-solutions_files/figure-latex/unnamed-chunk
+-3-1.pdf  used on input line 210.
+(pdftex.def)             Requested size: 341.43787pt x 341.43787pt.
+[4 <./exercise-02-solutions_files/figure-latex/unnamed-chunk-2-1.pdf>]
+<exercise-02-solutions_files/figure-latex/unnamed-chunk-4-1.pdf, id=92, 867.24p
+t x 867.24pt>
+File: exercise-02-solutions_files/figure-latex/unnamed-chunk-4-1.pdf Graphic fi
+le (type pdf)
+<use exercise-02-solutions_files/figure-latex/unnamed-chunk-4-1.pdf>
+Package pdftex.def Info: exercise-02-solutions_files/figure-latex/unnamed-chunk
+-4-1.pdf  used on input line 224.
+(pdftex.def)             Requested size: 341.43787pt x 341.43787pt.
+[5 <./exercise-02-solutions_files/figure-latex/unnamed-chunk-3-1.pdf>]
+<exercise-02-solutions_files/figure-latex/unnamed-chunk-4-2.pdf, id=103, 867.24
+pt x 867.24pt>
+File: exercise-02-solutions_files/figure-latex/unnamed-chunk-4-2.pdf Graphic fi
+le (type pdf)
+<use exercise-02-solutions_files/figure-latex/unnamed-chunk-4-2.pdf>
+Package pdftex.def Info: exercise-02-solutions_files/figure-latex/unnamed-chunk
+-4-2.pdf  used on input line 233.
+(pdftex.def)             Requested size: 341.43787pt x 341.43787pt.
+[6 <./exercise-02-solutions_files/figure-latex/unnamed-chunk-4-1.pdf>]
+<exercise-02-solutions_files/figure-latex/unnamed-chunk-5-1.pdf, id=113, 867.24
+pt x 867.24pt>
+File: exercise-02-solutions_files/figure-latex/unnamed-chunk-5-1.pdf Graphic fi
+le (type pdf)
+<use exercise-02-solutions_files/figure-latex/unnamed-chunk-5-1.pdf>
+Package pdftex.def Info: exercise-02-solutions_files/figure-latex/unnamed-chunk
+-5-1.pdf  used on input line 255.
+(pdftex.def)             Requested size: 341.43787pt x 341.43787pt.
+[7 <./exercise-02-solutions_files/figure-latex/unnamed-chunk-4-2.pdf>]
+<exercise-02-solutions_files/figure-latex/unnamed-chunk-5-2.pdf, id=125, 867.24
+pt x 867.24pt>
+File: exercise-02-solutions_files/figure-latex/unnamed-chunk-5-2.pdf Graphic fi
+le (type pdf)
+<use exercise-02-solutions_files/figure-latex/unnamed-chunk-5-2.pdf>
+Package pdftex.def Info: exercise-02-solutions_files/figure-latex/unnamed-chunk
+-5-2.pdf  used on input line 264.
+(pdftex.def)             Requested size: 341.43787pt x 341.43787pt.
+[8 <./exercise-02-solutions_files/figure-latex/unnamed-chunk-5-1.pdf>] [9 <./ex
+ercise-02-solutions_files/figure-latex/unnamed-chunk-5-2.pdf>]
+LaTeX Font Info:    Trying to load font information for TS1+fvm on input line 3
+47.
 (/Users/fateme/Library/TinyTeX/texmf-dist/tex/latex/bera/ts1fvm.fd
 File: ts1fvm.fd 2004/09/07 scalable font definitions for TS1/fvm.
 )
 LaTeX Font Info:    Font shape `TS1/fvm/m/it' in size <10> not available
-(Font)              Font shape `TS1/fvm/m/sl' tried instead on input line 204.
+(Font)              Font shape `TS1/fvm/m/sl' tried instead on input line 347.
 LaTeX Font Info:    Font shape `TS1/fvm/m/sl' will be
-(Font)              scaled to size 7.98004pt on input line 204.
-[4 <./exercise-02-solutions_files/figure-latex/unnamed-chunk-2-1.pdf>]
-LaTeX Font Info:    Font shape `TS1/fvm/m/n' will be
-(Font)              scaled to size 7.98004pt on input line 257.
-[5]
-Underfull \vbox (badness 10000) detected at line 368
+(Font)              scaled to size 7.98004pt on input line 347.
+
+Underfull \vbox (badness 10000) detected at line 386
  []
 
-[6] [7] (./exercise-02-solutions.aux)
+[10]
+LaTeX Font Info:    Font shape `TS1/fvm/m/n' will be
+(Font)              scaled to size 7.98004pt on input line 392.
+[11] (./exercise-02-solutions.aux)
 Package rerunfilecheck Info: File `exercise-02-solutions.out' has not changed.
 (rerunfilecheck)             Checksum: 2F103DCDE4444680DE8F0CC02E7DCA99;359.
 
@@ -761,13 +807,13 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 11780 strings out of 481886
- 184620 string characters out of 5931217
- 508954 words of memory out of 5000000
- 27792 multiletter control sequences out of 15000+600000
+ 11819 strings out of 481886
+ 186806 string characters out of 5931217
+ 508957 words of memory out of 5000000
+ 27822 multiletter control sequences out of 15000+600000
  569144 words of font info for 51 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 72i,13n,77p,1210b,405s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 72i,13n,77p,1210b,407s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/Users/fateme/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/User
 s/fateme/Library/TinyTeX/texmf-dist/fonts/enc/dvips/base/8r.enc} </Users/fateme
 /Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1000.600pk> </Users/
@@ -782,10 +828,10 @@ s10.pfb></Users/fateme/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmssbo1
 0.pfb></Users/fateme/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmssbx10.
 pfb></Users/fateme/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsso10.pfb
 >
-Output written on exercise-02-solutions.pdf (7 pages, 174330 bytes).
+Output written on exercise-02-solutions.pdf (11 pages, 289567 bytes).
 PDF statistics:
- 252 PDF objects out of 1000 (max. 8388607)
- 126 compressed objects within 2 object streams
- 24 named destinations out of 1000 (max. 500000)
- 67 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 307 PDF objects out of 1000 (max. 8388607)
+ 159 compressed objects within 2 object streams
+ 28 named destinations out of 1000 (max. 500000)
+ 92 words of extra memory for PDF output out of 10000 (max. 10000000)
 
