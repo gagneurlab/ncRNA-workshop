@@ -12,7 +12,7 @@ output:
     keep_tex: false
 fontsize: 8pt
 header-includes:
-  - \AtBeginDocument{\title[Graphically supported hypotheses]{Lecture 6 - Graphically supported hypotheses}}
+  # - \AtBeginDocument{\title[Graphically supported hypotheses]{Lecture 6 - Graphically supported hypotheses}}
   # - \AtBeginDocument{\author[Julien Gagneur]{Daniela Klaproth-Andrade, Julien Gagneur}}
   - \AtBeginDocument{\usepackage{float} \floatplacement{figure}{H}}
 ---
